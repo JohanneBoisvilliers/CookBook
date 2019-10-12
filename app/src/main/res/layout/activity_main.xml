@@ -23,11 +23,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/bottom_bar_height"
         android:layout_gravity="bottom"
-        app:itemIconSize="@dimen/icon_bottom_bar"
-        app:labelVisibilityMode="unlabeled"
         android:background="@color/colorPrimary"
+        app:elevation="0dp"
+        app:itemIconSize="@dimen/icon_bottom_bar"
         app:itemIconTint="@drawable/bottom_navigation_colors"
-        app:menu="@menu/bottom_navigation_menu"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_navigation_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

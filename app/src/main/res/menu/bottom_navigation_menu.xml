@@ -13,7 +13,7 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/nav_social"
-        android:icon="@drawable/group"
+        android:icon="@drawable/connection"
         android:title="@null"
         app:showAsAction="ifRoom" />
     <item
