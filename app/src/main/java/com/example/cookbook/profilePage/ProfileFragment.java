@@ -1,4 +1,4 @@
-package com.example.cookbook.recipesPage;
+package com.example.cookbook.profilePage;
 
 
 import android.os.Bundle;
@@ -13,11 +13,15 @@ import com.example.cookbook.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class recipesFragment extends Fragment {
+public class ProfileFragment extends Fragment {
 
 
-    public recipesFragment() {
+    public ProfileFragment() {
         // Required empty public constructor
+    }
+
+    public static ProfileFragment newInstance() {
+        return new ProfileFragment();
     }
 
 
@@ -25,7 +29,7 @@ public class recipesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_recipes, container, false);
+        return inflater.inflate(R.layout.fragment_profile, container, false);
     }
 
 }
