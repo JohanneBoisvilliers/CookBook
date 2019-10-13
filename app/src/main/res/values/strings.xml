@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CookBook</string>
+    <string name="category_latest">Latest Recipes</string>
 </resources>
