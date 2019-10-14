@@ -17,4 +17,7 @@
     <dimen name="bottom_gradient_container_height">60dp</dimen>
     <dimen name="text_bottom_gradient_size">20sp</dimen>
     <dimen name="margin_text_bottom">10sp</dimen>
+    <!--ALL RECIPES FRAGMENT-->
+    <dimen name="margin_title">-10dp</dimen>
+    <dimen name="title_size">50sp</dimen>
 </resources>

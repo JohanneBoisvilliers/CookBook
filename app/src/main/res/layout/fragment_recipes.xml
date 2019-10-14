@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".recipesPage.recipesFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".recipesPage.RecipesFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="recipes" />
+        android:id="@+id/all_recipes_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/all_recipes_title"
+        android:fontFamily="@font/segoepr"
+        android:textColor="@color/colorAccent"
+        android:textSize="@dimen/title_size"
+        android:layout_marginTop="@dimen/margin_title"
+        android:layout_marginStart="@dimen/margin_to_border"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent" />
 
-</FrameLayout>
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/all_recipes_title"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="@dimen/margin_to_border"
+        android:layout_marginTop="@dimen/margin_to_border"
+        android:layout_marginEnd="@dimen/margin_to_border" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_search_recipe"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/search"
+        android:tint="@color/colorPrimary"
+        android:layout_margin="@dimen/margin_to_border"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
