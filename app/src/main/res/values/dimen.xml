@@ -21,4 +21,11 @@
     <dimen name="margin_title">-10dp</dimen>
     <dimen name="title_size">45sp</dimen>
     <dimen name="base_height_card">250dp</dimen>
+    <!--USER PROFILE-->
+    <dimen name="bottom_container">200dp</dimen>
+    <dimen name="username_size">20sp</dimen>
+    <dimen name="logo_size">20dp</dimen>
+    <dimen name="number_recipe_logos_size">30dp</dimen>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="margin_logo">5dp</dimen>
 </resources>

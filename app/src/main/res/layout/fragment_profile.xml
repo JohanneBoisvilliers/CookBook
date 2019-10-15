@@ -3,12 +3,193 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".profilePage.profileFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".profilePage.ProfileFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="profile" />
+        android:layout_height="match_parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/bottom_container"
+        android:layout_marginStart="@dimen/margin_to_border"
+        android:layout_marginEnd="@dimen/margin_to_border"
+        android:layout_gravity="bottom"
+        android:background="@drawable/user_info_container">
+
+        <TextView
+            android:id="@+id/profile_username"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Username"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="@dimen/username_size"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="@dimen/margin_to_border"
+            android:layout_marginTop="@dimen/margin_to_border" />
+
+        <TextView
+            android:id="@+id/profile_register_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="register date"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="italic"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profile_username"
+            android:layout_marginStart="@dimen/margin_to_border" />
+
+        <ImageView
+            android:id="@+id/logo_like"
+            android:layout_width="@dimen/logo_size"
+            android:layout_height="@dimen/logo_size"
+            android:src="@drawable/like"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/profile_register_date"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="@dimen/margin_to_border"
+            android:layout_marginTop="@dimen/margin_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10 Likes"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintLeft_toRightOf="@id/logo_like"
+            app:layout_constraintTop_toTopOf="@id/logo_like"
+            app:layout_constraintBottom_toBottomOf="@id/logo_like"
+            android:layout_marginStart="@dimen/margin_to_border" />
+
+        <ImageView
+            android:id="@+id/logo_love"
+            android:layout_width="@dimen/logo_size"
+            android:layout_height="@dimen/logo_size"
+            android:src="@drawable/heart"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/logo_like"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="@dimen/margin_to_border"
+            android:layout_marginTop="@dimen/margin_logo" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10 Favorites"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintLeft_toRightOf="@id/logo_love"
+            app:layout_constraintTop_toTopOf="@id/logo_love"
+            app:layout_constraintBottom_toBottomOf="@id/logo_love"
+            android:layout_marginStart="@dimen/margin_to_border" />
+
+        <ImageView
+            android:id="@+id/logo_recipes"
+            android:layout_width="@dimen/logo_size"
+            android:layout_height="@dimen/logo_size"
+            android:src="@drawable/book"
+            android:tint="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/logo_love"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginStart="@dimen/margin_to_border"
+            android:layout_marginTop="@dimen/margin_logo" />
+
+        <TextView
+            android:id="@+id/recipe_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/recipe_description"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            android:textSize="@dimen/text_size"
+            app:layout_constraintLeft_toRightOf="@id/logo_recipes"
+            app:layout_constraintTop_toTopOf="@id/logo_recipes"
+            app:layout_constraintBottom_toBottomOf="@id/logo_recipes"
+            android:layout_marginStart="@dimen/margin_to_border" />
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo_recipes"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="@dimen/margin_to_border"
+            android:layout_marginStart="@dimen/margin_to_border"
+            android:layout_marginBottom="@dimen/margin_logo"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/number_recipe_logos_size"
+                android:layout_height="@dimen/number_recipe_logos_size"
+                android:src="@drawable/starter"
+                android:tint="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/starter_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_logo" />
+
+            <ImageView
+                android:layout_width="@dimen/number_recipe_logos_size"
+                android:layout_height="@dimen/number_recipe_logos_size"
+                android:src="@drawable/plate"
+                android:tint="@color/colorPrimary"
+                android:layout_marginStart="@dimen/margin_to_border" />
+
+            <TextView
+                android:id="@+id/main_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_logo" />
+
+            <ImageView
+                android:layout_width="@dimen/number_recipe_logos_size"
+                android:layout_height="@dimen/number_recipe_logos_size"
+                android:src="@drawable/cake"
+                android:tint="@color/colorPrimary"
+                android:layout_marginStart="@dimen/margin_to_border" />
+
+            <TextView
+                android:id="@+id/dessert_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_logo" />
+
+            <ImageView
+                android:layout_width="@dimen/number_recipe_logos_size"
+                android:layout_height="@dimen/number_recipe_logos_size"
+                android:src="@drawable/cup"
+                android:tint="@color/colorPrimary"
+                android:layout_marginStart="@dimen/margin_to_border" />
+
+            <TextView
+                android:id="@+id/drink_quantity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:textColor="@color/colorPrimary"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_logo" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>

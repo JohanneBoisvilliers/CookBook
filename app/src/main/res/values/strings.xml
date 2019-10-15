@@ -5,4 +5,6 @@
     <string name="category_latest">Latest Recipes</string>
     <!--ALL RECIPES FRAGMENT-->
     <string name="all_recipes_title">All Recipes</string>
+    <!--PROFILE FRAGMENT-->
+    <string name="recipe_description">RECIPES :</string>
 </resources>
