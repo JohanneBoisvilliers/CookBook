@@ -3,7 +3,7 @@
     <!--GENERAL-->
     <dimen name="margin_to_border">16dp</dimen>
     <!--MAIN ACTIVITY-->
-    <dimen name="bottom_bar_height">80dp</dimen>
+    <dimen name="bottom_bar_height">60dp</dimen>
     <dimen name="icon_bottom_bar">30dp</dimen>
     <!--HOME FRAGMENT-->
     <!--main recycler view-->
@@ -28,4 +28,5 @@
     <dimen name="number_recipe_logos_size">30dp</dimen>
     <dimen name="text_size">18sp</dimen>
     <dimen name="margin_logo">5dp</dimen>
+    <dimen name="margin_fab">40dp</dimen>
 </resources>
