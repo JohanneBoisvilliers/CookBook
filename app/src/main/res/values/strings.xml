@@ -5,4 +5,12 @@
     <string name="category_latest">Latest Recipes</string>
     <!--ALL RECIPES FRAGMENT-->
     <string name="all_recipes_title">All Recipes</string>
+    <!--PROFILE FRAGMENT-->
+    <string name="recipe_description">RECIPES :</string>
+    <!--ADD RECIPES FRAGMENT-->
+    <string name="add_recipe_title">New Recipes</string>
+    <string name="hint_add_recipe_url">Recipe URL</string>
+    <string name="or_separator">OR</string>
+    <string name="add_recipe_button_url">ADD RECIPE BY URL</string>
+    <string name="add_recipe_button_manually">ADD RECIPE MANUALLY</string>
 </resources>
