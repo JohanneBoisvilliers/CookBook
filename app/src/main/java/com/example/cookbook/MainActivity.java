@@ -1,13 +1,20 @@
 package com.example.cookbook;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Database;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.cookbook.database.CookBookLocalDatabase;
+import com.example.cookbook.repositories.UserDataRepository;
+import com.facebook.stetho.Stetho;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.io.FileReader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,8 +32,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        Stetho.initializeWithDefaults(this);
+
+        CookBookLocalDatabase.getInstance(this)
+                .ingredientDao()
+                .getIngredient(1)
+                .observe(this,v-> {
+                    if (v != null) {
+                        Log.d("debug", "onCreate: "+v.getName());
+                    }
+                });
         this.configureViewPager();
         this.configureBottomView();
+
     }
 
     // ----------------------------------- UTILS -----------------------------------
