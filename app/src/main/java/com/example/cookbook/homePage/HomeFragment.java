@@ -7,10 +7,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookbook.R;
+import com.example.cookbook.models.Recipe;
+import com.example.cookbook.recipesPage.RecipeViewModel;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +29,7 @@ public class HomeFragment extends Fragment {
     RecyclerView mMainRecyclerView;
 
     private MainRecyclerViewAdapter mMainAdapter;
+    private RecipeViewModel mRecipeViewModel;
 
     public HomeFragment() {
     }
@@ -31,6 +37,11 @@ public class HomeFragment extends Fragment {
     public static HomeFragment newInstance() {
         return new HomeFragment();
     }
+
+    private List<List<Recipe>> mFinalEmbeddedList;
+    private List<Recipe> mLatestRecipes;
+    private List<Recipe> mFavoriteRecipes;
+    private List<Recipe> mNotDoneRecipes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -40,7 +51,7 @@ public class HomeFragment extends Fragment {
         ButterKnife.bind(this, view);
 
         this.configureMainRecyclerView();
-
+        this.configureViewRecipeViewModel();
         return view;
     }
 
@@ -50,5 +61,17 @@ public class HomeFragment extends Fragment {
         this.mMainRecyclerView.setAdapter(this.mMainAdapter);
         this.mMainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
+
+    private void configureViewRecipeViewModel() {
+        mRecipeViewModel = ViewModelProviders.of(getActivity()).get(RecipeViewModel.class);
+    }
+
+    private void updateItemList(List<Recipe> recipeList) {
+    }
+
+    // ----------------------------------- ASYNC -----------------------------------
+    //private void getRecipes(){
+    //    mRecipeViewModel.getRecipes().observe(this,);
+    //}
 
 }

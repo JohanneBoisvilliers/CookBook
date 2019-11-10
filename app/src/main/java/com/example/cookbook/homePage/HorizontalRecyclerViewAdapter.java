@@ -9,9 +9,13 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookbook.R;
+import com.example.cookbook.models.Recipe;
+
+import java.util.List;
 
 public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<HorizontalRecyclerViewViewHolder> {
 
+    private List<Recipe> mRecipeList;
 
     @NonNull
     @Override

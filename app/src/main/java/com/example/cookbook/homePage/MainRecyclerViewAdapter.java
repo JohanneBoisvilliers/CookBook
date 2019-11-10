@@ -16,6 +16,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     private Context mContext;
     private RecyclerView.RecycledViewPool mViewPool;
     private HorizontalRecyclerViewAdapter mHorizontalRecyclerViewAdapter;
+    private String[] mCategoryTitles;
 
     @NonNull
     @Override
@@ -26,6 +27,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
 
         mViewPool = new RecyclerView.RecycledViewPool();
         mHorizontalRecyclerViewAdapter = new HorizontalRecyclerViewAdapter();
+        mCategoryTitles = mContext.getResources().getStringArray(R.array.titles_main_recycler_view);
 
         return new MainRecyclerViewViewHolder(view);
     }
@@ -34,6 +36,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     public void onBindViewHolder(@NonNull MainRecyclerViewViewHolder holder, int position) {
         holder.mHorizontalRecyclerView.setRecycledViewPool(mViewPool);
         holder.mHorizontalRecyclerView.setAdapter(mHorizontalRecyclerViewAdapter);
+        holder.mTitlesCategory.setText(mCategoryTitles[position]);
         holder.mHorizontalRecyclerView.setLayoutManager(new LinearLayoutManager(mContext,
                 LinearLayoutManager.HORIZONTAL, false));
     }

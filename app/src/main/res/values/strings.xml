@@ -13,4 +13,10 @@
     <string name="or_separator">OR</string>
     <string name="add_recipe_button_url">ADD RECIPE BY URL</string>
     <string name="add_recipe_button_manually">ADD RECIPE MANUALLY</string>
+
+    <string-array name="titles_main_recycler_view">
+        <item>Latest recipes</item>
+        <item>Favorite recipes</item>
+        <item>Todo list</item>
+    </string-array>
 </resources>

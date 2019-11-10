@@ -1,20 +1,18 @@
 package com.example.cookbook;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Database;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
-import com.example.cookbook.database.CookBookLocalDatabase;
-import com.example.cookbook.repositories.UserDataRepository;
+import com.example.cookbook.injections.Injections;
+import com.example.cookbook.injections.ViewModelFactory;
+import com.example.cookbook.recipesPage.RecipeViewModel;
 import com.facebook.stetho.Stetho;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-
-import java.io.FileReader;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     ViewPager mViewPager;
     @BindView(R.id.bottom_navigation)
     BottomNavigationView mBottomNavigationView;
+    private RecipeViewModel mRecipeViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,16 +33,9 @@ public class MainActivity extends AppCompatActivity {
 
         Stetho.initializeWithDefaults(this);
 
-        CookBookLocalDatabase.getInstance(this)
-                .ingredientDao()
-                .getIngredient(1)
-                .observe(this,v-> {
-                    if (v != null) {
-                        Log.d("debug", "onCreate: "+v.getName());
-                    }
-                });
         this.configureViewPager();
         this.configureBottomView();
+        this.configureRecipeViewModel();
 
     }
 
@@ -69,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void configureBottomView() {
         mBottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -79,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
     private void updateMainFragment(Integer integer) {
         switch (integer) {
             case R.id.nav_home:
@@ -98,5 +88,10 @@ public class MainActivity extends AppCompatActivity {
                 mViewPager.setCurrentItem(4);
                 break;
         }
+    }
+
+    private void configureRecipeViewModel() {
+        ViewModelFactory viewModelFactory = Injections.provideViewModelFactory(this);
+        mRecipeViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel.class);
     }
 }

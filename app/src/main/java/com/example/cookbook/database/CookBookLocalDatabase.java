@@ -1,6 +1,5 @@
 package com.example.cookbook.database;
 
-import android.app.Application;
 import android.content.ContentValues;
 import android.content.Context;
 import android.util.Log;
@@ -14,8 +13,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.cookbook.R;
 import com.example.cookbook.database.dao.IngredientDao;
+import com.example.cookbook.database.dao.RecipeDao;
 import com.example.cookbook.database.dao.UserDao;
 import com.example.cookbook.models.Ingredient;
+import com.example.cookbook.models.Recipe;
 import com.example.cookbook.utils.MyApp;
 
 import java.io.BufferedReader;
@@ -25,7 +26,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 
-@Database(entities = {Ingredient.class},version = 1,exportSchema = false)
+@Database(entities = {Ingredient.class, Recipe.class}, version = 1, exportSchema = false)
 public abstract class CookBookLocalDatabase extends RoomDatabase {
 
     // --- SINGLETON ---
@@ -34,6 +35,8 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
     // --- DAO ---
     public abstract UserDao userDao();
     public abstract IngredientDao ingredientDao();
+
+    public abstract RecipeDao recipeDao();
 
     // --- INSTANCE ---
     public static CookBookLocalDatabase getInstance(Context context) {
@@ -47,8 +50,11 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
-                                    Log.d("deb", "onCreate: ");
                                     insertIngredientHelper(db);
+                                    ContentValues contentValues = new ContentValues();
+                                    contentValues.put("id", 1);
+                                    contentValues.put("name", "Oeuf au plat");
+                                    db.insert("Recipe", OnConflictStrategy.IGNORE, contentValues);
                             }})
                             .build();
                 }
