@@ -57,7 +57,7 @@ public class HomeFragment extends Fragment {
 
     // ----------------------------------- UTILS -----------------------------------
     private void configureMainRecyclerView() {
-        this.mMainAdapter = new MainRecyclerViewAdapter();
+        this.mMainAdapter = new MainRecyclerViewAdapter(mFinalEmbeddedList);
         this.mMainRecyclerView.setAdapter(this.mMainAdapter);
         this.mMainRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
@@ -66,12 +66,17 @@ public class HomeFragment extends Fragment {
         mRecipeViewModel = ViewModelProviders.of(getActivity()).get(RecipeViewModel.class);
     }
 
-    private void updateItemList(List<Recipe> recipeList) {
+    private void updateItemList(List<List<Recipe>> embeddedList) {
+        this.mFinalEmbeddedList.clear();
+        this.mFinalEmbeddedList.addAll(embeddedList);
+        this.mMainAdapter.notifyItemChanged(mFinalEmbeddedList);
     }
 
     // ----------------------------------- ASYNC -----------------------------------
-    //private void getRecipes(){
-    //    mRecipeViewModel.getRecipes().observe(this,);
-    //}
+    private void getFavoriteRecipes() {
+        mRecipeViewModel.getRecipes().observe(this, list -> {
+
+        });
+    }
 
 }

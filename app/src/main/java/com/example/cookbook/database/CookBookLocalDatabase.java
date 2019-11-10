@@ -51,10 +51,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
                                     insertIngredientHelper(db);
-                                    ContentValues contentValues = new ContentValues();
-                                    contentValues.put("id", 1);
-                                    contentValues.put("name", "Oeuf au plat");
-                                    db.insert("Recipe", OnConflictStrategy.IGNORE, contentValues);
+                                    insertRecettesHelper(db);
                             }})
                             .build();
                 }
@@ -74,13 +71,42 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
 
             while ((line = reader.readLine()) != null) {
 
-                String[] tokens = line.split(",");
+                String[] tokens = line.split(";");
                 lineNumber += 1;
 
                 ContentValues ingredientValue=new ContentValues();
                 ingredientValue.put("id",lineNumber);
                 ingredientValue.put("name",tokens[0]);
                 db.insert("Ingredient",OnConflictStrategy.REPLACE,ingredientValue);
+
+            }
+        } catch (IOException e) {
+            Log.wtf("deb", "Error reading data file on line" + line, e);
+            e.printStackTrace();
+        }
+    }
+
+    private static void insertRecettesHelper(SupportSQLiteDatabase db) {
+
+        InputStream is = MyApp.getContext().getResources().openRawResource(R.raw.recettes);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+        String line = "";
+        int lineNumber = 0;
+        try {
+            reader.readLine();
+
+            while ((line = reader.readLine()) != null) {
+
+                String[] tokens = line.split(";");
+                lineNumber += 1;
+
+                ContentValues recette = new ContentValues();
+                recette.put("id", lineNumber);
+                recette.put("name", tokens[0]);
+                recette.put("isAlreadyDone", tokens[1]);
+                recette.put("numberOfLike", tokens[2]);
+                recette.put("addDate", tokens[3]);
+                db.insert("Recipe", OnConflictStrategy.REPLACE, recette);
 
             }
         } catch (IOException e) {

@@ -1,6 +1,7 @@
 package com.example.cookbook;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.viewpager.widget.ViewPager;
 
+import com.example.cookbook.database.CookBookLocalDatabase;
 import com.example.cookbook.injections.Injections;
 import com.example.cookbook.injections.ViewModelFactory;
 import com.example.cookbook.recipesPage.RecipeViewModel;
@@ -36,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
         this.configureViewPager();
         this.configureBottomView();
         this.configureRecipeViewModel();
+
+        CookBookLocalDatabase cookBookLocalDatabase = CookBookLocalDatabase.getInstance(this);
+        cookBookLocalDatabase.recipeDao().getRecipes().observe(this, item -> {
+            Log.d("DEbug", "onCreate: " + item.getName());
+        });
 
     }
 
