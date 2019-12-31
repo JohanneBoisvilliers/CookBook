@@ -17,6 +17,10 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
     private List<Recipe> mRecipeList;
 
+    public HorizontalRecyclerViewAdapter(List<Recipe> recipeList) {
+        mRecipeList = recipeList;
+    }
+
     @NonNull
     @Override
     public HorizontalRecyclerViewViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -28,7 +32,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
     @Override
     public void onBindViewHolder(@NonNull HorizontalRecyclerViewViewHolder holder, int position) {
-
+        holder.updateUiOfRecipe(mRecipeList.get(position));
     }
 
     @Override

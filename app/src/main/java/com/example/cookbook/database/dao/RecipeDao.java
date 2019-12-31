@@ -10,4 +10,5 @@ import com.example.cookbook.models.Recipe;
 public interface RecipeDao {
     @Query("SELECT * FROM Recipe")
     LiveData<Recipe> getRecipes();
+
 }

@@ -73,7 +73,7 @@ public class HomeFragment extends Fragment {
     }
 
     // ----------------------------------- ASYNC -----------------------------------
-    private void getFavoriteRecipes() {
+    private void getRecipe() {
         mRecipeViewModel.getRecipes().observe(this, list -> {
 
         });
