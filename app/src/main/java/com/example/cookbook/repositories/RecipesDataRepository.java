@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData;
 import com.example.cookbook.database.dao.RecipeDao;
 import com.example.cookbook.models.Recipe;
 
+import java.util.List;
+
 public class RecipesDataRepository {
     private final RecipeDao mRecipeDao;
 
@@ -12,7 +14,7 @@ public class RecipesDataRepository {
         this.mRecipeDao = recipeDao;
     }
 
-    public LiveData<Recipe> getRecipes() {
+    public LiveData<List<Recipe>> getRecipes() {
         return this.mRecipeDao.getRecipes();
     }
 }

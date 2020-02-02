@@ -5,13 +5,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.cookbook.R
+import com.example.cookbook.models.Recipe
 import kotlinx.android.synthetic.main.fragment_recipes.*
 
 class RecipesFragment : Fragment() {
 
-    private var mListAdapter: RecipesListAdapter = RecipesListAdapter()
+    private var mRecipesList = mutableListOf<Recipe>()
+    private var mListAdapter: RecipesListAdapter = RecipesListAdapter(mRecipesList)
+    lateinit var mRecipeViewModel: RecipeViewModel
+
+    //--------------LIFE CYCLE--------------
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,8 +32,13 @@ class RecipesFragment : Fragment() {
     //configure fragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        configureRecipeViewModel()
         configureRecyclerView()
+        getRecipes()
     }
+
+    //--------------UTILS--------------
+
     //configure recycler view : set layout manager and adapter
     private fun configureRecyclerView() {
         all_recipes_recyclerview.apply {
@@ -34,8 +46,22 @@ class RecipesFragment : Fragment() {
             adapter = mListAdapter
         }
     }
+    //get recipe view model for requests
+    private fun configureRecipeViewModel(){
+        mRecipeViewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+    }
+    private fun updateItemsList(recipesList:List<Recipe>){
+        mRecipesList.clear()
+        mRecipesList.addAll(recipesList)
+        mListAdapter.updateList(recipesList)
+    }
     //companion for instantiate fragment
     companion object {
         fun newInstance(): RecipesFragment = RecipesFragment()
+    }
+
+    //--------------ASYNC--------------
+    private fun getRecipes() {
+        mRecipeViewModel.recipes.observe(this, Observer { list -> updateItemsList(list) })
     }
 }

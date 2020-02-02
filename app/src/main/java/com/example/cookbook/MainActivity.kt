@@ -5,16 +5,12 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import androidx.viewpager.widget.ViewPager
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
-import butterknife.BindView
-import butterknife.ButterKnife
 import com.example.cookbook.database.CookBookLocalDatabase
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.facebook.stetho.Stetho
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -25,13 +21,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        
+
         Stetho.initializeWithDefaults(this)
         configureViewPager()
         configureBottomView()
         configureRecipeViewModel()
         val cookBookLocalDatabase = CookBookLocalDatabase.getInstance(this)
-        cookBookLocalDatabase.recipeDao().recipes.observe(this, Observer { item: Recipe -> Log.d("DEbug", "onCreate: " + item.name) })
+        cookBookLocalDatabase.recipeDao().recipes.observe(this, Observer { list -> Log.d("DEbug", "onCreate: " + list[0].name) })
     }
 
     // ----------------------------------- UTILS -----------------------------------

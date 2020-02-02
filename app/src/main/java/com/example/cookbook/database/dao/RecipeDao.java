@@ -6,9 +6,10 @@ import androidx.room.Query;
 
 import com.example.cookbook.models.Recipe;
 
+import java.util.List;
+
 @Dao
 public interface RecipeDao {
     @Query("SELECT * FROM Recipe")
-    LiveData<Recipe> getRecipes();
-
+    LiveData<List<Recipe>> getRecipes();
 }
