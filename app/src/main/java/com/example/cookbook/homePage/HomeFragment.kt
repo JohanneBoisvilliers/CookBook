@@ -18,9 +18,6 @@ import com.example.cookbook.recipesPage.RecipeViewModel
 import butterknife.BindView
 import butterknife.ButterKnife
 
-/**
- * A simple [Fragment] subclass.
- */
 class HomeFragment : Fragment() {
 
     @BindView(R.id.main_recycler_view)
