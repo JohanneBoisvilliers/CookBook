@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'jacoco-android'
 
 android {
@@ -47,4 +49,10 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:1.1.1"
     //Stetho
     implementation 'com.facebook.stetho:stetho:1.5.1'
+    compile "androidx.core:core-ktx:+"
+    compile "androidx.lifecycle:lifecycle-viewmodel-ktx:2.0.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

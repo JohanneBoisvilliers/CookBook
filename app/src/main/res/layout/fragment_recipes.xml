@@ -15,7 +15,7 @@
         android:fontFamily="@font/segoepr"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/title_size"
-        android:paddingTop="@dimen/margin_title_toolbar"
+        android:paddingTop="5dp"
         android:paddingBottom="@dimen/margin_title_toolbar"
         android:layout_marginTop="@dimen/margin_title"
         android:layout_marginStart="@dimen/margin_to_border"

@@ -96,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                 break;
         }
     }
-
     private void configureRecipeViewModel() {
         ViewModelFactory viewModelFactory = Injections.provideViewModelFactory(this);
         mRecipeViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel.class);

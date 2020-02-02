@@ -22,7 +22,7 @@ public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 1:
-                return RecipesFragment.newInstance();
+                return RecipesFragment.Companion.newInstance();
             case 2:
                 return SocialFragment.newInstance();
             case 3:
@@ -30,7 +30,7 @@ public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
             case 4:
                 return AddRecipeFragment.newInstance();
             default:
-                return HomeFragment.newInstance();
+                return HomeFragment.Companion.newInstance();
         }
     }
 
