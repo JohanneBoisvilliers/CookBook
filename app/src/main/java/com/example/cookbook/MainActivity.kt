@@ -1,14 +1,17 @@
 package com.example.cookbook
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.example.cookbook.database.CookBookLocalDatabase
 import com.example.cookbook.injections.Injections
-import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.facebook.stetho.Stetho
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,6 +19,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private var mRecipeViewModel: RecipeViewModel? = null
+    private val PERMISSIONS:Int = 1
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +31,20 @@ class MainActivity : AppCompatActivity() {
         configureBottomView()
         configureRecipeViewModel()
         val cookBookLocalDatabase = CookBookLocalDatabase.getInstance(this)
-        cookBookLocalDatabase.recipeDao().recipes.observe(this, Observer { list -> Log.d("DEbug", "onCreate: " + list[0].name) })
+        // TODO enlever cette ligne qui ne sert qu'à instancier la BBD
+        cookBookLocalDatabase.recipeDao().getRecipes().observe(this, Observer { list -> Log.d("DEbug", "onCreate: " + list[0].baseDataRecipe?.name) })
+        // TODO créer vraie méthode pour gestion de permission
+        if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+
+                ActivityCompat.requestPermissions(this,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        PERMISSIONS)
+
+            }
+
     }
 
     // ----------------------------------- UTILS -----------------------------------

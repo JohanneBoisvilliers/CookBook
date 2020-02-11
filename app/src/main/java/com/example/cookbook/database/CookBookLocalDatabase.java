@@ -15,7 +15,9 @@ import com.example.cookbook.R;
 import com.example.cookbook.database.dao.IngredientDao;
 import com.example.cookbook.database.dao.RecipeDao;
 import com.example.cookbook.database.dao.UserDao;
+import com.example.cookbook.models.BaseDataRecipe;
 import com.example.cookbook.models.Ingredient;
+import com.example.cookbook.models.Photo;
 import com.example.cookbook.models.Recipe;
 import com.example.cookbook.utils.MyApp;
 
@@ -26,7 +28,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 
-@Database(entities = {Ingredient.class, Recipe.class}, version = 1, exportSchema = false)
+@Database(entities = {Ingredient.class, BaseDataRecipe.class,Photo.class}, version = 1, exportSchema = false)
 public abstract class CookBookLocalDatabase extends RoomDatabase {
 
     // --- SINGLETON ---
@@ -51,7 +53,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
                                     insertIngredientHelper(db);
-                                    insertRecettesHelper(db);
+                                    insertRecipeHelper(db);
                             }})
                             .build();
                 }
@@ -86,7 +88,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
         }
     }
 
-    private static void insertRecettesHelper(SupportSQLiteDatabase db) {
+    private static void insertRecipeHelper(SupportSQLiteDatabase db) {
 
         InputStream is = MyApp.getContext().getResources().openRawResource(R.raw.recettes);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -106,7 +108,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                 recette.put("isAlreadyDone", tokens[1]);
                 recette.put("numberOfLike", tokens[2]);
                 recette.put("addDate", tokens[3]);
-                db.insert("Recipe", OnConflictStrategy.REPLACE, recette);
+                db.insert("BaseDataRecipe", OnConflictStrategy.REPLACE, recette);
 
             }
         } catch (IOException e) {

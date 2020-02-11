@@ -21,6 +21,6 @@ public class HorizontalRecyclerViewViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void updateUiOfRecipe(Recipe recipe){
-        recipeName.setText(recipe.getName());
+//        recipeName.setText(recipe.name);
     }
 }

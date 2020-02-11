@@ -7,6 +7,7 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cookbook.R
 import com.example.cookbook.models.Recipe
+import kotlinx.android.synthetic.main.recyclerview_all_recipes_item.view.*
 import java.util.*
 
 class RecipesListAdapter constructor(list:MutableList<Recipe>) : RecyclerView.Adapter<RecipesListViewHolder>() {
@@ -24,7 +25,7 @@ class RecipesListAdapter constructor(list:MutableList<Recipe>) : RecyclerView.Ad
 
     override fun onBindViewHolder(holder: RecipesListViewHolder, position: Int) {
         mRandom = Random()
-        holder.mPhotoContainer.layoutParams.height = getRandomHeight(550, 800)
+        holder.itemView.photo_container.layoutParams.height = getRandomHeight(550, 800)
         holder.updateRecipeCardUi(mRecipeList[position])
     }
 
