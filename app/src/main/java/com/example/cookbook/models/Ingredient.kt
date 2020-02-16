@@ -4,9 +4,11 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-class Ingredient {
+data class Ingredient (
 
     @PrimaryKey(autoGenerate = true)
-    var id: Long = 0
-    var name: String? = null
-}
+    val id: Long = 0,
+    val quantity:Int= 0,
+    val unityOfMeasure:String?,
+    val name: String? = null
+)

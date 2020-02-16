@@ -19,6 +19,7 @@ import com.example.cookbook.models.BaseDataRecipe;
 import com.example.cookbook.models.Ingredient;
 import com.example.cookbook.models.Photo;
 import com.example.cookbook.models.Recipe;
+import com.example.cookbook.models.Step;
 import com.example.cookbook.utils.MyApp;
 
 import java.io.BufferedReader;
@@ -28,7 +29,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 
 
-@Database(entities = {Ingredient.class, BaseDataRecipe.class,Photo.class}, version = 1, exportSchema = false)
+@Database(entities = {Ingredient.class, BaseDataRecipe.class,Photo.class, Step.class}, version = 1, exportSchema = false)
 public abstract class CookBookLocalDatabase extends RoomDatabase {
 
     // --- SINGLETON ---

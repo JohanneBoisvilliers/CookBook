@@ -7,9 +7,13 @@ import androidx.room.Relation
 
 data class Recipe (
         @Embedded
-        var baseDataRecipe: BaseDataRecipe?,
+        val baseDataRecipe: BaseDataRecipe?,
         @Relation(parentColumn = "id",entityColumn = "recipeId")
-        var photoList:MutableList<Photo>
+        val photoList:MutableList<Photo>,
+        @Relation(parentColumn ="id",entityColumn = "recipeId")
+        val stepList:MutableList<Step>,
+        @Relation(parentColumn = "id",entityColumn = "recipeId")
+        val ingredientList:MutableList<Ingredient>
 ){
-    constructor() : this(null, mutableListOf())
+    constructor() : this(null, mutableListOf(), mutableListOf(), mutableListOf())
 }

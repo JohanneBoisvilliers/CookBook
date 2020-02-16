@@ -17,7 +17,7 @@ import java.io.IOException
 
 
 class RecipesListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    //set the recipe's item in recycler view 
+    //set the recipe's item in recycler view
     fun updateRecipeCardUi(recipe:Recipe){
         itemView.recipe_title.text= recipe.baseDataRecipe?.name
         this.PhotoSettings(recipe)
