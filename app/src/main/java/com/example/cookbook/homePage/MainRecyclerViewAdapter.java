@@ -10,12 +10,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookbook.R;
+import com.example.cookbook.models.Recipe;
+
+import java.util.List;
 
 public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerViewViewHolder> {
 
     private Context mContext;
     private RecyclerView.RecycledViewPool mViewPool;
     private HorizontalRecyclerViewAdapter mHorizontalRecyclerViewAdapter;
+    private String[] mCategoryTitles;
+    private List<List<Recipe>> mMainEmbeddedRecipeList;
+
+    public MainRecyclerViewAdapter(List<List<Recipe>> mainEmbeddedRecipeList) {
+        this.mMainEmbeddedRecipeList = mainEmbeddedRecipeList;
+    }
 
     @NonNull
     @Override
@@ -25,7 +34,7 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
         View view = inflater.inflate(R.layout.recyclerview_main_item, parent, false);
 
         mViewPool = new RecyclerView.RecycledViewPool();
-        mHorizontalRecyclerViewAdapter = new HorizontalRecyclerViewAdapter();
+        mCategoryTitles = mContext.getResources().getStringArray(R.array.titles_main_recycler_view);
 
         return new MainRecyclerViewViewHolder(view);
     }
@@ -33,7 +42,8 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     @Override
     public void onBindViewHolder(@NonNull MainRecyclerViewViewHolder holder, int position) {
         holder.mHorizontalRecyclerView.setRecycledViewPool(mViewPool);
-        holder.mHorizontalRecyclerView.setAdapter(mHorizontalRecyclerViewAdapter);
+        holder.mHorizontalRecyclerView.setAdapter(new HorizontalRecyclerViewAdapter(mMainEmbeddedRecipeList.get(position)));
+        holder.mTitlesCategory.setText(mCategoryTitles[position]);
         holder.mHorizontalRecyclerView.setLayoutManager(new LinearLayoutManager(mContext,
                 LinearLayoutManager.HORIZONTAL, false));
     }
@@ -41,5 +51,11 @@ public class MainRecyclerViewAdapter extends RecyclerView.Adapter<MainRecyclerVi
     @Override
     public int getItemCount() {
         return 3;
+    }
+
+    public void notifyItemChanged(List<List<Recipe>> embeddedList) {
+        this.mMainEmbeddedRecipeList.clear();
+        this.mMainEmbeddedRecipeList.addAll(embeddedList);
+        notifyDataSetChanged();
     }
 }

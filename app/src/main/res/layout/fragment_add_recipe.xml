@@ -16,6 +16,8 @@
         android:fontFamily="@font/segoepr"
         android:layout_marginTop="@dimen/margin_title"
         android:layout_marginStart="@dimen/margin_to_border"
+        android:paddingTop="@dimen/margin_title_toolbar"
+        android:paddingBottom="@dimen/margin_title_toolbar"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

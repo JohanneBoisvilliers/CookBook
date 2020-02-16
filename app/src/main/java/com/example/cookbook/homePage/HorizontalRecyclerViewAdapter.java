@@ -9,9 +9,17 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.cookbook.R;
+import com.example.cookbook.models.Recipe;
+
+import java.util.List;
 
 public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<HorizontalRecyclerViewViewHolder> {
 
+    private List<Recipe> mRecipeList;
+
+    public HorizontalRecyclerViewAdapter(List<Recipe> recipeList) {
+        mRecipeList = recipeList;
+    }
 
     @NonNull
     @Override
@@ -24,7 +32,7 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
     @Override
     public void onBindViewHolder(@NonNull HorizontalRecyclerViewViewHolder holder, int position) {
-
+        holder.updateUiOfRecipe(mRecipeList.get(position));
     }
 
     @Override
