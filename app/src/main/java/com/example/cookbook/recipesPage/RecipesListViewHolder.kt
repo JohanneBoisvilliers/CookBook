@@ -17,15 +17,22 @@ import java.io.IOException
 
 
 class RecipesListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
+    //set the recipe's item in recycler view 
     fun updateRecipeCardUi(recipe:Recipe){
         itemView.recipe_title.text= recipe.baseDataRecipe?.name
+        this.PhotoSettings(recipe)
+    }
+    //get the actual recipe and check if there are some photos to
+    //set the recipe thumbnail
+    fun PhotoSettings(recipe:Recipe){
         if(recipe.photoList.size > 0){
             Glide.with(itemView.context)
                     .load(Uri.fromFile(File(recipe.photoList[0].photoUrl)))
-                    .fitCenter()
+                    .error(R.drawable.assiette_vide)
+                    .centerCrop()
                     .into(itemView.photo_container)
+        }else{
+            itemView.photo_container.setImageResource(R.drawable.assiette_vide)
         }
-
     }
 }
