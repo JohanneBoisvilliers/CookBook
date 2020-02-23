@@ -11,4 +11,8 @@ interface RecipeDao {
     @Query("SELECT * FROM BaseDataRecipe")
     @Transaction
     fun getRecipes(): LiveData<List<Recipe>>
+
+    @Query("SELECT * FROM BaseDataRecipe WHERE id= :recipeId")
+    @Transaction
+    fun getSpecificRecipe(recipeId : Long): LiveData<Recipe>
 }

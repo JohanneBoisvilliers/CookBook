@@ -1,6 +1,8 @@
 package com.example.cookbook.recipesPage
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.cookbook.R
 import com.example.cookbook.models.Recipe
+import com.example.cookbook.recipeDetailsPage.RecipeDetailsActivity
+import com.example.cookbook.utils.RecyclerItemClickListenr
 import kotlinx.android.synthetic.main.fragment_recipes.*
+import java.io.Serializable
+import kotlin.math.log
 
 class RecipesFragment : Fragment() {
 
@@ -45,6 +51,18 @@ class RecipesFragment : Fragment() {
             layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
             adapter = mListAdapter
         }
+        all_recipes_recyclerview.addOnItemTouchListener(RecyclerItemClickListenr(requireContext(), all_recipes_recyclerview, object : RecyclerItemClickListenr.OnItemClickListener {
+
+            override fun onItemClick(view: View, position: Int) {
+                val intent = Intent(context, RecipeDetailsActivity::class.java)
+                intent.putExtra("recipe",mRecipesList[position].baseDataRecipe?.id)
+
+                startActivity(intent)
+            }
+            override fun onItemLongClick(view: View?, position: Int) {
+                TODO("do nothing")
+            }
+        }))
     }
     //get recipe view model for requests
     private fun configureRecipeViewModel(){

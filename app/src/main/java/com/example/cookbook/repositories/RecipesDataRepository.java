@@ -17,4 +17,8 @@ public class RecipesDataRepository {
     public LiveData<List<Recipe>> getRecipes() {
         return this.mRecipeDao.getRecipes();
     }
+
+    public LiveData<Recipe> getSpecificRecipe(Long recipeId){
+        return this.mRecipeDao.getSpecificRecipe(recipeId);
+    }
 }
