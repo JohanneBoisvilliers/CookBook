@@ -11,7 +11,7 @@ import com.example.cookbook.models.Ingredient;
 @Dao
 public interface IngredientDao {
 
-    @Query("SELECT * FROM Ingredient WHERE id = :ingredientId")
+    @Query("SELECT * FROM Ingredient WHERE ingredientId = :ingredientId")
     LiveData<Ingredient> getIngredient(long ingredientId);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

@@ -12,7 +12,7 @@ interface RecipeDao {
     @Transaction
     fun getRecipes(): LiveData<List<Recipe>>
 
-    @Query("SELECT * FROM BaseDataRecipe WHERE id= :recipeId")
+    @Query("SELECT * FROM BaseDataRecipe WHERE baseRecipeId= :recipeId")
     @Transaction
     fun getSpecificRecipe(recipeId : Long): LiveData<Recipe>
 }

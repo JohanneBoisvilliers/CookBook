@@ -2,7 +2,6 @@ package com.example.cookbook.recipesPage
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,8 +14,6 @@ import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipeDetailsPage.RecipeDetailsActivity
 import com.example.cookbook.utils.RecyclerItemClickListenr
 import kotlinx.android.synthetic.main.fragment_recipes.*
-import java.io.Serializable
-import kotlin.math.log
 
 class RecipesFragment : Fragment() {
 
@@ -55,7 +52,7 @@ class RecipesFragment : Fragment() {
 
             override fun onItemClick(view: View, position: Int) {
                 val intent = Intent(context, RecipeDetailsActivity::class.java)
-                intent.putExtra("recipe",mRecipesList[position].baseDataRecipe?.id)
+                intent.putExtra("recipe",mRecipesList[position].baseDataRecipe?.baseRecipeId)
 
                 startActivity(intent)
             }
