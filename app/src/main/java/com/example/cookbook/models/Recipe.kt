@@ -21,8 +21,10 @@ data class Recipe (
                         parentColumn = "baseRecipeId",
                         entityColumn = "ingredientId"
                         ))
-        var ingredientList:MutableList<Ingredient>
+        var ingredientList:MutableList<Ingredient>,
+        @Relation(parentColumn="baseRecipeId",entityColumn = "recipeId")
+        var stepList:MutableList<Step>
 ){
-        constructor() : this(null, mutableListOf(), mutableListOf())
+        constructor() : this(null, mutableListOf(), mutableListOf(), mutableListOf())
 }
 

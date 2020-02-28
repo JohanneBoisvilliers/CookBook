@@ -19,6 +19,7 @@ import com.example.cookbook.models.BaseDataRecipe;
 import com.example.cookbook.models.BaseRecipeIngredientCrossRef;
 import com.example.cookbook.models.Ingredient;
 import com.example.cookbook.models.Photo;
+import com.example.cookbook.models.Step;
 import com.example.cookbook.utils.MyApp;
 
 import java.io.BufferedReader;
@@ -31,7 +32,8 @@ import java.nio.charset.Charset;
 @Database(entities = {Ingredient.class,
         BaseDataRecipe.class,
         Photo.class,
-        BaseRecipeIngredientCrossRef.class},
+        BaseRecipeIngredientCrossRef.class,
+        Step.class},
         version = 1,
         exportSchema = false)
 public abstract class CookBookLocalDatabase extends RoomDatabase {

@@ -28,7 +28,7 @@ class IngredientsListAdapter constructor(list:MutableList<Ingredient>) : Recycle
         holder.bind(mIngredientList[position])
     }
 
-    fun updateList(list:List<Ingredient>){
+    fun updateIngredientList(list:List<Ingredient>){
         mIngredientList.clear()
         mIngredientList.addAll(list)
         notifyDataSetChanged()

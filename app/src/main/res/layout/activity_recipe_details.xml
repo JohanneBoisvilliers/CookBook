@@ -1,40 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    tools:context=".recipeDetailsPage.RecipeDetailsActivity">
+    android:layout_height="wrap_content">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:layout_alignParentTop="true"
-        android:id="@+id/viewPager_recipe_details"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/viewpager_height" />
-
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/rd_tab_layout"
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:tabBackground="@drawable/tab_selector"
-        app:tabGravity="center"
-        app:tabIndicatorHeight="0dp"/>
+        tools:context=".recipeDetailsPage.RecipeDetailsActivity">
 
-    <TextView
-        android:id="@+id/ingredient_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ingredient_title"
-        android:textStyle="bold"
-        android:textSize="@dimen/ingredients_title_size"
-        android:layout_below="@id/viewPager_recipe_details"
-        android:layout_margin="@dimen/margin_to_border"/>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager_recipe_details"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/viewpager_height"
+            android:layout_alignParentTop="true" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/rd_tab_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/viewPager_recipe_details"
+            app:tabBackground="@drawable/tab_selector"
+            app:tabGravity="center"
+            app:tabIndicatorHeight="0dp" />
+
+        <TextView
+            android:id="@+id/ingredient_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/viewPager_recipe_details"
+            android:layout_margin="@dimen/margin_to_border"
+            android:text="@string/ingredient_title"
+            android:textSize="@dimen/ingredients_title_size"
+            android:textStyle="bold" />
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ingredient_recycler_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/ingredient_title"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/ingredient_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ingredient_title" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/recipe_step_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ingredient_recycler_view"
+            android:layout_margin="@dimen/margin_to_border"
+            android:text="@string/recipe_step_title"
+            android:textSize="@dimen/ingredients_title_size"
+            android:textStyle="bold" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recipe_step_recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/recipe_step_title" />
+
+    </RelativeLayout>
+</ScrollView>
