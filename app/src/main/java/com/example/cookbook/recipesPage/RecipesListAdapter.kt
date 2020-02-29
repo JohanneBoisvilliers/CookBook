@@ -20,6 +20,7 @@ class RecipesListAdapter constructor(list:MutableList<Recipe>) : RecyclerView.Ad
         mContext = parent.context
         val layoutInflater = LayoutInflater.from(mContext)
         val view = layoutInflater.inflate(R.layout.recyclerview_all_recipes_item, parent, false)
+
         return RecipesListViewHolder(view)
     }
 
