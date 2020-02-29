@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_recipes -> activity_main_viewpager.currentItem = 1
             R.id.nav_social -> activity_main_viewpager.currentItem = 2
             R.id.nav_user -> activity_main_viewpager.currentItem = 3
-            R.id.nav_add -> activity_main_viewpager.currentItem = 4
         }
     }
 

@@ -32,9 +32,8 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.paramIngredientRecyclerview()
         this.paramStepRecyclerview()
     }
-
+    // settings of viewpager
     fun paramViewPager() {
-        this.viewPagerAdapter = PhotoViewPagerAdapter(recipe!!.photoList)
         viewPager_recipe_details.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         viewPager_recipe_details.adapter = viewPagerAdapter
 
