@@ -7,12 +7,16 @@
     <string name="all_recipes_title">All Recipes</string>
     <!--PROFILE FRAGMENT-->
     <string name="recipe_description">RECIPES :</string>
-    <!--ADD RECIPES FRAGMENT-->
+    <!--ADD RECIPES ACTIVITY-->
     <string name="add_recipe_title">New Recipes</string>
     <string name="hint_add_recipe_url">Recipe URL</string>
     <string name="or_separator">OR</string>
-    <string name="add_recipe_button_url">ADD RECIPE BY URL</string>
-    <string name="add_recipe_button_manually">ADD RECIPE MANUALLY</string>
+    <string name="add_recipe_button_url">ADD RECIPE</string>
+    <string name="add_ingredient_button">ADD INGREDIENT</string>
+    <string name="category_title">Category :</string>
+    <string name="recipe_title">Recipe</string>
+    <string name="online_title">Online recipe ?</string>
+    <string name="ingredients_title">Ingredients :</string>
     <!--RECIPES DETAILS ACTIVITY-->
     <string name="ingredient_title">INGREDIENTS</string>
     <string name="recipe_step_title">RECIPE</string>

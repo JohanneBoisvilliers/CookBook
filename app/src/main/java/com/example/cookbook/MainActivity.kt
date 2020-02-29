@@ -1,6 +1,7 @@
 package com.example.cookbook
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -10,16 +11,20 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
+import com.example.cookbook.addRecipePage.AddRecipeActvity
 import com.example.cookbook.database.CookBookLocalDatabase
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.facebook.stetho.Stetho
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_recipes.*
 
 class MainActivity : AppCompatActivity() {
 
     private var mRecipeViewModel: RecipeViewModel? = null
     private val PERMISSIONS:Int = 1
+
+    // ----------------------------------- LIFE CYCLE -----------------------------------
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,4 +85,6 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = Injections.provideViewModelFactory(this)
         mRecipeViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel::class.java)
     }
+
+
 }
