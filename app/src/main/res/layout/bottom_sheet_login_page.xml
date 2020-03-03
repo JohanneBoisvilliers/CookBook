@@ -10,7 +10,12 @@
     android:background="@color/colorPrimary"
     android:clipToPadding="true"
     app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
-
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_accueil"
+        android:alpha="0.4"
+        android:scaleType="centerCrop"/>
     <LinearLayout
         android:id="@+id/title_container"
         android:orientation="horizontal"
@@ -22,11 +27,12 @@
         android:gravity="center_horizontal">
 
         <TextView
-            android:gravity="center_horizontal"
             android:id="@+id/title_text"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/playfair_display_bold_italic"
+            android:alpha="0.7"
+            android:fontFamily="@font/playfair_display_italic"
+            android:gravity="center_horizontal"
             android:padding="@dimen/margin_to_border"
             android:text="@string/title_register_page"
             android:textColor="@color/colorAccent"
@@ -37,13 +43,13 @@
     <!-- USERNAME TEXT FIELD -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/username_field"
-        android:layout_width="300dp"
+        android:layout_width="@dimen/textfield_width"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/title_container"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintBottom_toTopOf="@id/password_field"
-        android:padding="16dp">
+        android:padding="@dimen/textfield_padding">
 
         <com.google.android.material.textfield.TextInputEditText
             android:background="@drawable/textfield_background"
@@ -57,8 +63,8 @@
     <!-- PASSWORD TEXT FIELD -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/password_field"
-        android:layout_width="300dp"
-        android:padding="@dimen/margin_to_border"
+        android:layout_width="@dimen/textfield_width"
+        android:padding="@dimen/textfield_padding"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -81,14 +87,17 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/social_logos_container"
-        android:paddingBottom="@dimen/logos_bottom_padding">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_field">
 
         <Button
             android:id="@+id/send_pass_button"
             android:layout_width="@dimen/round_button_width"
             android:layout_height="@dimen/round_button_height"
             android:background="@drawable/round_button"
-            android:text="@string/register_button"/>
+            android:text="@string/register_button"
+            android:layout_marginBottom="5dp"/>
         <!-- "OR" SEPARATOR CONTAINER -->
         <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/separator"
@@ -96,11 +105,11 @@
             android:layout_height="wrap_content"
             android:gravity="center_vertical|center_horizontal"
             android:orientation="horizontal"
-            android:paddingBottom="@dimen/separator_padding"
-            android:paddingTop="@dimen/separator_padding">
+            android:paddingTop="@dimen/separator_padding"
+            android:paddingBottom="@dimen/separator_padding">
 
             <View
-                android:layout_width="120dp"
+                android:layout_width="@dimen/separator_width"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark" />
 
@@ -109,11 +118,11 @@
                 android:layout_height="wrap_content"
                 android:paddingStart="@dimen/margin_to_border"
                 android:paddingEnd="@dimen/margin_to_border"
-                android:textColor="@color/colorAccent"
-                android:text="@string/or_separator" />
+                android:text="@string/or_separator"
+                android:textColor="@color/colorAccent" />
 
             <View
-                android:layout_width="120dp"
+                android:layout_width="@dimen/separator_width"
                 android:layout_height="1dp"
                 android:background="@color/colorPrimaryDark" />
         </androidx.appcompat.widget.LinearLayoutCompat>
@@ -138,47 +147,51 @@
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"></Space>
+            android:layout_weight="1.5"/>
 
         <ImageView
+            android:id="@+id/google_button"
             android:layout_width="@dimen/social_logo_size"
             android:layout_height="@dimen/social_logo_size"
-            android:background="@color/colorPrimaryDark" />
+            android:src="@drawable/logo_google"/>
 
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"></Space>
+            android:layout_weight="1"/>
 
         <ImageView
+            android:id="@+id/facebook_button"
             android:layout_width="@dimen/social_logo_size"
             android:layout_height="@dimen/social_logo_size"
-            android:background="@color/colorPrimaryDark" />
+            android:src="@drawable/logo_facebook"/>
 
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"></Space>
+            android:layout_weight="1"/>
 
         <ImageView
+            android:id="@+id/twitter_button"
             android:layout_width="@dimen/social_logo_size"
             android:layout_height="@dimen/social_logo_size"
-            android:background="@color/colorPrimaryDark" />
+            android:src="@drawable/logo_twitter"/>
 
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"></Space>
+            android:layout_weight="1"/>
 
         <ImageView
+            android:id="@+id/instagram_button"
             android:layout_width="@dimen/social_logo_size"
             android:layout_height="@dimen/social_logo_size"
-            android:background="@color/colorPrimaryDark" />
+            android:src="@drawable/logo_insta"/>
 
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1"></Space>
+            android:layout_weight="1.5"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
     <!-- ACCOUNT QUESTION -->
