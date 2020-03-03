@@ -1,6 +1,9 @@
 <resources>
-    <!--MAIN-->
-    <string name="app_name">CookBook</string>
+    <!-- GENERAL -->
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="or_separator">OR</string>
+    <string name="continue_separator">Continue with</string>
     <!--HOME FRAGMENT-->
     <string name="category_latest">Latest Recipes</string>
     <!--ALL RECIPES FRAGMENT-->
@@ -10,9 +13,19 @@
     <!--ADD RECIPES FRAGMENT-->
     <string name="add_recipe_title">New Recipes</string>
     <string name="hint_add_recipe_url">Recipe URL</string>
-    <string name="or_separator">OR</string>
     <string name="add_recipe_button_url">ADD RECIPE BY URL</string>
     <string name="add_recipe_button_manually">ADD RECIPE MANUALLY</string>
+    <!-- LANDING PAGE -->
+    <string name="landing_title">Cookbook</string>
+    <string name="login_button">Login</string>
+    <string name="register_sentence">Don\'t have an account yet ? please</string>
+    <string name="register_word">register</string>
+    <!-- BOTTOM SHEET -->
+    <string name="register_button">Register</string>
+    <string name="login_word">login</string>
+    <string name="login_sentence">Do you have an account ? please</string>
+    <string name="title_register_page">Welcome, please register</string>
+    <string name="title_login_page">Welcome, please Login</string>
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>
