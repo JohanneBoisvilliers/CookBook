@@ -36,7 +36,6 @@
             android:padding="@dimen/margin_to_border"
             android:text="@string/title_register_page"
             android:textColor="@color/colorAccent"
-
             android:textSize="@dimen/title_register_size" />
 
     </LinearLayout>

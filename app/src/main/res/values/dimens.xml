@@ -42,7 +42,7 @@
     <dimen name="bottom_sheet_height">500dp</dimen>
     <dimen name="separator_padding">15dp</dimen>
     <dimen name="logos_bottom_padding">30dp</dimen>
-    <dimen name="title_register_size">30sp</dimen>
+    <dimen name="title_register_size">25sp</dimen>
     <dimen name="textfield_padding">8dp</dimen>
     <dimen name="textfield_width">300dp</dimen>
     <dimen name="separator_width">80dp</dimen>
