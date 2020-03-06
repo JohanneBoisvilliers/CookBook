@@ -152,7 +152,8 @@
             android:id="@+id/google_button"
             android:layout_width="@dimen/social_logo_size"
             android:layout_height="@dimen/social_logo_size"
-            android:src="@drawable/logo_google"/>
+            android:src="@drawable/logo_google"
+            android:clickable="true"/>
 
         <Space
             android:layout_width="0dp"

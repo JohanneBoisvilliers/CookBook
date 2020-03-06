@@ -27,6 +27,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.concurrent.Executors;
 
 
 @Database(entities = {Ingredient.class, BaseDataRecipe.class,Photo.class, Step.class}, version = 1, exportSchema = false)
@@ -53,8 +54,14 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                                 @Override
                                 public void onCreate(@NonNull SupportSQLiteDatabase db) {
                                     super.onCreate(db);
-                                    insertIngredientHelper(db);
-                                    insertRecipeHelper(db);
+                                    Executors.newSingleThreadScheduledExecutor().execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            insertIngredientHelper(db,context);
+                                            insertRecipeHelper(db);
+                                        }
+                                    });
+
                             }})
                             .build();
                 }
@@ -63,7 +70,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static void insertIngredientHelper(SupportSQLiteDatabase db){
+    public static void insertIngredientHelper(SupportSQLiteDatabase db,Context context){
 
         InputStream is = MyApp.getContext().getResources().openRawResource(R.raw.ingredients);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
@@ -77,10 +84,9 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                 String[] tokens = line.split(";");
                 lineNumber += 1;
 
-                ContentValues ingredientValue=new ContentValues();
-                ingredientValue.put("id",lineNumber);
-                ingredientValue.put("name",tokens[0]);
-                db.insert("Ingredient",OnConflictStrategy.REPLACE,ingredientValue);
+                Ingredient ingredient = new Ingredient(lineNumber,1,null,tokens[0]);
+
+                getInstance(context).ingredientDao().insertIngredient(ingredient);
 
             }
         } catch (IOException e) {
