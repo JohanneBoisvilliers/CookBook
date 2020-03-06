@@ -31,16 +31,18 @@ class LandingPageActivity : AppCompatActivity() {
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private val RC_SIGN_IN = 999
     private lateinit var fbAuth:FirebaseAuth
+    private lateinit var snackbar:Snackbar
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_landing_page)
-        fbAuth = FirebaseAuth.getInstance()
+
         this.init()
     }
 
     private fun init() {
+        fbAuth = FirebaseAuth.getInstance()
         this.configureGoogleSignInOptions()
         this.paramBottomSheetBehavior()
         this.listenerOnRegisterWord()
@@ -94,8 +96,9 @@ class LandingPageActivity : AppCompatActivity() {
     }
 
     private fun listenerOnGoogleButton(){
-        google_button.setOnClickListener{view -> signInWithGoogle(view)}
+        google_button.setOnClickListener{signInWithGoogle()}
     }
+
     // set title, button text, bottom sheet word
     private fun paramBottomsheetUiInfos(buttonText: String, titleText: String, wordText: String) {
         slideUpDownBottomSheet()
@@ -135,8 +138,8 @@ class LandingPageActivity : AppCompatActivity() {
             }
         })
     }
-    fun showMessage(view:View, message: String){
-        Snackbar.make(view, message, Snackbar.LENGTH_INDEFINITE).setAction("Action", null).show()
+    fun configSnackbar(message: String){
+        snackbar = Snackbar.make(root_layout, message, Snackbar.LENGTH_INDEFINITE)
     }
 
     fun configureGoogleSignInOptions(){
@@ -148,8 +151,9 @@ class LandingPageActivity : AppCompatActivity() {
         mGoogleSignInClient=GoogleSignIn.getClient(this,mGoogleSignInOptions)
     }
 
-    fun signInWithGoogle(view: View){
-        showMessage(view,"Authenticating...")
+    fun signInWithGoogle(){
+        configSnackbar("Authenticating...")
+        snackbar.show()
 
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
@@ -165,10 +169,12 @@ class LandingPageActivity : AppCompatActivity() {
                 // Google Sign In was successful, authenticate with Firebase
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account!!)
+                snackbar.dismiss()
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
-                Log.w("error", "Google sign in failed", e)
-                // ...
+                snackbar.dismiss()
+                configSnackbar("Google sign in failed, try again")
+                snackbar.show()
             }
         }
     }
@@ -184,6 +190,8 @@ class LandingPageActivity : AppCompatActivity() {
                         startActivity(intent)
 
                     } else {
+                        configSnackbar("bad credential")
+                        snackbar.show()
                     }
                 }
     }
