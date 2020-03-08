@@ -26,6 +26,9 @@
     <string name="login_sentence">Do you have an account ? please</string>
     <string name="title_register_page">Welcome, please register</string>
     <string name="title_login_page">Welcome, please Login</string>
+    <!--PROFILE FRAGMENT-->
+    <string name="register_date">Registered since: %s</string>
+
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>

@@ -5,8 +5,8 @@
       <module fileurl="file://$PROJECT_DIR$/Android-CookBook.iml" filepath="$PROJECT_DIR$/Android-CookBook.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/Android-CookBook-app.iml" filepath="$PROJECT_DIR$/app/Android-CookBook-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/CookBook.iml" filepath="$PROJECT_DIR$/CookBook.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/CookBook-app.iml" filepath="$PROJECT_DIR$/app/CookBook-app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Documents-CookBook.iml" filepath="$PROJECT_DIR$/Documents-CookBook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/CookBook-app.iml" filepath="$PROJECT_DIR$/app/CookBook-app.iml" group="CookBook/app" />
+      <module fileurl="file://$PROJECT_DIR$/Documents-CookBook.iml" filepath="$PROJECT_DIR$/Documents-CookBook.iml" group="CookBook" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
