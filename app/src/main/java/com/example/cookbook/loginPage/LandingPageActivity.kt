@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.lifecycle.ViewModelProviders
 import com.example.cookbook.MainActivity
 import com.example.cookbook.R
+import com.example.cookbook.injections.Injections
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -27,6 +29,7 @@ import kotlinx.android.synthetic.main.bottom_sheet_login_page.*
 
 
 class LandingPageActivity : AppCompatActivity() {
+    private lateinit var loginViewModel: LoginViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private var isExpanded: Boolean = false
     private lateinit var mGoogleSignInOptions: GoogleSignInOptions
@@ -34,13 +37,8 @@ class LandingPageActivity : AppCompatActivity() {
     private val RC_SIGN_IN = 999
     private lateinit var fbAuth: FirebaseAuth
     private lateinit var snackbar: Snackbar
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_landing_page)
-
-        this.init()
+    override fun onStart() {
+        super.onStart()
         if (fbAuth.currentUser != null) {
             // User is signed in (getCurrentUser() will be null if not signed in)
             val intent = Intent(this, MainActivity::class.java);
@@ -49,15 +47,26 @@ class LandingPageActivity : AppCompatActivity() {
         }
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_landing_page)
+
+        this.init()
+
+
+    }
+
     private fun init() {
         fbAuth = FirebaseAuth.getInstance()
-        this.configureGoogleSignInOptions()
-        this.paramBottomSheetBehavior()
+        this.initLoginViewModel()
+        this.initGoogleSignInOptions()
+        this.initBottomSheetBehavior()
         this.listenerOnRegisterWord()
         this.listenerOnClickableWord()
         this.listenerOnLogin()
         this.listenerOnGoogleButton()
         this.listenerOnTwitterButton()
+        this.listenerOnEmailButton()
     }
 
     // open/close function to bottom sheet
@@ -71,6 +80,8 @@ class LandingPageActivity : AppCompatActivity() {
 
     // Set listener on text in bottom landing page
     private fun listenerOnRegisterWord() {
+        loginViewModel.isRegisterExpanded.value = true
+        loginViewModel.isLoginExpanded.value = false
         register_word_landing.setOnClickListener {
             paramBottomsheetUiInfos(
                     getString(R.string.register_button),
@@ -84,11 +95,15 @@ class LandingPageActivity : AppCompatActivity() {
         clickable_word.setOnClickListener {
             // set title, button text, bottom word depending to where we're come from
             if (clickable_word.text == getString(R.string.register_word)) {
+                loginViewModel.isRegisterExpanded.value = true
+                loginViewModel.isLoginExpanded.value = false
                 paramBottomsheetUiInfos(
                         getString(R.string.register_button),
                         getString(R.string.title_register_page),
                         getString(R.string.login_word))
             } else {
+                loginViewModel.isLoginExpanded.value = true
+                loginViewModel.isRegisterExpanded.value = false
                 paramBottomsheetUiInfos(
                         getString(R.string.login_button),
                         getString(R.string.title_login_page),
@@ -101,6 +116,8 @@ class LandingPageActivity : AppCompatActivity() {
     // Set listener on Login button
     private fun listenerOnLogin() {
         login_button.setOnClickListener {
+            loginViewModel.isLoginExpanded.value = true
+            loginViewModel.isRegisterExpanded.value = false
             paramBottomsheetUiInfos(
                     getString(R.string.login_button),
                     getString(R.string.title_login_page),
@@ -111,8 +128,46 @@ class LandingPageActivity : AppCompatActivity() {
     private fun listenerOnGoogleButton() {
         google_button.setOnClickListener { signInWithGoogle() }
     }
+
     private fun listenerOnTwitterButton() {
         twitter_button.setOnClickListener { signInWithTwitter() }
+    }
+
+    private fun listenerOnEmailButton() {
+        email_button.setOnClickListener {
+            if (loginViewModel.isRegisterExpanded.value == true) {
+                initSnackBar(getString(R.string.snackbar_register), Snackbar.LENGTH_INDEFINITE)
+                fbAuth.createUserWithEmailAndPassword("${username_input.text}", "${pass_input.text}")
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                // Sign in success, update UI with the signed-in user's information
+                                snackbar.dismiss()
+                                initSnackBar(getString(R.string.snackbar_success), Snackbar.LENGTH_SHORT)
+                                loginViewModel.isRegisterExpanded.value = false
+                                loginViewModel.isLoginExpanded.value = false
+                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                            } else {
+                                snackbar.dismiss()
+                                initSnackBar("${task.exception?.message}", Snackbar.LENGTH_LONG)
+                            }
+                        }
+            } else {
+                initSnackBar(getString(R.string.snackbar_auth), Snackbar.LENGTH_INDEFINITE)
+                fbAuth.signInWithEmailAndPassword("${username_input.text}", "${pass_input.text}")
+                        .addOnCompleteListener(this) { task ->
+                            if (task.isSuccessful) {
+                                // Sign in success, update UI with the signed-in user's information
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                                snackbar.dismiss()
+                                finish()
+                            } else {
+                                // If sign in fails, display a message to the user.
+                                initSnackBar("${task.exception?.message}", Snackbar.LENGTH_LONG)
+                            }
+                        }
+            }
+        }
     }
 
     // set title, button text, bottom sheet word
@@ -124,28 +179,26 @@ class LandingPageActivity : AppCompatActivity() {
     }
 
     // handle callback for bottom sheet
-    private fun paramBottomSheetBehavior() {
+    private fun initBottomSheetBehavior() {
         bottomSheetBehavior = BottomSheetBehavior.from<ConstraintLayout>(bottom_sheet_register)
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
             @SuppressLint("SwitchIntDef")
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 // React to state change
                 when (newState) {
-                    //set isExpanded bool when bottom sheet is open with login button or register text
-                    BottomSheetBehavior.STATE_EXPANDED -> {
-                        isExpanded = true
-                    }
                     //when bottom sheet is collapsed , check if isExpanded is true
                     //if it's true, it's mean that we clicked on word in bottom sheet
                     //so we have to close bottom sheet and re open it with good informations
                     BottomSheetBehavior.STATE_COLLAPSED -> {
-                        if (isExpanded) {
+                        if (loginViewModel.isLoginExpanded.value!! or loginViewModel.isRegisterExpanded.value!!) {
                             bottomSheetBehavior.state = BottomSheetBehavior.STATE_EXPANDED
                         }
                     }
                     //if we close bottom sheet with dragging action, set isExpanded to false
                     BottomSheetBehavior.STATE_DRAGGING -> {
-                        isExpanded = false
+                        //isExpanded = false
+                        loginViewModel.isRegisterExpanded.value = false
+                        loginViewModel.isLoginExpanded.value = false
                     }
                 }
             }
@@ -156,11 +209,12 @@ class LandingPageActivity : AppCompatActivity() {
         })
     }
 
-    fun configSnackbar(message: String) {
-        snackbar = Snackbar.make(root_layout, message, Snackbar.LENGTH_INDEFINITE)
+    fun initSnackBar(message: String, duration: Int) {
+        snackbar = Snackbar.make(root_layout, message, duration)
+        snackbar.show()
     }
 
-    fun configureGoogleSignInOptions() {
+    fun initGoogleSignInOptions() {
         // Configure Google Sign In
         mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -170,30 +224,40 @@ class LandingPageActivity : AppCompatActivity() {
     }
 
     fun signInWithGoogle() {
-        configSnackbar("Authenticating...")
-        snackbar.show()
-
+        initSnackBar(getString(R.string.snackbar_auth), Snackbar.LENGTH_INDEFINITE)
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
     }
-    fun signInWithTwitter() {
-        configSnackbar("Authenticating...")
-        snackbar.show()
-        val provider = OAuthProvider.newBuilder("twitter.com")
 
-        fbAuth
-                .startActivityForSignInWithProvider( /* activity= */this, provider.build())
-                .addOnSuccessListener(
-                        OnSuccessListener<AuthResult?> {
-                            val intent = Intent(this, MainActivity::class.java)
-                            startActivity(intent)
-                            snackbar.dismiss()
-                            finish()
-                        })
-                .addOnFailureListener(
-                        OnFailureListener {
-                            // Handle failure.
-                        })
+    fun signInWithTwitter() {
+        initSnackBar(getString(R.string.snackbar_auth), Snackbar.LENGTH_INDEFINITE)
+        val provider = OAuthProvider.newBuilder("twitter.com")
+        val pendingResultTask = fbAuth.pendingAuthResult
+        if (pendingResultTask != null) { // There's something already here! Finish the sign-in for your user.
+            pendingResultTask.addOnSuccessListener(
+                    OnSuccessListener<AuthResult?> {
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        snackbar.dismiss()
+                        finish()
+                    }).addOnFailureListener {
+                        snackbar.dismiss()
+                        initSnackBar("${it.message}", Snackbar.LENGTH_LONG)
+                    }
+        } else { // There's no pending result so you need to start the sign-in flow.
+            fbAuth.startActivityForSignInWithProvider( /* activity= */this, provider.build())
+                    .addOnSuccessListener(
+                            OnSuccessListener<AuthResult?> {
+                                val intent = Intent(this, MainActivity::class.java)
+                                startActivity(intent)
+                                snackbar.dismiss()
+                                finish()
+                            }).addOnFailureListener(this) {
+                        snackbar.dismiss()
+                        initSnackBar("${it.message}", Snackbar.LENGTH_LONG)
+                    }
+        }
+
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -210,8 +274,7 @@ class LandingPageActivity : AppCompatActivity() {
             } catch (e: ApiException) {
                 // Google Sign In failed, update UI appropriately
                 snackbar.dismiss()
-                configSnackbar("Google sign in failed, try again")
-                snackbar.show()
+                initSnackBar("${task.exception?.message}", Snackbar.LENGTH_LONG)
             }
         }
     }
@@ -226,10 +289,14 @@ class LandingPageActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     } else {
-                        configSnackbar("bad credential")
-                        snackbar.show()
+                        initSnackBar("${it.exception?.message}", Snackbar.LENGTH_LONG)
                     }
                 }
+    }
+
+    private fun initLoginViewModel() {
+        val viewModelFactory = Injections.provideViewModelFactory(this)
+        loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
     }
 
 }

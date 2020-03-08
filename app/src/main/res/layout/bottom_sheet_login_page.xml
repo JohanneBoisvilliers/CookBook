@@ -51,6 +51,7 @@
         android:padding="@dimen/textfield_padding">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_input"
             android:background="@drawable/textfield_background"
             android:padding="10dp"
             android:maxLines="1"
@@ -70,6 +71,7 @@
         app:layout_constraintTop_toBottomOf="@id/username_field">
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pass_input"
             android:background="@drawable/textfield_background"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -183,7 +185,7 @@
             android:layout_weight="1"/>
 
         <ImageView
-            android:id="@+id/instagram_button"
+            android:id="@+id/email_button"
             android:layout_width="@dimen/social_logo_size"
             android:layout_height="@dimen/social_logo_size"
             android:src="@drawable/logo_insta"/>

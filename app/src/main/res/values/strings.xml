@@ -20,6 +20,9 @@
     <string name="login_button">Login</string>
     <string name="register_sentence">Don\'t have an account yet ? please</string>
     <string name="register_word">register</string>
+    <string name="snackbar_auth">Authenticating…</string>
+    <string name="snackbar_register">Registration…</string>
+    <string name="snackbar_success">Registration complete</string>
     <!-- BOTTOM SHEET -->
     <string name="register_button">Register</string>
     <string name="login_word">login</string>

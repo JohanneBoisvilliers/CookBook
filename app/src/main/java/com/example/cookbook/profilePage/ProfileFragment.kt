@@ -1,6 +1,7 @@
 package com.example.cookbook.profilePage
 
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -12,6 +13,7 @@ import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DecodeFormat
 import com.bumptech.glide.request.target.Target
+import com.example.cookbook.MainActivity
 import com.example.cookbook.R
 import com.example.cookbook.databinding.FragmentProfileBinding
 import com.example.cookbook.loginPage.LandingPageActivity
@@ -100,9 +102,13 @@ class ProfileFragment : Fragment() {
 
         fbAuth.addAuthStateListener {
             if (fbAuth.currentUser == null){
-                val intent = Intent(context, LandingPageActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+                try {
+                    val intent = Intent(context, LandingPageActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    
+                }
             }
         }
     }
