@@ -2,11 +2,9 @@ package com.example.cookbook.loginPage
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.cookbook.MainActivity
 import com.example.cookbook.R
@@ -15,23 +13,27 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.OnFailureListener
+import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.OAuthProvider
 import kotlinx.android.synthetic.main.activity_landing_page.*
 import kotlinx.android.synthetic.main.bottom_sheet_login_page.*
 
+
 class LandingPageActivity : AppCompatActivity() {
-    private val viewModel: LoginViewModel by viewModels()
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
     private var isExpanded: Boolean = false
     private lateinit var mGoogleSignInOptions: GoogleSignInOptions
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private val RC_SIGN_IN = 999
-    private lateinit var fbAuth:FirebaseAuth
-    private lateinit var snackbar:Snackbar
+    private lateinit var fbAuth: FirebaseAuth
+    private lateinit var snackbar: Snackbar
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,6 +41,12 @@ class LandingPageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_landing_page)
 
         this.init()
+        if (fbAuth.currentUser != null) {
+            // User is signed in (getCurrentUser() will be null if not signed in)
+            val intent = Intent(this, MainActivity::class.java);
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun init() {
@@ -49,7 +57,9 @@ class LandingPageActivity : AppCompatActivity() {
         this.listenerOnClickableWord()
         this.listenerOnLogin()
         this.listenerOnGoogleButton()
+        this.listenerOnTwitterButton()
     }
+
     // open/close function to bottom sheet
     private fun slideUpDownBottomSheet() {
         if (bottomSheetBehavior.state != BottomSheetBehavior.STATE_EXPANDED) {
@@ -58,6 +68,7 @@ class LandingPageActivity : AppCompatActivity() {
             bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
+
     // Set listener on text in bottom landing page
     private fun listenerOnRegisterWord() {
         register_word_landing.setOnClickListener {
@@ -67,6 +78,7 @@ class LandingPageActivity : AppCompatActivity() {
                     getString(R.string.login_word))
         }
     }
+
     // Set listener on text in bottom sheet
     private fun listenerOnClickableWord() {
         clickable_word.setOnClickListener {
@@ -85,6 +97,7 @@ class LandingPageActivity : AppCompatActivity() {
 
         }
     }
+
     // Set listener on Login button
     private fun listenerOnLogin() {
         login_button.setOnClickListener {
@@ -95,8 +108,11 @@ class LandingPageActivity : AppCompatActivity() {
         }
     }
 
-    private fun listenerOnGoogleButton(){
-        google_button.setOnClickListener{signInWithGoogle()}
+    private fun listenerOnGoogleButton() {
+        google_button.setOnClickListener { signInWithGoogle() }
+    }
+    private fun listenerOnTwitterButton() {
+        twitter_button.setOnClickListener { signInWithTwitter() }
     }
 
     // set title, button text, bottom sheet word
@@ -106,6 +122,7 @@ class LandingPageActivity : AppCompatActivity() {
         title_text.text = titleText
         clickable_word.text = wordText
     }
+
     // handle callback for bottom sheet
     private fun paramBottomSheetBehavior() {
         bottomSheetBehavior = BottomSheetBehavior.from<ConstraintLayout>(bottom_sheet_register)
@@ -138,25 +155,45 @@ class LandingPageActivity : AppCompatActivity() {
             }
         })
     }
-    fun configSnackbar(message: String){
+
+    fun configSnackbar(message: String) {
         snackbar = Snackbar.make(root_layout, message, Snackbar.LENGTH_INDEFINITE)
     }
 
-    fun configureGoogleSignInOptions(){
+    fun configureGoogleSignInOptions() {
         // Configure Google Sign In
         mGoogleSignInOptions = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build()
-        mGoogleSignInClient=GoogleSignIn.getClient(this,mGoogleSignInOptions)
+        mGoogleSignInClient = GoogleSignIn.getClient(this, mGoogleSignInOptions)
     }
 
-    fun signInWithGoogle(){
+    fun signInWithGoogle() {
         configSnackbar("Authenticating...")
         snackbar.show()
 
         val signInIntent = mGoogleSignInClient.signInIntent
         startActivityForResult(signInIntent, RC_SIGN_IN)
+    }
+    fun signInWithTwitter() {
+        configSnackbar("Authenticating...")
+        snackbar.show()
+        val provider = OAuthProvider.newBuilder("twitter.com")
+
+        fbAuth
+                .startActivityForSignInWithProvider( /* activity= */this, provider.build())
+                .addOnSuccessListener(
+                        OnSuccessListener<AuthResult?> {
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                            snackbar.dismiss()
+                            finish()
+                        })
+                .addOnFailureListener(
+                        OnFailureListener {
+                            // Handle failure.
+                        })
     }
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -180,15 +217,14 @@ class LandingPageActivity : AppCompatActivity() {
     }
 
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         fbAuth.signInWithCredential(credential)
-                .addOnCompleteListener{
+                .addOnCompleteListener {
                     if (it.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        var intent=Intent(this, MainActivity::class.java)
+                        val intent = Intent(this, MainActivity::class.java)
                         startActivity(intent)
-
+                        finish()
                     } else {
                         configSnackbar("bad credential")
                         snackbar.show()
