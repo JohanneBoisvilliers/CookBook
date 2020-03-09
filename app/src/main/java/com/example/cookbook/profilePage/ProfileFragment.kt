@@ -11,9 +11,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.bumptech.glide.Glide
-import com.bumptech.glide.load.DecodeFormat
-import com.bumptech.glide.request.target.Target
-import com.example.cookbook.MainActivity
 import com.example.cookbook.R
 import com.example.cookbook.databinding.FragmentProfileBinding
 import com.example.cookbook.loginPage.LandingPageActivity
@@ -27,13 +24,19 @@ import kotlinx.android.synthetic.main.fragment_profile.*
  */
 class ProfileFragment : Fragment() {
 
-    private var fbAuth:FirebaseAuth = FirebaseAuth.getInstance()
-    private var currentUser:FirebaseUser?=null
-    private var name: String?=null
+    private var fbAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var currentUser: FirebaseUser? = null
+    private var name: String? = null
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var profileViewModel: ProfileViewModel
-    private var photoUrl:String?=null
+    private var photoUrl: String? = null
+    private lateinit var actualContext: Context
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        actualContext = context
+    }
 
     override fun onStart() {
         super.onStart()
@@ -42,14 +45,15 @@ class ProfileFragment : Fragment() {
         currentUser?.let {
 
             photoUrl = it.photoUrl.toString()
-            profileViewModel.name.value = it.displayName
+            profileViewModel.name.value = if (!it.displayName.isNullOrEmpty()) it.displayName else "Unknown"
             profileViewModel.creationDate.value = it.metadata?.creationTimestamp
 
-            binding.profileUsername.text = profileViewModel.name.value
-            binding.profileRegisterDate.text = getString(R.string.register_date,profileViewModel.getDate())
+            binding.profileUsername.text = if (profileViewModel.name.value!!.isNotEmpty()) profileViewModel.name.value else "unknown"
+            binding.profileRegisterDate.text = getString(R.string.register_date, profileViewModel.getDate())
             configureBackground()
         }
     }
+
     //inflate fragment recipe
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?,
@@ -64,7 +68,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureProfileViewModel()
-       listenerOnLogOutFab()
+        listenerOnLogOutFab()
     }
 
     companion object {
@@ -95,24 +99,21 @@ class ProfileFragment : Fragment() {
     }
 
     // ------------------------------------ SETTINGS ------------------------------------
-    private fun listenerOnLogOutFab(){
-        fab_logout.setOnClickListener{
+    private fun listenerOnLogOutFab() {
+        fab_logout.setOnClickListener {
             fbAuth.signOut()
         }
 
         fbAuth.addAuthStateListener {
-            if (fbAuth.currentUser == null){
-                try {
-                    val intent = Intent(context, LandingPageActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                } catch (e: Exception) {
-                    
-                }
+            if (fbAuth.currentUser == null) {
+                val intent = Intent(actualContext, LandingPageActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
             }
         }
     }
-    private fun configureProfileViewModel(){
+
+    private fun configureProfileViewModel() {
         profileViewModel = ViewModelProviders.of(activity!!).get(ProfileViewModel::class.java)
     }
 
