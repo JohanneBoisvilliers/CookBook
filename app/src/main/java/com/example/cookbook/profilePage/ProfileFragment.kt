@@ -14,6 +14,10 @@ import com.bumptech.glide.Glide
 import com.example.cookbook.R
 import com.example.cookbook.databinding.FragmentProfileBinding
 import com.example.cookbook.loginPage.LandingPageActivity
+import com.google.android.gms.auth.api.Auth
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -32,6 +36,7 @@ class ProfileFragment : Fragment() {
     private lateinit var profileViewModel: ProfileViewModel
     private var photoUrl: String? = null
     private lateinit var actualContext: Context
+    private lateinit var mGoogleSignInClient:GoogleSignInClient
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,6 +73,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         configureProfileViewModel()
+
         listenerOnLogOutFab()
     }
 
@@ -102,13 +108,12 @@ class ProfileFragment : Fragment() {
     private fun listenerOnLogOutFab() {
         fab_logout.setOnClickListener {
             fbAuth.signOut()
-        }
-
-        fbAuth.addAuthStateListener {
-            if (fbAuth.currentUser == null) {
-                val intent = Intent(actualContext, LandingPageActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+            fbAuth.addAuthStateListener {
+                if (fbAuth.currentUser == null) {
+                    val intent = Intent(actualContext, LandingPageActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                }
             }
         }
     }

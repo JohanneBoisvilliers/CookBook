@@ -1,8 +1,10 @@
 package com.example.cookbook.loginPage
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -10,6 +12,9 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cookbook.MainActivity
 import com.example.cookbook.R
 import com.example.cookbook.injections.Injections
+import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -26,6 +31,12 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
 import kotlinx.android.synthetic.main.activity_landing_page.*
 import kotlinx.android.synthetic.main.bottom_sheet_login_page.*
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager
+import com.facebook.login.LoginManager.*
+import com.facebook.login.LoginResult
+import java.util.*
 
 
 class LandingPageActivity : AppCompatActivity() {
@@ -37,6 +48,8 @@ class LandingPageActivity : AppCompatActivity() {
     private val RC_SIGN_IN = 999
     private lateinit var fbAuth: FirebaseAuth
     private lateinit var snackbar: Snackbar
+    private lateinit var callbackManager:CallbackManager
+
     override fun onStart() {
         super.onStart()
         if (fbAuth.currentUser != null) {
@@ -52,8 +65,6 @@ class LandingPageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_landing_page)
 
         this.init()
-
-
     }
 
     private fun init() {
@@ -67,6 +78,7 @@ class LandingPageActivity : AppCompatActivity() {
         this.listenerOnGoogleButton()
         this.listenerOnTwitterButton()
         this.listenerOnEmailButton()
+        this.listenerOnFacebookButton()
     }
 
     // open/close function to bottom sheet
@@ -170,6 +182,13 @@ class LandingPageActivity : AppCompatActivity() {
         }
     }
 
+    private fun listenerOnFacebookButton(){
+        facebook_button.setOnClickListener{
+            callbackManager = CallbackManager.Factory.create()
+            getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+        }
+    }
+
     // set title, button text, bottom sheet word
     private fun paramBottomsheetUiInfos(buttonText: String, titleText: String, wordText: String) {
         slideUpDownBottomSheet()
@@ -262,7 +281,12 @@ class LandingPageActivity : AppCompatActivity() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
+        callbackManager.onActivityResult(requestCode, resultCode, data)
+        if (resultCode== Activity.RESULT_OK){
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)

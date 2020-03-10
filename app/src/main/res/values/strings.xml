@@ -32,6 +32,8 @@
     <!--PROFILE FRAGMENT-->
     <string name="register_date">Registered since: %s</string>
 
+    <string name="facebook_app_id">190699912159028</string>
+    <string name="fb_login_protocol_scheme">fb190699912159028</string>
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>
