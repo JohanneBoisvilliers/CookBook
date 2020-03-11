@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -13,14 +12,11 @@ import com.example.cookbook.MainActivity
 import com.example.cookbook.R
 import com.example.cookbook.injections.Injections
 import com.facebook.CallbackManager
-import com.facebook.FacebookCallback
-import com.facebook.FacebookException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
@@ -31,11 +27,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.OAuthProvider
 import kotlinx.android.synthetic.main.activity_landing_page.*
 import kotlinx.android.synthetic.main.bottom_sheet_login_page.*
-import com.facebook.FacebookSdk;
-import com.facebook.appevents.AppEventsLogger;
-import com.facebook.login.LoginManager
 import com.facebook.login.LoginManager.*
-import com.facebook.login.LoginResult
 import java.util.*
 
 
@@ -48,7 +40,7 @@ class LandingPageActivity : AppCompatActivity() {
     private val RC_SIGN_IN = 999
     private lateinit var fbAuth: FirebaseAuth
     private lateinit var snackbar: Snackbar
-    private lateinit var callbackManager:CallbackManager
+    private lateinit var callbackManager: CallbackManager
 
     override fun onStart() {
         super.onStart()
@@ -147,46 +139,65 @@ class LandingPageActivity : AppCompatActivity() {
 
     private fun listenerOnEmailButton() {
         email_button.setOnClickListener {
-            if (loginViewModel.isRegisterExpanded.value == true) {
-                initSnackBar(getString(R.string.snackbar_register), Snackbar.LENGTH_INDEFINITE)
-                fbAuth.createUserWithEmailAndPassword("${username_input.text}", "${pass_input.text}")
-                        .addOnCompleteListener(this) { task ->
-                            if (task.isSuccessful) {
-                                // Sign in success, update UI with the signed-in user's information
-                                snackbar.dismiss()
-                                initSnackBar(getString(R.string.snackbar_success), Snackbar.LENGTH_SHORT)
-                                loginViewModel.isRegisterExpanded.value = false
-                                loginViewModel.isLoginExpanded.value = false
-                                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                            } else {
-                                snackbar.dismiss()
-                                initSnackBar("${task.exception?.message}", Snackbar.LENGTH_LONG)
-                            }
-                        }
-            } else {
-                initSnackBar(getString(R.string.snackbar_auth), Snackbar.LENGTH_INDEFINITE)
-                fbAuth.signInWithEmailAndPassword("${username_input.text}", "${pass_input.text}")
-                        .addOnCompleteListener(this) { task ->
-                            if (task.isSuccessful) {
-                                // Sign in success, update UI with the signed-in user's information
-                                val intent = Intent(this, MainActivity::class.java)
-                                startActivity(intent)
-                                snackbar.dismiss()
-                                finish()
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                initSnackBar("${task.exception?.message}", Snackbar.LENGTH_LONG)
-                            }
-                        }
+            val isUsernameEmpty:Boolean = username_input.length() <= 0
+            val isPassNotValid:Boolean = pass_input.length() <= 6
+
+            when (isUsernameEmpty) {
+                true -> username_input.error = "You have to enter a valid email address"
+            }
+            when(isPassNotValid){
+                true -> pass_input.error = "At least 6 characters"
+            }
+            if(!isUsernameEmpty && !isPassNotValid){
+                if (loginViewModel.isRegisterExpanded.value == true) {
+                    emailRegisterUser()
+                } else {
+                    emailLoginUser()
+                }
             }
         }
     }
 
-    private fun listenerOnFacebookButton(){
-        facebook_button.setOnClickListener{
+    private fun listenerOnFacebookButton() {
+        facebook_button.setOnClickListener {
             callbackManager = CallbackManager.Factory.create()
             getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
         }
+    }
+
+    private fun emailRegisterUser() {
+        initSnackBar(getString(R.string.snackbar_register), Snackbar.LENGTH_INDEFINITE)
+        fbAuth.createUserWithEmailAndPassword("${username_input.text}", "${pass_input.text}")
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        snackbar.dismiss()
+                        initSnackBar(getString(R.string.snackbar_success), Snackbar.LENGTH_SHORT)
+                        loginViewModel.isRegisterExpanded.value = false
+                        loginViewModel.isLoginExpanded.value = false
+                        bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                    } else {
+                        snackbar.dismiss()
+                        initSnackBar("${task.exception?.message}", Snackbar.LENGTH_LONG)
+                    }
+                }
+    }
+
+    private fun emailLoginUser() {
+        initSnackBar(getString(R.string.snackbar_auth), Snackbar.LENGTH_INDEFINITE)
+        fbAuth.signInWithEmailAndPassword("${username_input.text}", "${pass_input.text}")
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        // Sign in success, update UI with the signed-in user's information
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        snackbar.dismiss()
+                        finish()
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        initSnackBar("${task.exception?.message}", Snackbar.LENGTH_LONG)
+                    }
+                }
     }
 
     // set title, button text, bottom sheet word
@@ -260,9 +271,9 @@ class LandingPageActivity : AppCompatActivity() {
                         snackbar.dismiss()
                         finish()
                     }).addOnFailureListener {
-                        snackbar.dismiss()
-                        initSnackBar("${it.message}", Snackbar.LENGTH_LONG)
-                    }
+                snackbar.dismiss()
+                initSnackBar("${it.message}", Snackbar.LENGTH_LONG)
+            }
         } else { // There's no pending result so you need to start the sign-in flow.
             fbAuth.startActivityForSignInWithProvider( /* activity= */this, provider.build())
                     .addOnSuccessListener(
@@ -282,7 +293,7 @@ class LandingPageActivity : AppCompatActivity() {
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         callbackManager.onActivityResult(requestCode, resultCode, data)
-        if (resultCode== Activity.RESULT_OK){
+        if (resultCode == Activity.RESULT_OK) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             finish()
