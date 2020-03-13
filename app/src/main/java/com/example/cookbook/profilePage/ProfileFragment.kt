@@ -110,9 +110,13 @@ class ProfileFragment : Fragment() {
             fbAuth.signOut()
             fbAuth.addAuthStateListener {
                 if (fbAuth.currentUser == null) {
-                    val intent = Intent(actualContext, LandingPageActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
+                    try {
+                        val intent = Intent(actualContext, LandingPageActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                    } catch (e: Exception) {
+                        print(e)
+                    }
                 }
             }
         }

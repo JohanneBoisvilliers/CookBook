@@ -1,7 +1,6 @@
 package com.example.cookbook.loginPage
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -11,7 +10,10 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cookbook.MainActivity
 import com.example.cookbook.R
 import com.example.cookbook.injections.Injections
+import com.facebook.AccessToken
 import com.facebook.CallbackManager
+import com.facebook.FacebookCallback
+import com.facebook.FacebookException
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -21,20 +23,16 @@ import com.google.android.gms.tasks.OnSuccessListener
 import com.google.android.gms.tasks.Task
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.auth.OAuthProvider
 import kotlinx.android.synthetic.main.activity_landing_page.*
 import kotlinx.android.synthetic.main.bottom_sheet_login_page.*
 import com.facebook.login.LoginManager.*
-import java.util.*
+import com.facebook.login.LoginResult
+import com.google.firebase.auth.*
 
 
 class LandingPageActivity : AppCompatActivity() {
     private lateinit var loginViewModel: LoginViewModel
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<ConstraintLayout>
-    private var isExpanded: Boolean = false
     private lateinit var mGoogleSignInOptions: GoogleSignInOptions
     private lateinit var mGoogleSignInClient: GoogleSignInClient
     private val RC_SIGN_IN = 999
@@ -61,6 +59,8 @@ class LandingPageActivity : AppCompatActivity() {
 
     private fun init() {
         fbAuth = FirebaseAuth.getInstance()
+        callbackManager = CallbackManager.Factory.create()
+
         this.initLoginViewModel()
         this.initGoogleSignInOptions()
         this.initBottomSheetBehavior()
@@ -87,7 +87,7 @@ class LandingPageActivity : AppCompatActivity() {
         loginViewModel.isRegisterExpanded.value = true
         loginViewModel.isLoginExpanded.value = false
         register_word_landing.setOnClickListener {
-            paramBottomsheetUiInfos(
+            initBottomSheetUiInfos(
                     getString(R.string.register_button),
                     getString(R.string.title_register_page),
                     getString(R.string.login_word))
@@ -101,14 +101,14 @@ class LandingPageActivity : AppCompatActivity() {
             if (clickable_word.text == getString(R.string.register_word)) {
                 loginViewModel.isRegisterExpanded.value = true
                 loginViewModel.isLoginExpanded.value = false
-                paramBottomsheetUiInfos(
+                initBottomSheetUiInfos(
                         getString(R.string.register_button),
                         getString(R.string.title_register_page),
                         getString(R.string.login_word))
             } else {
                 loginViewModel.isLoginExpanded.value = true
                 loginViewModel.isRegisterExpanded.value = false
-                paramBottomsheetUiInfos(
+                initBottomSheetUiInfos(
                         getString(R.string.login_button),
                         getString(R.string.title_login_page),
                         getString(R.string.register_word))
@@ -122,7 +122,7 @@ class LandingPageActivity : AppCompatActivity() {
         login_button.setOnClickListener {
             loginViewModel.isLoginExpanded.value = true
             loginViewModel.isRegisterExpanded.value = false
-            paramBottomsheetUiInfos(
+            initBottomSheetUiInfos(
                     getString(R.string.login_button),
                     getString(R.string.title_login_page),
                     getString(R.string.register_word))
@@ -139,16 +139,16 @@ class LandingPageActivity : AppCompatActivity() {
 
     private fun listenerOnEmailButton() {
         email_button.setOnClickListener {
-            val isUsernameEmpty:Boolean = username_input.length() <= 0
-            val isPassNotValid:Boolean = pass_input.length() <= 6
+            val isUsernameEmpty: Boolean = username_input.length() <= 0
+            val isPassNotValid: Boolean = pass_input.length() <= 6
 
             when (isUsernameEmpty) {
                 true -> username_input.error = "You have to enter a valid email address"
             }
-            when(isPassNotValid){
+            when (isPassNotValid) {
                 true -> pass_input.error = "At least 6 characters"
             }
-            if(!isUsernameEmpty && !isPassNotValid){
+            if (!isUsernameEmpty && !isPassNotValid) {
                 if (loginViewModel.isRegisterExpanded.value == true) {
                     emailRegisterUser()
                 } else {
@@ -160,8 +160,19 @@ class LandingPageActivity : AppCompatActivity() {
 
     private fun listenerOnFacebookButton() {
         facebook_button.setOnClickListener {
-            callbackManager = CallbackManager.Factory.create()
-            getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "email"))
+            getInstance().logInWithReadPermissions(this, listOf("email", "public_profile"))
+            getInstance().registerCallback(callbackManager, object : FacebookCallback<LoginResult> {
+                override fun onSuccess(loginResult: LoginResult) {
+                    initSnackBar(getString(R.string.snackbar_auth), Snackbar.LENGTH_INDEFINITE)
+                    handleFacebookAccessToken(loginResult.accessToken)
+                }
+
+                override fun onCancel() {}
+
+                override fun onError(error: FacebookException) {
+                    print(error)
+                }
+            })
         }
     }
 
@@ -201,7 +212,7 @@ class LandingPageActivity : AppCompatActivity() {
     }
 
     // set title, button text, bottom sheet word
-    private fun paramBottomsheetUiInfos(buttonText: String, titleText: String, wordText: String) {
+    private fun initBottomSheetUiInfos(buttonText: String, titleText: String, wordText: String) {
         slideUpDownBottomSheet()
         send_pass_button.text = buttonText
         title_text.text = titleText
@@ -292,12 +303,8 @@ class LandingPageActivity : AppCompatActivity() {
 
     public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+
         callbackManager.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
         if (requestCode == RC_SIGN_IN) {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data)
@@ -332,6 +339,24 @@ class LandingPageActivity : AppCompatActivity() {
     private fun initLoginViewModel() {
         val viewModelFactory = Injections.provideViewModelFactory(this)
         loginViewModel = ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
+    }
+
+    private fun handleFacebookAccessToken(token: AccessToken) {
+        val credential = FacebookAuthProvider.getCredential(token.token)
+        fbAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this) { task ->
+                    if (task.isSuccessful) {
+                        snackbar.dismiss()
+                        initSnackBar(getString(R.string.snackbar_success), Snackbar.LENGTH_SHORT)
+                        snackbar.dismiss()
+                        val intent = Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    } else {
+                        snackbar.dismiss()
+                        initSnackBar("${task.exception}", Snackbar.LENGTH_LONG)
+                    }
+                }
     }
 
 }
