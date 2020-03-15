@@ -63,6 +63,10 @@ class AddRecipeActvity : AppCompatActivity() {
                         add_ingredient_fields.visibility = View.GONE
                     }
                 }
+                R.id.add_photo_button ->{
+                    val modalBottomSheet = BottomSheetPhoto()
+                    modalBottomSheet.show(supportFragmentManager, BottomSheetPhoto.TAG)
+                }
             }
 
         }

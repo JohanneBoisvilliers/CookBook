@@ -26,6 +26,8 @@
     <string name="name_ingredient_text">Name :</string>
     <string name="unit_ingredient_text">Unit :</string>
     <string name="quantity_ingredient_text">Qt. :</string>
+    <string name="pick_gallery">Pick image from gallery</string>
+    <string name="pick_camera">Pick image from camera</string>
     <!--RECIPES DETAILS ACTIVITY-->
     <string name="ingredient_title">INGREDIENTS</string>
     <string name="recipe_step_title">RECIPE</string>
