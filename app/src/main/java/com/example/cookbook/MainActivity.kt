@@ -31,8 +31,7 @@ class MainActivity : AppCompatActivity() {
         configureBottomView()
         configureRecipeViewModel()
         val cookBookLocalDatabase = CookBookLocalDatabase.getInstance(this)
-        // TODO enlever cette ligne qui ne sert qu'à instancier la BBD
-        cookBookLocalDatabase.recipeDao().getRecipes().observe(this, Observer { list -> Log.d("DEbug", "onCreate: " + list[0].baseDataRecipe?.name) })
+
         // TODO créer vraie méthode pour gestion de permission
         if (ContextCompat.checkSelfPermission(this,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)

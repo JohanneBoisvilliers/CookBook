@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottom_sheet_register"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/bottom_sheet_height"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    android:background="@color/colorPrimary"
+    android:clipToPadding="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_accueil"
+        android:alpha="0.4"
+        android:scaleType="centerCrop"/>
+    <LinearLayout
+        android:id="@+id/title_container"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:id="@+id/title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:fontFamily="@font/playfair_display_italic"
+            android:gravity="center_horizontal"
+            android:padding="@dimen/margin_to_border"
+            android:text="@string/title_register_page"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title_register_size" />
+
+    </LinearLayout>
+    <!-- USERNAME TEXT FIELD -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/username_field"
+        android:layout_width="@dimen/textfield_width"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title_container"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/password_field"
+        android:padding="@dimen/textfield_padding">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/username_input"
+            android:background="@drawable/textfield_background"
+            android:padding="10dp"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/username_hint"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <!-- PASSWORD TEXT FIELD -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/password_field"
+        android:layout_width="@dimen/textfield_width"
+        android:padding="@dimen/textfield_padding"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/username_field">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/pass_input"
+            android:background="@drawable/textfield_background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:maxLines="1"
+            android:hint="@string/password_hint" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+    <!-- BUTTON REGISTER-->
+    <LinearLayout
+        android:id="@+id/register_or_continue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/social_logos_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/password_field">
+
+        <Button
+            android:id="@+id/email_button"
+            android:layout_width="@dimen/round_button_width"
+            android:layout_height="@dimen/round_button_height"
+            android:background="@drawable/round_button"
+            android:text="@string/register_button"
+            android:layout_marginBottom="5dp"/>
+        <!-- "OR" SEPARATOR CONTAINER -->
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/separator"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/separator_padding"
+            android:paddingBottom="@dimen/separator_padding">
+
+            <View
+                android:layout_width="@dimen/separator_width"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/colorPrimaryDark" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/margin_to_border"
+                android:paddingEnd="@dimen/margin_to_border"
+                android:text="@string/or_separator"
+                android:textColor="@color/colorAccent" />
+
+            <View
+                android:layout_width="@dimen/separator_width"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/colorPrimaryDark" />
+        </androidx.appcompat.widget.LinearLayoutCompat>
+        <!-- "CONTINUE WITH" SEPARATOR CONTAINER -->
+        <TextView
+            android:id="@+id/continue_separator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/continue_separator" />
+    </LinearLayout>
+    <!-- SOCIAL MEDIA LOGOS CONTAINER -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/social_logos_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/register_sentence_container"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:paddingBottom="@dimen/logos_bottom_padding">
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/google_button"
+            android:layout_width="@dimen/social_logo_size"
+            android:layout_height="@dimen/social_logo_size"
+            android:src="@drawable/logo_google"
+            android:clickable="true"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/facebook_button"
+            android:layout_width="@dimen/social_logo_size"
+            android:layout_height="@dimen/social_logo_size"
+            android:src="@drawable/logo_facebook"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+        <ImageView
+            android:id="@+id/twitter_button"
+            android:layout_width="@dimen/social_logo_size"
+            android:layout_height="@dimen/social_logo_size"
+            android:src="@drawable/logo_twitter"/>
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"/>
+
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+    <!-- ACCOUNT QUESTION -->
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:id="@+id/register_sentence_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:id="@+id/register_sentence"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register_sentence"
+            android:paddingBottom="10dp"/>
+
+        <TextView
+            android:id="@+id/clickable_word"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/login_word"
+            android:textColor="@color/colorAccent"
+            android:paddingBottom="10dp"
+            android:paddingLeft="5dp"/>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

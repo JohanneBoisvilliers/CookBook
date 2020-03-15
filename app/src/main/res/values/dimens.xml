@@ -4,6 +4,9 @@
     <dimen name="margin_to_border">16dp</dimen>
     <dimen name="margin_in_button">50dp</dimen>
     <dimen name="margin_title_toolbar">10sp</dimen>
+    <dimen name="round_button_height">40dp</dimen>
+    <dimen name="round_button_width">280dp</dimen>
+    <dimen name="social_logo_size">60dp</dimen>
     <!--MAIN ACTIVITY-->
     <dimen name="bottom_bar_height">60dp</dimen>
     <dimen name="icon_bottom_bar">30dp</dimen>
@@ -32,4 +35,16 @@
     <dimen name="text_size">18sp</dimen>
     <dimen name="margin_logo">5dp</dimen>
     <dimen name="margin_fab">40dp</dimen>
+    <!-- LANDING PAGE -->
+    <dimen name="title_text_size">45sp</dimen>
+    <dimen name="margin_register_word">5dp</dimen>
+    <!-- REGISTER PAGE -->
+    <dimen name="bottom_sheet_height">500dp</dimen>
+    <dimen name="separator_padding">15dp</dimen>
+    <dimen name="logos_bottom_padding">30dp</dimen>
+    <dimen name="title_register_size">25sp</dimen>
+    <dimen name="textfield_padding">8dp</dimen>
+    <dimen name="textfield_width">300dp</dimen>
+    <dimen name="separator_width">80dp</dimen>
+
 </resources>

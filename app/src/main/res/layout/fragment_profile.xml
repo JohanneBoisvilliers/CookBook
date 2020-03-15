@@ -8,7 +8,8 @@
 
     <ImageView
         android:id="@+id/background_user_profile"
-        android:layout_width="match_parent"
+        android:adjustViewBounds="true"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -45,11 +46,12 @@
             android:layout_marginStart="@dimen/margin_to_border" />
 
         <ImageView
+            tools:viewBindingIgnore="true"
             android:id="@+id/logo_like"
             android:layout_width="@dimen/logo_size"
             android:layout_height="@dimen/logo_size"
             android:src="@drawable/like"
-            android:tint="@color/colorPrimary"
+            app:tint="@color/colorPrimary"
             app:layout_constraintTop_toBottomOf="@id/profile_register_date"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginStart="@dimen/margin_to_border"
@@ -68,11 +70,12 @@
             android:layout_marginStart="@dimen/margin_to_border" />
 
         <ImageView
+            tools:viewBindingIgnore="true"
             android:id="@+id/logo_love"
             android:layout_width="@dimen/logo_size"
             android:layout_height="@dimen/logo_size"
             android:src="@drawable/heart"
-            android:tint="@color/colorPrimary"
+            app:tint="@color/colorPrimary"
             app:layout_constraintTop_toBottomOf="@id/logo_like"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginStart="@dimen/margin_to_border"
@@ -91,17 +94,19 @@
             android:layout_marginStart="@dimen/margin_to_border" />
 
         <ImageView
+            tools:viewBindingIgnore="true"
             android:id="@+id/logo_recipes"
             android:layout_width="@dimen/logo_size"
             android:layout_height="@dimen/logo_size"
             android:src="@drawable/book"
-            android:tint="@color/colorPrimary"
+            app:tint="@color/colorPrimary"
             app:layout_constraintTop_toBottomOf="@id/logo_love"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginStart="@dimen/margin_to_border"
             android:layout_marginTop="@dimen/margin_logo" />
 
         <TextView
+            tools:viewBindingIgnore="true"
             android:id="@+id/recipe_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -131,7 +136,7 @@
                 android:layout_width="@dimen/number_recipe_logos_size"
                 android:layout_height="@dimen/number_recipe_logos_size"
                 android:src="@drawable/starter"
-                android:tint="@color/colorPrimary" />
+                app:tint="@color/colorPrimary" />
 
             <TextView
                 android:id="@+id/starter_quantity"
@@ -146,7 +151,7 @@
                 android:layout_width="@dimen/number_recipe_logos_size"
                 android:layout_height="@dimen/number_recipe_logos_size"
                 android:src="@drawable/plate"
-                android:tint="@color/colorPrimary"
+                app:tint="@color/colorPrimary"
                 android:layout_marginStart="@dimen/margin_to_border" />
 
             <TextView
@@ -162,7 +167,7 @@
                 android:layout_width="@dimen/number_recipe_logos_size"
                 android:layout_height="@dimen/number_recipe_logos_size"
                 android:src="@drawable/cake"
-                android:tint="@color/colorPrimary"
+                app:tint="@color/colorPrimary"
                 android:layout_marginStart="@dimen/margin_to_border" />
 
             <TextView
@@ -178,7 +183,7 @@
                 android:layout_width="@dimen/number_recipe_logos_size"
                 android:layout_height="@dimen/number_recipe_logos_size"
                 android:src="@drawable/cup"
-                android:tint="@color/colorPrimary"
+                app:tint="@color/colorPrimary"
                 android:layout_marginStart="@dimen/margin_to_border" />
 
             <TextView
@@ -195,7 +200,8 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_search_recipe"
+        tools:viewBindingIgnore="true"
+        android:id="@+id/fab_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_anchor="@id/user_informations"

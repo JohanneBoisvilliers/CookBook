@@ -62,6 +62,6 @@ class RecipesFragment : Fragment() {
 
     //--------------ASYNC--------------
     private fun getRecipes() {
-        mRecipeViewModel.recipes.observe(this, Observer { list -> updateItemsList(list) })
+        mRecipeViewModel.recipes.observe(viewLifecycleOwner, Observer { list -> updateItemsList(list) })
     }
 }

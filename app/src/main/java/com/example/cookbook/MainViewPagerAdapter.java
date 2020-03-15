@@ -26,7 +26,7 @@ public class MainViewPagerAdapter extends FragmentStatePagerAdapter {
             case 2:
                 return SocialFragment.newInstance();
             case 3:
-                return ProfileFragment.newInstance();
+                return ProfileFragment.Companion.newInstance();
             case 4:
                 return AddRecipeFragment.newInstance();
             default:
