@@ -16,9 +16,9 @@ import com.example.cookbook.database.dao.IngredientDao;
 import com.example.cookbook.database.dao.RecipeDao;
 import com.example.cookbook.database.dao.UserDao;
 import com.example.cookbook.models.BaseDataRecipe;
+import com.example.cookbook.models.BaseRecipeIngredientCrossRef;
 import com.example.cookbook.models.Ingredient;
 import com.example.cookbook.models.Photo;
-import com.example.cookbook.models.Recipe;
 import com.example.cookbook.models.Step;
 import com.example.cookbook.utils.MyApp;
 
@@ -30,7 +30,13 @@ import java.nio.charset.Charset;
 import java.util.concurrent.Executors;
 
 
-@Database(entities = {Ingredient.class, BaseDataRecipe.class,Photo.class, Step.class}, version = 1, exportSchema = false)
+@Database(entities = {Ingredient.class,
+        BaseDataRecipe.class,
+        Photo.class,
+        BaseRecipeIngredientCrossRef.class,
+        Step.class},
+        version = 1,
+        exportSchema = false)
 public abstract class CookBookLocalDatabase extends RoomDatabase {
 
     // --- SINGLETON ---
@@ -110,7 +116,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                 lineNumber += 1;
 
                 ContentValues recette = new ContentValues();
-                recette.put("id", lineNumber);
+                recette.put("baseRecipeId", lineNumber);
                 recette.put("name", tokens[0]);
                 recette.put("isAlreadyDone", tokens[1]);
                 recette.put("numberOfLike", tokens[2]);

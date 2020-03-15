@@ -34,6 +34,10 @@
 
     <string name="facebook_app_id">190699912159028</string>
     <string name="fb_login_protocol_scheme">fb190699912159028</string>
+    <!--RECIPES DETAILS ACTIVITY-->
+    <string name="ingredient_title">INGREDIENTS</string>
+    <string name="recipe_step_title">RECIPE</string>
+
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>

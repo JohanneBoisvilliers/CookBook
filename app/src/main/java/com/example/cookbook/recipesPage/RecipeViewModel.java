@@ -21,4 +21,6 @@ public class RecipeViewModel extends ViewModel {
     public LiveData<List<Recipe>> getRecipes() {
         return mRecipesDataRepository.getRecipes();
     }
+
+    public LiveData<Recipe> getSpecificRecipe(Long recipeId){return mRecipesDataRepository.getSpecificRecipe(recipeId);}
 }

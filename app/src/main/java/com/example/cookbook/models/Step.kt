@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 @Entity
 data class Step(
         @PrimaryKey(autoGenerate = true)
-        val id:Long,
+        val id: Long,
         val recipeId:Long,
-        val title:String,
-        val description:String?,
-        val photoUrl:String?
+        val title: String,
+        val photoUrl: String,
+        val description: String
 )

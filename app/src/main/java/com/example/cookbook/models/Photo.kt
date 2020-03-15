@@ -10,5 +10,3 @@ data class Photo (
     val recipeId: Long,
     val photoUrl: String
 )
-
-
