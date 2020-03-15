@@ -11,13 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookbook.R
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Ingredient
-import com.example.cookbook.models.IngredientDatabase
-import com.example.cookbook.models.IngredientDetails
-import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipeDetailsPage.IngredientsListAdapter
 import com.example.cookbook.recipeDetailsPage.StepListAdapter
 import kotlinx.android.synthetic.main.activity_add_recipe.*
-import kotlinx.android.synthetic.main.activity_recipe_details.*
 
 class AddRecipeActvity : AppCompatActivity() {
     private var mIngredientList = mutableListOf<Ingredient>()
@@ -51,7 +47,7 @@ class AddRecipeActvity : AppCompatActivity() {
                         add_ingredient_fields.visibility = View.GONE
                     }
                 }
-                R.id.save_button -> {
+                R.id.save_ingredient_button -> {
                     //var ingredientDatabase = IngredientDatabase(name = "blabla")
                     //var ingredientDetails = IngredientDetails(1, 1, mViewModel.unit.value.orEmpty(), 1)
                     //var ingredient = Ingredient(ingredientDatabase = ingredientDatabase, ingredientDetails = ingredientDetails)
@@ -67,6 +63,13 @@ class AddRecipeActvity : AppCompatActivity() {
                     val modalBottomSheet = BottomSheetPhoto()
                     modalBottomSheet.show(supportFragmentManager, BottomSheetPhoto.TAG)
                 }
+                R.id.add_step_button->{
+                    if (add_step_field.visibility == View.GONE) {
+                        add_step_field.visibility = View.VISIBLE
+                    }else{
+                        add_step_field.visibility = View.GONE
+                    }
+                }
             }
 
         }
@@ -80,7 +83,7 @@ class AddRecipeActvity : AppCompatActivity() {
     }
 
     fun initStepRecyclerview() {
-        recipe_step_recycler_view.apply {
+        new_recipe_step_list.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = stepAdapter
         }

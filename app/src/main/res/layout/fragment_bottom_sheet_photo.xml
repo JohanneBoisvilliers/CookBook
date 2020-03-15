@@ -22,6 +22,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_to_border"
             android:text="@string/pick_camera"/>
     </LinearLayout>
 
@@ -39,6 +40,7 @@
             android:layout_margin="@dimen/margin_to_border"
             android:src="@drawable/picture"/>
         <TextView
+            android:layout_margin="@dimen/margin_to_border"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/pick_gallery"/>
