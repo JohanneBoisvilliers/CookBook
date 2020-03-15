@@ -1,6 +1,6 @@
 <resources>
     <!-- GENERAL -->
-    <string name="username_hint">Username</string>
+    <string name="username_hint">Email</string>
     <string name="password_hint">Password</string>
     <string name="or_separator">OR</string>
     <string name="continue_separator">Continue with</string>

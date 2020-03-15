@@ -214,7 +214,7 @@ class LandingPageActivity : AppCompatActivity() {
     // set title, button text, bottom sheet word
     private fun initBottomSheetUiInfos(buttonText: String, titleText: String, wordText: String) {
         slideUpDownBottomSheet()
-        send_pass_button.text = buttonText
+        email_button.text = buttonText
         title_text.text = titleText
         clickable_word.text = wordText
     }

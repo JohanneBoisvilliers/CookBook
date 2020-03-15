@@ -50,7 +50,7 @@ class ProfileFragment : Fragment() {
         currentUser?.let {
 
             photoUrl = it.photoUrl.toString()
-            profileViewModel.name.value = if (!it.displayName.isNullOrEmpty()) it.displayName else "Unknown"
+            profileViewModel.name.value = if (!it.displayName.isNullOrEmpty()) it.displayName else it.email
             profileViewModel.creationDate.value = it.metadata?.creationTimestamp
 
             binding.profileUsername.text = if (profileViewModel.name.value!!.isNotEmpty()) profileViewModel.name.value else "unknown"

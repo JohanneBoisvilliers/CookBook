@@ -93,7 +93,7 @@
         app:layout_constraintTop_toBottomOf="@+id/password_field">
 
         <Button
-            android:id="@+id/send_pass_button"
+            android:id="@+id/email_button"
             android:layout_width="@dimen/round_button_width"
             android:layout_height="@dimen/round_button_height"
             android:background="@drawable/round_button"
@@ -112,6 +112,7 @@
             <View
                 android:layout_width="@dimen/separator_width"
                 android:layout_height="1dp"
+                android:alpha="0.2"
                 android:background="@color/colorPrimaryDark" />
 
             <TextView
@@ -125,6 +126,7 @@
             <View
                 android:layout_width="@dimen/separator_width"
                 android:layout_height="1dp"
+                android:alpha="0.2"
                 android:background="@color/colorPrimaryDark" />
         </androidx.appcompat.widget.LinearLayoutCompat>
         <!-- "CONTINUE WITH" SEPARATOR CONTAINER -->
@@ -148,7 +150,7 @@
         <Space
             android:layout_width="0dp"
             android:layout_height="1dp"
-            android:layout_weight="1.5"/>
+            android:layout_weight="1"/>
 
         <ImageView
             android:id="@+id/google_button"
@@ -184,16 +186,7 @@
             android:layout_height="1dp"
             android:layout_weight="1"/>
 
-        <ImageView
-            android:id="@+id/email_button"
-            android:layout_width="@dimen/social_logo_size"
-            android:layout_height="@dimen/social_logo_size"
-            android:src="@drawable/logo_insta"/>
 
-        <Space
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1.5"/>
 
     </androidx.appcompat.widget.LinearLayoutCompat>
     <!-- ACCOUNT QUESTION -->
