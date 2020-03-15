@@ -13,10 +13,19 @@
     <string name="or_separator">OR</string>
     <string name="add_recipe_button_url">ADD RECIPE</string>
     <string name="add_ingredient_button">ADD INGREDIENT</string>
+    <string name="add_photo_button">ADD PHOTO</string>
+    <string name="add_step_button">ADD STEP</string>
     <string name="category_title">Category :</string>
     <string name="recipe_title">Recipe</string>
     <string name="online_title">Online recipe ?</string>
     <string name="ingredients_title">Ingredients :</string>
+    <string name="photos_title">Photos :</string>
+    <string name="steps_title">Steps :</string>
+    <string name="add_ingredient_text">Add</string>
+    <string name="cancel_ingredient_text">Cancel</string>
+    <string name="name_ingredient_text">Name :</string>
+    <string name="unit_ingredient_text">Unit :</string>
+    <string name="quantity_ingredient_text">Qt. :</string>
     <!--RECIPES DETAILS ACTIVITY-->
     <string name="ingredient_title">INGREDIENTS</string>
     <string name="recipe_step_title">RECIPE</string>
