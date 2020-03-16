@@ -39,4 +39,15 @@
         <item>Favorite recipes</item>
         <item>Todo list</item>
     </string-array>
+
+    <string-array name="unit_list">
+        <item>gr</item>
+        <item>kg</item>
+        <item>ml</item>
+        <item>cl</item>
+        <item>l</item>
+        <item>CaS</item>
+        <item>CaC</item>
+        <item>none</item>
+    </string-array>
 </resources>

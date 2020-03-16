@@ -2,15 +2,17 @@ package com.example.cookbook.addRecipePage
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
-import android.widget.Button
-import android.widget.CheckBox
+import android.widget.*
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cookbook.R
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Ingredient
+import com.example.cookbook.models.IngredientDatabase
 import com.example.cookbook.recipeDetailsPage.IngredientsListAdapter
 import com.example.cookbook.recipeDetailsPage.StepListAdapter
 import kotlinx.android.synthetic.main.activity_add_recipe.*
@@ -26,7 +28,10 @@ class AddRecipeActvity : AppCompatActivity() {
         setContentView(R.layout.activity_add_recipe)
 
         initIngredientRecyclerview()
-        configureViewModel()
+        initSpinner()
+        initViewModel()
+        listenerOnIngredientQuantity()
+        listenerOnUnitSpinner()
     }
 
     fun onClicked(view: View) {
@@ -48,11 +53,16 @@ class AddRecipeActvity : AppCompatActivity() {
                     }
                 }
                 R.id.save_ingredient_button -> {
-                    //var ingredientDatabase = IngredientDatabase(name = "blabla")
-                    //var ingredientDetails = IngredientDetails(1, 1, mViewModel.unit.value.orEmpty(), 1)
-                    //var ingredient = Ingredient(ingredientDatabase = ingredientDatabase, ingredientDetails = ingredientDetails)
-                    //mViewModel.ingredientList.plusAssign(ingredient)
-                    //updateItemsList(mViewModel.ingredientList.value)
+                    var ingredientDatabase = IngredientDatabase(name = "blabla")
+                    var ingredient = Ingredient(
+                            quantity = mViewModel.quantity.value!!,
+                            unit = mViewModel.unit.value!!,
+                            ingredientDatabaseId = 1,
+                            recipeId = 1,
+                            ingredientId = 1,
+                            ingredientDatabase = ingredientDatabase)
+                    mViewModel.ingredientList.plusAssign(ingredient)
+                    updateItemsList(mViewModel.ingredientList.value)
                 }
                 R.id.cancel_ingredient_button -> {
                     if (add_ingredient_fields.visibility == View.VISIBLE) {
@@ -74,7 +84,7 @@ class AddRecipeActvity : AppCompatActivity() {
 
         }
     }
-
+    // configure ingredient recyclerview (ingredient list)
     fun initIngredientRecyclerview() {
         new_recipe_ingredient_list.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -89,11 +99,43 @@ class AddRecipeActvity : AppCompatActivity() {
         }
     }
 
-    private fun configureViewModel() {
+    private fun initViewModel() {
         val viewModelFactory = Injections.provideViewModelFactory(this)
         mViewModel = ViewModelProviders.of(this, viewModelFactory).get(AddRecipeViewModel::class.java)
     }
+    // configure the unit spinner for ingredient unit
+    private fun initSpinner(){
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+                this,
+                R.array.unit_list,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            unit_spinner.adapter = adapter
+        }
+    }
+    // get value in quantity field
+    private fun listenerOnIngredientQuantity(){
+        qt_field.onTextChanged { mViewModel.quantity.value = it.toInt() }
+    }
+    private fun listenerOnUnitSpinner(){
+        unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
+            override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
+                // An item was selected. You can retrieve the selected item using
+                mViewModel.unit.value = parent.getItemAtPosition(pos).toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+                // Another interface callback
+            }
+        }
+
+        }
+    //notify adapter that an item has changed
     private fun updateItemsList(ingredientList: MutableList<Ingredient>?) {
         mIngredientList.clear()
         if (ingredientList != null) {
@@ -103,8 +145,25 @@ class AddRecipeActvity : AppCompatActivity() {
     }
 }
 
+// ---------------- EXTENSIONS -------------------
+
+//extension for adding an item in a mutablelivedata list
 operator fun <T> MutableLiveData<MutableList<T>>.plusAssign(values: T) {
     val value = this.value ?: arrayListOf()
     value.add(values)
     this.value = value
+}
+//extension for using lambda for onTextChanged function
+fun EditText.onTextChanged(onTextChanged: (String) -> Unit) {
+    this.addTextChangedListener(object : TextWatcher {
+        override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        }
+
+        override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            onTextChanged.invoke(p0.toString())
+        }
+
+        override fun afterTextChanged(editable: Editable?) {
+        }
+    })
 }

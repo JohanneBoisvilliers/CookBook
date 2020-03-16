@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.recyclerview_ingredient_item.view.*
 class IngredientsListViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
 
  fun bind(ingredient: Ingredient){
-     itemView.ingredient_name.text = ingredient.name
+     itemView.ingredient_quantity.text = ingredient.quantity.toString()
+     itemView.ingredient_unit.text = ingredient.unit
  }
 }
