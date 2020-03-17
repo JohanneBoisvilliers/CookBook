@@ -25,7 +25,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new RecipeViewModel(mRecipesDataRepository,mIngredientDataRepository);
         }
         if (modelClass.isAssignableFrom(AddRecipeViewModel.class)) {
-            return (T) new AddRecipeViewModel();
+            return (T) new AddRecipeViewModel(mIngredientDataRepository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

@@ -230,18 +230,16 @@
 
             </androidx.cardview.widget.CardView>
 
-            <Button
+            <ImageButton
+                android:src="@drawable/add"
                 android:id="@+id/add_ingredient_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                android:layout_marginBottom="@dimen/margin_to_border"
-                android:background="@drawable/background_white_button"
+                android:padding="@dimen/margin_to_border"
+                android:background="@android:color/transparent"
                 android:onClick="onClicked"
-                android:paddingLeft="@dimen/margin_in_button"
-                android:paddingRight="@dimen/margin_in_button"
-                android:text="@string/add_ingredient_button"
-                android:textColor="@color/colorAccent"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_ingredient_fields" />
@@ -250,7 +248,6 @@
                 android:id="@+id/photo_detail_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_to_border"
                 android:text="@string/photos_title"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/category_text"
@@ -269,18 +266,16 @@
                     android:layout_height="wrap_content" />
             </RelativeLayout>
 
-            <Button
+            <ImageButton
                 android:id="@+id/add_photo_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                android:layout_marginBottom="@dimen/margin_to_border"
-                android:background="@drawable/background_white_button"
+                android:background="@android:color/transparent"
+                android:src="@drawable/add"
+                android:clickable="true"
+                android:focusable="true"
                 android:onClick="onClicked"
-                android:paddingLeft="@dimen/margin_in_button"
-                android:paddingRight="@dimen/margin_in_button"
-                android:text="@string/add_photo_button"
-                android:textColor="@color/colorAccent"
+                android:padding="@dimen/margin_to_border"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/photos_list_container" />
@@ -289,7 +284,6 @@
                 android:id="@+id/step_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_to_border"
                 android:text="@string/steps_title"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/category_text"
@@ -368,18 +362,16 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.cardview.widget.CardView>
 
-            <Button
+            <ImageButton
                 android:id="@+id/add_step_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                android:layout_marginBottom="@dimen/margin_to_border"
-                android:background="@drawable/background_white_button"
+                android:background="@android:color/transparent"
                 android:onClick="onClicked"
-                android:paddingLeft="@dimen/margin_in_button"
-                android:paddingRight="@dimen/margin_in_button"
-                android:text="@string/add_step_button"
-                android:textColor="@color/colorAccent"
+                android:src="@drawable/add"
+                android:padding="@dimen/margin_to_border"
+                android:clickable="true"
+                android:focusable="true"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/add_step_field" />
