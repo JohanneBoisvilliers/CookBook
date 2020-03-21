@@ -50,4 +50,14 @@
         <item>CaC</item>
         <item>none</item>
     </string-array>
+
+    <string-array name="category_list">
+        <item>Starter</item>
+        <item>Main</item>
+        <item>Dessert</item>
+        <item>Drink</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

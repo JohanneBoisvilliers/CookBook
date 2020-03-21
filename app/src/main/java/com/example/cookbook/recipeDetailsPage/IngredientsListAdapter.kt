@@ -8,9 +8,10 @@ import com.example.cookbook.R
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.recipesPage.RecipesListViewHolder
 
-class IngredientsListAdapter constructor(list:MutableList<Ingredient>) : RecyclerView.Adapter<IngredientsListViewHolder>(){
+class IngredientsListAdapter constructor(list:MutableList<Ingredient>,isEditMode:Boolean) : RecyclerView.Adapter<IngredientsListViewHolder>(){
     private var mIngredientList:MutableList<Ingredient> = list
     private var mContext: Context? = null
+    private var mIsEditModeOn = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientsListViewHolder {
         mContext = parent.context
@@ -25,10 +26,11 @@ class IngredientsListAdapter constructor(list:MutableList<Ingredient>) : Recycle
     }
 
     override fun onBindViewHolder(holder: IngredientsListViewHolder, position: Int) {
-        holder.bind(mIngredientList[position])
+        holder.bind(mIngredientList[position],mIsEditModeOn)
     }
 
-    fun updateIngredientList(list:List<Ingredient>){
+    fun updateIngredientList(list:List<Ingredient>,isEditMode: Boolean){
+        mIsEditModeOn=isEditMode
         mIngredientList.clear()
         mIngredientList.addAll(list)
         notifyDataSetChanged()

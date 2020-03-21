@@ -2,6 +2,7 @@
 <resources>
     <!--GENERAL-->
     <dimen name="margin_to_border">16dp</dimen>
+    <dimen name="half_margin_to_border">8dp</dimen>
     <dimen name="margin_in_button">50dp</dimen>
     <dimen name="margin_title_toolbar">10sp</dimen>
     <!--MAIN ACTIVITY-->
@@ -42,5 +43,7 @@
     <dimen name="ingredient_word_padding">5dp</dimen>
     <!-- ADD RECIPE ACTIVITY-->
     <dimen name="bottom_sheet_icon_size">24dp</dimen>
+    <dimen name="viewpager_update_icon_size">24dp</dimen>
+    <dimen name="update_icon_margin">30dp</dimen>
 
 </resources>

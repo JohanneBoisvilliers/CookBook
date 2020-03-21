@@ -13,8 +13,6 @@ class PhotoViewPagerAdapter constructor(photoList:MutableList<Photo>) : Recycler
     private var mPhotoList: MutableList<Photo> = photoList
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PhotoViewPagerViewHolder {
-
-
         return PhotoViewPagerViewHolder(parent)
     }
 

@@ -1,5 +1,6 @@
 package com.example.cookbook.addRecipePage
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -15,12 +16,13 @@ import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientDatabase
 import com.example.cookbook.recipeDetailsPage.IngredientsListAdapter
+import com.example.cookbook.recipeDetailsPage.RecipeDetailsActivity
 import com.example.cookbook.recipeDetailsPage.StepListAdapter
 import kotlinx.android.synthetic.main.activity_add_recipe.*
 
 class AddRecipeActvity : AppCompatActivity() {
     private var mIngredientList = mutableListOf<Ingredient>()
-    private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf())
+    private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(),false)
     private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf())
     private lateinit var mViewModel: AddRecipeViewModel
 
@@ -34,6 +36,7 @@ class AddRecipeActvity : AppCompatActivity() {
         getIngredientList()
         listenerOnIngredientQuantity()
         listenerOnUnitSpinner()
+        listenerOnFab()
     }
 
     // ---------------- INIT -------------------
@@ -99,28 +102,6 @@ class AddRecipeActvity : AppCompatActivity() {
     }
 
     // ---------------- LISTENERS -------------------
-
-    // get value in quantity field
-    private fun listenerOnIngredientQuantity(){
-        qt_field.onTextChanged { mViewModel.quantity.value = it.toInt() }
-    }
-    // get value in unit spinner
-    private fun listenerOnUnitSpinner(){
-        unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-
-            override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
-                // set unit value in viewmodel when choose an item in unit spinner
-                mViewModel.unit.value = parent.getItemAtPosition(pos).toString()
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
-        }
-
-        }
-
-    // ---------------- UTILS -------------------
-
     fun onClicked(view: View) {
         if (view is CheckBox) {
             val checked: Boolean = view.isChecked
@@ -171,13 +152,40 @@ class AddRecipeActvity : AppCompatActivity() {
             }
         }
     }
+    // get value in quantity field
+    private fun listenerOnIngredientQuantity(){
+        qt_field.onTextChanged { mViewModel.quantity.value = it.toInt() }
+    }
+    // get value in unit spinner
+    private fun listenerOnUnitSpinner(){
+        unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
+                // set unit value in viewmodel when choose an item in unit spinner
+                mViewModel.unit.value = parent.getItemAtPosition(pos).toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        }
+
+        }
+    private fun listenerOnFab(){
+
+        val intent = Intent(this, RecipeDetailsActivity::class.java)
+        intent.putExtra("recipe",10L)
+
+        fab_go_details.setOnClickListener { startActivity(intent) }
+    }
+    // ---------------- UTILS -------------------
+
     //notify adapter that an item has changed
     private fun updateItemsList(ingredientList: MutableList<Ingredient>?) {
         mIngredientList.clear()
         if (ingredientList != null) {
             mIngredientList.addAll(ingredientList)
         }
-        ingredientAdapter?.updateIngredientList(mIngredientList)
+        ingredientAdapter?.updateIngredientList(mIngredientList,false)
     }
 
     // ---------------- ASYNC -------------------
@@ -186,9 +194,6 @@ class AddRecipeActvity : AppCompatActivity() {
         mViewModel.ingredientListName.observe(this, Observer { list ->
             initIngredientNameField(list)
         })
-       //mViewModel.getIngredientList().observe(this, Observer { list ->
-       //    initIngredientNameField(list)
-       //})
     }
 }
 
