@@ -61,7 +61,7 @@ class RecipesFragment : Fragment() {
                 startActivity(intent)
             }
             override fun onItemLongClick(view: View?, position: Int) {
-                TODO("do nothing")
+                print(position)
             }
         }))
     }

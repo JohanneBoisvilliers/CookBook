@@ -30,17 +30,21 @@ class RecipeDetailsActivity : AppCompatActivity() {
     private var recipe: Recipe? = Recipe()
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
     private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(),false)
-    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf())
+    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(),false)
     var testList = mutableListOf<IngredientDatabase>()
 
     override fun onResume() {
         super.onResume()
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.statusBarColor = Color.TRANSPARENT
+        if (Build.VERSION.SDK_INT in 19..20) {
+            setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, true)
         }
+        if (Build.VERSION.SDK_INT >= 19) {
+            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+        }
+        if (Build.VERSION.SDK_INT >= 21) {
+            setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
+            window.statusBarColor = Color.TRANSPARENT}
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -133,6 +137,16 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.recipe = recipe
         this.viewPagerAdapter?.updatePhotoList(recipe.photoList)
         this.ingredientAdapter?.updateIngredientList(recipe.ingredientList,isEditMode)
-        this.stepAdapter?.updateStepList(recipe.stepList)
+        this.stepAdapter?.updateStepList(recipe.stepList,isEditMode)
     }
+    // set status bar state
+    private fun setWindowFlag(bits: Int, on: Boolean) {
+        val win = window
+        val winParams = win.attributes
+        if (on) {
+            winParams.flags = winParams.flags or bits
+        } else {
+            winParams.flags = winParams.flags and bits.inv()
+        }
+        win.attributes = winParams}
 }

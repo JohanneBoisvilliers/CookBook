@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_add_recipe.*
 class AddRecipeActvity : AppCompatActivity() {
     private var mIngredientList = mutableListOf<Ingredient>()
     private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(),false)
-    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf())
+    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(),false)
     private lateinit var mViewModel: AddRecipeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {

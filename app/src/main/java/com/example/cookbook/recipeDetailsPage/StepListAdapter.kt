@@ -8,10 +8,11 @@ import com.example.cookbook.R
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.Step
 
-class StepListAdapter constructor(list: MutableList<Step>):RecyclerView.Adapter<StepListViewHolder>(){
+class StepListAdapter constructor(list: MutableList<Step>,isEditMode:Boolean):RecyclerView.Adapter<StepListViewHolder>(){
 
     private var mStepList:MutableList<Step> = list
     private var mContext: Context? = null
+    private var mIsEditMode = false
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepListViewHolder {
         mContext = parent.context
@@ -26,10 +27,11 @@ class StepListAdapter constructor(list: MutableList<Step>):RecyclerView.Adapter<
     }
 
     override fun onBindViewHolder(holder: StepListViewHolder, position: Int) {
-        holder.bind(mStepList[position])
+        holder.bind(mStepList[position],mIsEditMode)
     }
 
-    fun updateStepList(list:List<Step>){
+    fun updateStepList(list:List<Step>,isEditMode: Boolean){
+        mIsEditMode = isEditMode
         mStepList.clear()
         mStepList.addAll(list)
         notifyDataSetChanged()

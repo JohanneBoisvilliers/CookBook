@@ -32,13 +32,13 @@
                 android:id="@+id/vp_add_photo"
                 android:layout_width="@dimen/viewpager_update_icon_size"
                 android:layout_height="@dimen/viewpager_update_icon_size"
-                android:background="@drawable/circle_for_icons"
                 android:src="@drawable/baseline_add_circle_outline_24"
-                android:layout_marginTop="@dimen/margin_to_border"
+                android:layout_marginTop="@dimen/update_icon_margin"
                 android:layout_marginEnd="@dimen/update_icon_margin"
                 android:layout_alignEnd="@id/vp_del_photo"
                 android:layout_alignParentTop="true"
-                android:tint="@color/colorPrimary"/>
+                android:tint="@color/colorPrimary"
+                android:background="@drawable/circle_for_icons"/>
             <ImageView
                 android:background="@drawable/circle_for_icons"
                 android:id="@+id/vp_del_photo"
@@ -47,7 +47,8 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
                 android:src="@drawable/baseline_remove_circle_outline_24"
-                android:layout_margin="@dimen/margin_to_border"
+                android:layout_marginTop="@dimen/update_icon_margin"
+                android:layout_marginRight="@dimen/margin_to_border"
                 android:tint="@color/colorPrimary"/>
 
             <TextView

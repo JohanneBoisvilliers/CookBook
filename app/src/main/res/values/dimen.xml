@@ -44,6 +44,8 @@
     <!-- ADD RECIPE ACTIVITY-->
     <dimen name="bottom_sheet_icon_size">24dp</dimen>
     <dimen name="viewpager_update_icon_size">24dp</dimen>
+    <dimen name="step_modify_icon">16dp</dimen>
+    <dimen name="ingredient_modify_icon">16dp</dimen>
     <dimen name="update_icon_margin">30dp</dimen>
 
 </resources>
