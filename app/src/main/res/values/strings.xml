@@ -1,6 +1,6 @@
 <resources>
     <!--MAIN-->
-    <string name="app_name">CookBook</string>
+    <string name="app_name"></string>
     <!--HOME FRAGMENT-->
     <string name="category_latest">Latest Recipes</string>
     <!--ALL RECIPES FRAGMENT-->

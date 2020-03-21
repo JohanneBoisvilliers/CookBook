@@ -3,8 +3,9 @@ package com.example.cookbook.recipeDetailsPage
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
-import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -21,7 +22,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-
 
 class RecipeDetailsActivity : AppCompatActivity() {
 
@@ -43,20 +43,46 @@ class RecipeDetailsActivity : AppCompatActivity() {
         }
         if (Build.VERSION.SDK_INT >= 21) {
             setWindowFlag(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, false)
-            window.statusBarColor = Color.TRANSPARENT}
+            window.statusBarColor = Color.TRANSPARENT
+        }
+    }
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.toolbar_recipe_detail, menu)
+        return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_details)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         this.initRecipeViewModel()
 
         this.fetchRecipe()
         this.initViewPager()
         this.initIngredientRecyclerview()
         this.initStepRecyclerview()
-        this.listenerOnUpdateFab()
         this.observerOnEditMode()
+    }
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.action_modify -> {
+            mRecipeViewModel?.isUpdateModeOn?.value = !mRecipeViewModel?.isUpdateModeOn?.value!!
+            true
+        }
+
+        R.id.action_open_url -> {
+            // User chose the "Favorite" action, mark the current item
+            // as a favorite...
+            true
+        }
+
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
     }
 
     // ---------------- INIT -------------------
@@ -84,14 +110,6 @@ class RecipeDetailsActivity : AppCompatActivity() {
         recipe_step_recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = stepAdapter
-        }
-    }
-
-    // ---------------- LISTENERS -------------------
-
-    private fun listenerOnUpdateFab(){
-        fab_update_recipe.setOnClickListener{
-            mRecipeViewModel?.isUpdateModeOn?.value = !mRecipeViewModel?.isUpdateModeOn?.value!!
         }
     }
 

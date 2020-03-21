@@ -46,6 +46,8 @@
     <dimen name="viewpager_update_icon_size">24dp</dimen>
     <dimen name="step_modify_icon">16dp</dimen>
     <dimen name="ingredient_modify_icon">16dp</dimen>
-    <dimen name="update_icon_margin">30dp</dimen>
+    <dimen name="update_icon_margin">80dp</dimen>
+    <dimen name="icon_margin_to_border">30dp</dimen>
+    <dimen name="status_bar_height">25dp</dimen>
 
 </resources>

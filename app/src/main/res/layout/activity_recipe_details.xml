@@ -1,99 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="wrap_content"
+
+
+    <ScrollView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:context=".recipeDetailsPage.RecipeDetailsActivity">
-
-            <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager_recipe_details"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/viewpager_height"
-                android:layout_alignParentTop="true" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/rd_tab_layout"
+            <RelativeLayout
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/viewPager_recipe_details"
-                app:tabBackground="@drawable/tab_selector"
-                app:tabGravity="center"
-                app:tabIndicatorHeight="0dp" />
-            <ImageView
-                android:id="@+id/vp_add_photo"
-                android:layout_width="@dimen/viewpager_update_icon_size"
-                android:layout_height="@dimen/viewpager_update_icon_size"
-                android:src="@drawable/baseline_add_circle_outline_24"
-                android:layout_marginTop="@dimen/update_icon_margin"
-                android:layout_marginEnd="@dimen/update_icon_margin"
-                android:layout_alignEnd="@id/vp_del_photo"
-                android:layout_alignParentTop="true"
-                android:tint="@color/colorPrimary"
-                android:background="@drawable/circle_for_icons"/>
-            <ImageView
-                android:background="@drawable/circle_for_icons"
-                android:id="@+id/vp_del_photo"
-                android:layout_width="@dimen/viewpager_update_icon_size"
-                android:layout_height="@dimen/viewpager_update_icon_size"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentTop="true"
-                android:src="@drawable/baseline_remove_circle_outline_24"
-                android:layout_marginTop="@dimen/update_icon_margin"
-                android:layout_marginRight="@dimen/margin_to_border"
-                android:tint="@color/colorPrimary"/>
+                tools:context=".recipeDetailsPage.RecipeDetailsActivity">
 
-            <TextView
-                android:id="@+id/ingredient_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/viewPager_recipe_details"
-                android:layout_margin="@dimen/margin_to_border"
-                android:text="@string/ingredient_title"
-                android:textSize="@dimen/ingredients_title_size"
-                android:textStyle="bold" />
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/viewPager_recipe_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/viewpager_height"
+                    android:layout_alignParentTop="true" />
+
+                <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/rd_tab_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/viewPager_recipe_details"
+                    app:tabBackground="@drawable/tab_selector"
+                    app:tabGravity="center"
+                    app:tabIndicatorHeight="0dp" />
+
+                <ImageView
+                    android:id="@+id/vp_add_photo"
+                    android:layout_width="@dimen/viewpager_update_icon_size"
+                    android:layout_height="@dimen/viewpager_update_icon_size"
+                    android:layout_alignEnd="@id/vp_del_photo"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="@dimen/update_icon_margin"
+                    android:layout_marginEnd="@dimen/icon_margin_to_border"
+                    android:background="@drawable/circle_for_icons"
+                    android:src="@drawable/baseline_add_circle_outline_24"
+                    android:tint="@color/colorPrimary" />
+
+                <ImageView
+                    android:id="@+id/vp_del_photo"
+                    android:layout_width="@dimen/viewpager_update_icon_size"
+                    android:layout_height="@dimen/viewpager_update_icon_size"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/update_icon_margin"
+                    android:layout_marginEnd="@dimen/margin_to_border"
+                    android:background="@drawable/circle_for_icons"
+                    android:src="@drawable/baseline_remove_circle_outline_24"
+                    android:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/ingredient_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/viewPager_recipe_details"
+                    android:layout_margin="@dimen/margin_to_border"
+                    android:text="@string/ingredient_title"
+                    android:textSize="@dimen/ingredients_title_size"
+                    android:textStyle="bold" />
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/ingredient_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/ingredient_title" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ingredient_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/ingredient_title" />
 
-            <TextView
-                android:id="@+id/recipe_step_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/ingredient_recycler_view"
-                android:layout_margin="@dimen/margin_to_border"
-                android:text="@string/recipe_step_title"
-                android:textSize="@dimen/ingredients_title_size"
-                android:textStyle="bold" />
+                <TextView
+                    android:id="@+id/recipe_step_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/ingredient_recycler_view"
+                    android:layout_margin="@dimen/margin_to_border"
+                    android:text="@string/recipe_step_title"
+                    android:textSize="@dimen/ingredients_title_size"
+                    android:textStyle="bold" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recipe_step_recycler_view"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/recipe_step_title" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recipe_step_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/recipe_step_title" />
 
-        </RelativeLayout>
+            </RelativeLayout>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab_update_recipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/margin_to_border"
-            android:src="@drawable/baseline_create_24"
-            android:tint="@color/colorPrimary"
-            app:layout_anchor="@id/viewPager_recipe_details"
-            app:layout_anchorGravity="bottom|end" />
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-</ScrollView>
+    </ScrollView>
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@null"
+        android:layout_marginTop="@dimen/status_bar_height"
+        app:title=""/>
+</FrameLayout>

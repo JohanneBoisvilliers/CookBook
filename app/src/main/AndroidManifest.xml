@@ -14,8 +14,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".addRecipePage.AddRecipeActvity"></activity>
-        <activity android:name=".recipeDetailsPage.RecipeDetailsActivity" />
+        <activity android:name=".addRecipePage.AddRecipeActvity"/>
+        <activity android:name=".recipeDetailsPage.RecipeDetailsActivity"
+            android:parentActivityName="com.example.cookbook.MainActivity"/>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
