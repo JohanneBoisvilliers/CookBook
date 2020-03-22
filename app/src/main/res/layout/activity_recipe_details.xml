@@ -36,7 +36,7 @@
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp" />
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/vp_add_photo"
                     android:layout_width="@dimen/viewpager_update_icon_size"
                     android:layout_height="@dimen/viewpager_update_icon_size"
@@ -45,9 +45,11 @@
                     android:layout_alignBottom="@id/viewPager_recipe_details"
                     android:layout_marginEnd="@dimen/icon_margin_to_border"
                     android:src="@drawable/baseline_add_circle_outline_24"
-                    android:tint="@color/colorPrimary" />
+                    android:tint="@color/colorPrimary"
+                    android:onClick="onClicked"
+                    android:background="@android:color/transparent"/>
 
-                <ImageView
+                <ImageButton
                     android:id="@+id/vp_del_photo"
                     android:layout_width="@dimen/viewpager_update_icon_size"
                     android:layout_height="@dimen/viewpager_update_icon_size"
@@ -56,7 +58,8 @@
                     android:layout_marginBottom="@dimen/margin_to_border"
                     android:layout_marginEnd="@dimen/margin_to_border"
                     android:src="@drawable/baseline_remove_circle_outline_24"
-                    android:tint="@color/colorPrimary" />
+                    android:tint="@color/colorPrimary"
+                    android:background="@android:color/transparent"/>
                 <TextView
                     android:id="@+id/recipe_name"
                     android:layout_below="@id/viewPager_recipe_details"
