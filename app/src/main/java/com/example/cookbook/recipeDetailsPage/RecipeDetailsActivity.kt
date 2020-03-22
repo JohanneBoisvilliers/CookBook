@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cookbook.R
 import com.example.cookbook.addRecipePage.IngredientBottomSheet
+import com.example.cookbook.addRecipePage.StepBottomSheet
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientDatabase
@@ -142,6 +143,10 @@ class RecipeDetailsActivity : AppCompatActivity() {
                 R.id.btn_add_ingredient -> {
                     val modalBottomSheet = IngredientBottomSheet()
                     modalBottomSheet.show(supportFragmentManager, IngredientBottomSheet.TAG)
+                }
+                R.id.btn_add_step -> {
+                    val modalBottomSheet = StepBottomSheet()
+                    modalBottomSheet.show(supportFragmentManager,StepBottomSheet.TAG)
                 }
             }
         }

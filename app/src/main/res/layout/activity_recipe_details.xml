@@ -105,7 +105,7 @@
                     android:text="@string/recipe_step_title"
                     android:textSize="@dimen/ingredients_title_size"
                     android:textStyle="bold" />
-                <ImageView
+                <ImageButton
                     android:id="@+id/btn_add_step"
                     android:layout_width="@dimen/viewpager_update_icon_size"
                     android:layout_height="@dimen/viewpager_update_icon_size"
@@ -113,7 +113,9 @@
                     android:layout_alignTop="@id/recipe_step_title"
                     android:layout_alignBottom="@id/recipe_step_title"
                     android:src="@drawable/baseline_add_circle_outline_24"
-                    android:tint="@color/colorAccent" />
+                    android:tint="@color/colorAccent"
+                    android:onClick="onClicked"
+                    android:background="@android:color/transparent"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/recipe_step_recycler_view"

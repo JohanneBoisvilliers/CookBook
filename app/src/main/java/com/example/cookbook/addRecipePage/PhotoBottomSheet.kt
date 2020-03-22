@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.example.cookbook.R
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class BottomSheetPhoto : BottomSheetDialogFragment() {
+class PhotoBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreateView(
             inflater: LayoutInflater,
