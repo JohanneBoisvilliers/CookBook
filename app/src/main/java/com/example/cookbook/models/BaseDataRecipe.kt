@@ -9,8 +9,9 @@ import androidx.room.PrimaryKey
 data class BaseDataRecipe (
         @PrimaryKey(autoGenerate = true)
         val baseRecipeId: Long = 0L,
-        val name: String? = "",
+        val name: String?,
         val numberOfLike:Int = 0,
-        val isAlreadyDone: Boolean? = false,
-        val addDate: String? = ""
+        val isAlreadyDone: Boolean = false,
+        val addDate: String?,
+        val isOnline: Boolean = false
 )

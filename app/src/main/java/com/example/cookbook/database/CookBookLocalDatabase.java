@@ -121,6 +121,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                 recette.put("isAlreadyDone", tokens[1]);
                 recette.put("numberOfLike", tokens[2]);
                 recette.put("addDate", tokens[3]);
+                recette.put("isOnline", tokens[4]);
                 db.insert("BaseDataRecipe", OnConflictStrategy.REPLACE, recette);
 
             }

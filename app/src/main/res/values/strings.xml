@@ -29,6 +29,7 @@
     <string name="pick_gallery">Pick image from gallery</string>
     <string name="pick_camera">Pick image from camera</string>
     <string name="add_step_description">Add a new step</string>
+    <string name="error_recipe_name">You have to choose a recipe name</string>
     <!--RECIPES DETAILS ACTIVITY-->
     <string name="ingredient_title">INGREDIENTS</string>
     <string name="recipe_step_title">RECIPE</string>

@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -15,6 +13,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:context=".recipeDetailsPage.RecipeDetailsActivity">
+
+                <ImageView
+                    android:id="@+id/empty_photo"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/viewpager_height"
+                    android:src="@drawable/assiette_vide"
+                    android:scaleType="centerCrop"/>
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager_recipe_details"
@@ -35,11 +40,10 @@
                     android:id="@+id/vp_add_photo"
                     android:layout_width="@dimen/viewpager_update_icon_size"
                     android:layout_height="@dimen/viewpager_update_icon_size"
+                    android:layout_marginBottom="@dimen/margin_to_border"
                     android:layout_alignEnd="@id/vp_del_photo"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginTop="@dimen/update_icon_margin"
+                    android:layout_alignBottom="@id/viewPager_recipe_details"
                     android:layout_marginEnd="@dimen/icon_margin_to_border"
-                    android:background="@drawable/circle_for_icons"
                     android:src="@drawable/baseline_add_circle_outline_24"
                     android:tint="@color/colorPrimary" />
 
@@ -47,19 +51,28 @@
                     android:id="@+id/vp_del_photo"
                     android:layout_width="@dimen/viewpager_update_icon_size"
                     android:layout_height="@dimen/viewpager_update_icon_size"
-                    android:layout_alignParentTop="true"
+                    android:layout_alignBottom="@id/viewPager_recipe_details"
                     android:layout_alignParentEnd="true"
-                    android:layout_marginTop="@dimen/update_icon_margin"
+                    android:layout_marginBottom="@dimen/margin_to_border"
                     android:layout_marginEnd="@dimen/margin_to_border"
-                    android:background="@drawable/circle_for_icons"
                     android:src="@drawable/baseline_remove_circle_outline_24"
                     android:tint="@color/colorPrimary" />
+                <TextView
+                    android:id="@+id/recipe_name"
+                    android:layout_below="@id/viewPager_recipe_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/recipe_title_size"
+                    android:layout_marginTop="@dimen/margin_to_border"
+                    android:layout_marginEnd="@dimen/margin_to_border"
+                    android:layout_marginStart="@dimen/margin_to_border"
+                    android:text="Nom de la recette ici"/>
 
                 <TextView
                     android:id="@+id/ingredient_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/viewPager_recipe_details"
+                    android:layout_below="@id/recipe_name"
                     android:layout_margin="@dimen/margin_to_border"
                     android:text="@string/ingredient_title"
                     android:textSize="@dimen/ingredients_title_size"

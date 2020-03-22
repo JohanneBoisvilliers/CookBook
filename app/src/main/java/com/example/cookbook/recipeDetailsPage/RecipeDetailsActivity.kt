@@ -16,6 +16,7 @@ import com.example.cookbook.R
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientDatabase
+import com.example.cookbook.models.Photo
 import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -29,8 +30,8 @@ class RecipeDetailsActivity : AppCompatActivity() {
     private var recipeId: Long? = 0
     private var recipe: Recipe? = Recipe()
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
-    private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(),false)
-    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(),false)
+    private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false)
+    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false)
     var testList = mutableListOf<IngredientDatabase>()
 
     override fun onResume() {
@@ -46,11 +47,13 @@ class RecipeDetailsActivity : AppCompatActivity() {
             window.statusBarColor = Color.TRANSPARENT
         }
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.toolbar_recipe_detail, menu)
         return true
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -66,15 +69,18 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.initStepRecyclerview()
         this.observerOnEditMode()
     }
+
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        android.R.id.home-> {
+            onBackPressed()
+            true
+        }
         R.id.action_modify -> {
             mRecipeViewModel?.isUpdateModeOn?.value = !mRecipeViewModel?.isUpdateModeOn?.value!!
             true
         }
 
         R.id.action_open_url -> {
-            // User chose the "Favorite" action, mark the current item
-            // as a favorite...
             true
         }
 
@@ -91,6 +97,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         val viewModelFactory = Injections.provideViewModelFactory(this)
         mRecipeViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel::class.java)
     }
+
     // settings of viewpager
     fun initViewPager() {
         viewPager_recipe_details.orientation = ViewPager2.ORIENTATION_HORIZONTAL
@@ -115,12 +122,12 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     // ---------------- OBSERVERS -------------------
 
-    private fun observerOnEditMode(){
+    private fun observerOnEditMode() {
         mRecipeViewModel?.isUpdateModeOn?.observe(this, Observer { isUpdateModeOn ->
-            vp_add_photo.visibility = if(isUpdateModeOn) View.VISIBLE else View.GONE
-            vp_del_photo.visibility = if(isUpdateModeOn) View.VISIBLE else View.GONE
-            if(mRecipeViewModel?.actualRecipe?.value != null){
-                updateUi(mRecipeViewModel?.actualRecipe?.value!!,isUpdateModeOn)
+            vp_add_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+            vp_del_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+            if (mRecipeViewModel?.actualRecipe?.value != null) {
+                updateUi(mRecipeViewModel?.actualRecipe?.value!!, isUpdateModeOn)
             }
         })
     }
@@ -129,34 +136,43 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     private fun fetchRecipe() {
         recipeId = intent.getLongExtra("recipe", 0)
-        mRecipeViewModel?.getSpecificRecipe(recipeId)?.observe(this, Observer { recipeFetch ->
+        mRecipeViewModel?.getSpecificRecipe(recipeId!!)?.observe(this, Observer { recipeFetch ->
             mRecipeViewModel?.actualRecipe?.value = recipeFetch
             runBlocking {
-               launch { updateUi(recipeFetch) }
+                launch { updateUi(recipeFetch) }
                 initIngredientList(recipeFetch.ingredientList)
             }
         }
         )
     }
 
-    private fun fetchIngredientsDatabase(ingredient: Ingredient){
-         mRecipeViewModel?.getIngredientDatabase(ingredient.ingredientId)?.observe(this, Observer { ingredientReturned ->
+    private fun fetchIngredientsDatabase(ingredient: Ingredient) {
+        mRecipeViewModel?.getIngredientDatabase(ingredient.ingredientId)?.observe(this, Observer { ingredientReturned ->
             testList.add(ingredientReturned)
         })
     }
 
     private fun initIngredientList(list: List<Ingredient>) {
-        list.forEach {  fetchIngredientsDatabase(it)  }
+        list.forEach { fetchIngredientsDatabase(it) }
     }
 
     // ---------------- UTILS -------------------
 
-    private fun updateUi(recipe: Recipe,isEditMode:Boolean = false) {
+    private fun updateUi(recipe: Recipe, isEditMode: Boolean = false) {
         this.recipe = recipe
+        recipe_name.text = recipe.baseDataRecipe?.name
+        viewPagerVisibility(recipe)
         this.viewPagerAdapter?.updatePhotoList(recipe.photoList)
-        this.ingredientAdapter?.updateIngredientList(recipe.ingredientList,isEditMode)
-        this.stepAdapter?.updateStepList(recipe.stepList,isEditMode)
+        this.ingredientAdapter?.updateIngredientList(recipe.ingredientList, isEditMode)
+        this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
+
+    private fun viewPagerVisibility(recipe: Recipe){
+        val isListEmpty = recipe.photoList.size == 0
+        viewPager_recipe_details.visibility = if(isListEmpty) View.INVISIBLE else View.VISIBLE
+        empty_photo.visibility = if(isListEmpty) View.VISIBLE else View.INVISIBLE
+    }
+
     // set status bar state
     private fun setWindowFlag(bits: Int, on: Boolean) {
         val win = window
@@ -166,5 +182,6 @@ class RecipeDetailsActivity : AppCompatActivity() {
         } else {
             winParams.flags = winParams.flags and bits.inv()
         }
-        win.attributes = winParams}
+        win.attributes = winParams
+    }
 }

@@ -33,7 +33,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/recipe_name_textfield"
+                android:id="@+id/recipe_name_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -41,6 +41,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/new_recipe_title">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/recipe_name_textfield"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -64,7 +65,7 @@
                 android:layout_margin="@dimen/margin_to_border"
                 app:layout_constraintLeft_toRightOf="@id/category_text"
                 app:layout_constraintRight_toLeftOf="@id/online_recipe_text"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_name_textfield" />
+                app:layout_constraintTop_toBottomOf="@+id/recipe_name_container" />
             <!-- ONLINE RECIPE -->
             <TextView
                 android:id="@+id/online_recipe_text"
@@ -100,282 +101,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>
-            <!-- INGREDIENTS -->
-            <TextView
-                android:id="@+id/ingredient_details_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_to_border"
-                android:text="@string/ingredients_title"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/category_text"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_url" />
-
-            <RelativeLayout
-                android:id="@+id/ingredient_list_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                app:layout_constraintTop_toBottomOf="@id/ingredient_details_title">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/new_recipe_ingredient_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/add_ingredient_fields"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/add_ingredient_button"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/ingredient_list_container">
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_to_border">
-
-                    <TextView
-                        android:id="@+id/qt_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/quantity_ingredient_text"
-                        app:layout_constraintBottom_toBottomOf="@id/qt_field"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/qt_field" />
-
-                    <EditText
-                        android:id="@+id/qt_field"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_to_border"
-                        android:layout_marginEnd="@dimen/margin_to_border"
-                        app:layout_constraintLeft_toRightOf="@+id/qt_text"
-                        app:layout_constraintRight_toLeftOf="@id/unit_text"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/unit_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/unit_ingredient_text"
-                        app:layout_constraintBottom_toBottomOf="@id/qt_field"
-                        app:layout_constraintLeft_toRightOf="@id/qt_field"
-                        app:layout_constraintRight_toLeftOf="@+id/unit_spinner"
-                        app:layout_constraintTop_toTopOf="@id/qt_field" />
-
-                    <Spinner
-                        android:id="@+id/unit_spinner"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_to_border"
-                        app:layout_constraintBottom_toBottomOf="@id/qt_field"
-                        app:layout_constraintLeft_toRightOf="@id/unit_text"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toTopOf="@id/qt_field" />
-
-
-                    <TextView
-                        android:id="@+id/name_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/name_ingredient_text"
-                        app:layout_constraintBottom_toBottomOf="@id/name_field"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/qt_field" />
-
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/name_field"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/margin_to_border"
-                        app:layout_constraintLeft_toRightOf="@+id/name_text"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/qt_field" />
-
-                    <Button
-                        android:id="@+id/cancel_ingredient_button"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_to_border"
-                        android:background="@android:color/transparent"
-                        android:onClick="onClicked"
-                        android:text="@string/cancel_ingredient_text"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toLeftOf="@id/save_ingredient_button"
-                        app:layout_constraintTop_toBottomOf="@+id/name_field" />
-
-                    <Button
-                        android:id="@+id/save_ingredient_button"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_to_border"
-                        android:background="@android:color/transparent"
-                        android:onClick="onClicked"
-                        android:text="@string/add_ingredient_text"
-                        android:textColor="@color/colorAccent"
-                        app:layout_constraintLeft_toRightOf="@id/cancel_ingredient_button"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/name_field" />
-
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <ImageButton
-                android:src="@drawable/add"
-                android:id="@+id/add_ingredient_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/margin_to_border"
-                android:background="@android:color/transparent"
-                android:onClick="onClicked"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_ingredient_fields" />
-            <!-- PHOTOS -->
-            <TextView
-                android:id="@+id/photo_detail_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/photos_title"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/category_text"
-                app:layout_constraintTop_toBottomOf="@+id/add_ingredient_button" />
-
-            <RelativeLayout
-                android:id="@+id/photos_list_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                app:layout_constraintTop_toBottomOf="@id/photo_detail_title">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/new_recipe_photo_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
-            </RelativeLayout>
-
-            <ImageButton
-                android:id="@+id/add_photo_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:src="@drawable/add"
-                android:clickable="true"
-                android:focusable="true"
-                android:onClick="onClicked"
-                android:padding="@dimen/margin_to_border"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/photos_list_container" />
-            <!-- STEPS -->
-            <TextView
-                android:id="@+id/step_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/steps_title"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/category_text"
-                app:layout_constraintTop_toBottomOf="@+id/add_photo_button" />
-
-            <RelativeLayout
-                android:id="@+id/step_list_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                app:layout_constraintTop_toBottomOf="@id/step_title">
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/new_recipe_step_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </RelativeLayout>
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/add_step_field"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                android:visibility="gone"
-                app:layout_constraintBottom_toTopOf="@id/add_step_button"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/step_list_container">
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/margin_to_border">
-                    <TextView
-                        android:id="@+id/step_level"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/add_step_description"
-                        android:layout_marginBottom="@dimen/margin_to_border"
-                        android:text="@string/add_step_description"/>
-                    <EditText
-                        android:id="@+id/add_step_description"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:layout_constraintTop_toBottomOf="@+id/step_level"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintBottom_toTopOf="@id/cancel_step_button"
-                        app:layout_constraintRight_toRightOf="parent"/>
-                    <Button
-                        android:id="@+id/cancel_step_button"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_to_border"
-                        android:background="@android:color/transparent"
-                        android:onClick="onClicked"
-                        android:text="@string/cancel_ingredient_text"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintRight_toLeftOf="@id/save_step_button"
-                        app:layout_constraintTop_toBottomOf="@+id/add_step_description" />
-
-                    <Button
-                        android:id="@+id/save_step_button"
-                        style="?android:attr/borderlessButtonStyle"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/margin_to_border"
-                        android:background="@android:color/transparent"
-                        android:onClick="onClicked"
-                        android:text="@string/add_ingredient_text"
-                        android:textColor="@color/colorAccent"
-                        app:layout_constraintLeft_toRightOf="@id/cancel_step_button"
-                        app:layout_constraintRight_toRightOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/add_step_description" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </androidx.cardview.widget.CardView>
-
-            <ImageButton
-                android:id="@+id/add_step_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:onClick="onClicked"
-                android:src="@drawable/add"
-                android:padding="@dimen/margin_to_border"
-                android:clickable="true"
-                android:focusable="true"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/add_step_field" />
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
@@ -387,6 +112,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/margin_to_border"
-        android:src="@drawable/add"
+        android:src="@drawable/next"
         android:tint="@color/colorPrimary" />
 </RelativeLayout>

@@ -1,10 +1,11 @@
 package com.example.cookbook.database.dao
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Query
-import androidx.room.Transaction
+import androidx.room.*
+import com.example.cookbook.models.BaseDataRecipe
+import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.Recipe
+
 
 @Dao
 interface RecipeDao {
@@ -15,4 +16,7 @@ interface RecipeDao {
     @Query("SELECT * FROM BaseDataRecipe WHERE baseRecipeId= :recipeId")
     @Transaction
     fun getSpecificRecipe(recipeId : Long): LiveData<Recipe>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRecipe(recipe: BaseDataRecipe): Long
 }
