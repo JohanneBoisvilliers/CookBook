@@ -20,9 +20,9 @@ import com.example.cookbook.addRecipePage.StepBottomSheet
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientDatabase
-import com.example.cookbook.models.Photo
 import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipesPage.RecipeViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
 import kotlinx.coroutines.launch
@@ -72,6 +72,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.initIngredientRecyclerview()
         this.initStepRecyclerview()
         this.observerOnEditMode()
+        this.observerOnIngredientList()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -130,9 +131,16 @@ class RecipeDetailsActivity : AppCompatActivity() {
             vp_del_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_ingredient.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_step.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+            btn_save.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             if (mRecipeViewModel?.actualRecipe?.value != null) {
                 updateUi(mRecipeViewModel?.actualRecipe?.value!!, isUpdateModeOn)
             }
+        })
+    }
+
+    private fun observerOnIngredientList(){
+        mRecipeViewModel?.ingredientList?.observe(this,Observer{ list->
+            updateItemsList(list)
         })
     }
 
@@ -142,16 +150,13 @@ class RecipeDetailsActivity : AppCompatActivity() {
         if(view is ImageButton){
             when(view.id){
                 R.id.btn_add_ingredient -> {
-                    val modalBottomSheet = IngredientBottomSheet()
-                    modalBottomSheet.show(supportFragmentManager, IngredientBottomSheet.TAG)
+                    showModalBottomSheet(IngredientBottomSheet(), IngredientBottomSheet.TAG)
                 }
                 R.id.btn_add_step -> {
-                    val modalBottomSheet = StepBottomSheet()
-                    modalBottomSheet.show(supportFragmentManager,StepBottomSheet.TAG)
+                    showModalBottomSheet(StepBottomSheet(),StepBottomSheet.TAG)
                 }
                 R.id.vp_add_photo -> {
-                    val modalBottomSheet = PhotoBottomSheet()
-                    modalBottomSheet.show(supportFragmentManager,PhotoBottomSheet.TAG)
+                    showModalBottomSheet(PhotoBottomSheet(),PhotoBottomSheet.TAG)
                 }
 
             }
@@ -192,7 +197,10 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.ingredientAdapter?.updateIngredientList(recipe.ingredientList, isEditMode)
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
-
+    //notify adapter that an item has changed
+    private fun updateItemsList(ingredientList: MutableList<Ingredient>?) {
+        ingredientAdapter?.updateIngredientList(ingredientList!!,false)
+    }
     // set visibility of viewpager depending to recipe photo list size
     private fun viewPagerVisibility(recipe: Recipe) {
         val isListEmpty = recipe.photoList.size == 0
@@ -200,6 +208,9 @@ class RecipeDetailsActivity : AppCompatActivity() {
         empty_photo.visibility = if (isListEmpty) View.VISIBLE else View.INVISIBLE
     }
 
+    private fun showModalBottomSheet(modal: BottomSheetDialogFragment, tag :String ) {
+        modal.show(supportFragmentManager, tag)
+    }
     // set status bar state
     private fun setWindowFlag(bits: Int, on: Boolean) {
         val win = window

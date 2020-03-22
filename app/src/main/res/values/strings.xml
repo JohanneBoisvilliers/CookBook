@@ -11,9 +11,6 @@
     <string name="add_recipe_title">New Recipes</string>
     <string name="hint_add_recipe_url">Recipe URL</string>
     <string name="or_separator">OR</string>
-    <string name="add_recipe_button_url">ADD RECIPE</string>
-    <string name="add_ingredient_button">ADD INGREDIENT</string>
-    <string name="add_photo_button">ADD PHOTO</string>
     <string name="add_step_button">ADD STEP</string>
     <string name="category_title">Category :</string>
     <string name="recipe_title">Recipe</string>
@@ -21,6 +18,10 @@
     <string name="ingredients_title">Ingredients :</string>
     <string name="photos_title">Photos :</string>
     <string name="steps_title">Steps :</string>
+    <string name="error_recipe_name">You have to choose a recipe name</string>
+    <!--RECIPES DETAILS ACTIVITY-->
+    <string name="ingredient_title">INGREDIENTS</string>
+    <string name="recipe_step_title">RECIPE</string>
     <string name="add_ingredient_text">Add</string>
     <string name="cancel_ingredient_text">Cancel</string>
     <string name="name_ingredient_text">Name :</string>
@@ -29,11 +30,7 @@
     <string name="pick_gallery">Pick image from gallery</string>
     <string name="pick_camera">Pick image from camera</string>
     <string name="add_step_description">Add a new step</string>
-    <string name="error_recipe_name">You have to choose a recipe name</string>
-    <!--RECIPES DETAILS ACTIVITY-->
-    <string name="ingredient_title">INGREDIENTS</string>
-    <string name="recipe_step_title">RECIPE</string>
-
+    <string name="update_button">SAVE</string>
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>

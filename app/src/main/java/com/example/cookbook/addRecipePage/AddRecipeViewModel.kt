@@ -15,7 +15,7 @@ class AddRecipeViewModel(private val mIngredientDataRepository: IngredientDataRe
 
     val recipeName = MutableLiveData<String>()
     val category = MutableLiveData<String>()
-    val isOnline = MutableLiveData<Boolean>(false)
+    val isOnline = MutableLiveData(false)
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()
     val ingredientName = MutableLiveData<String>()
