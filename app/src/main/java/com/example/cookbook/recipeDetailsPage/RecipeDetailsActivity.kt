@@ -7,12 +7,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.cookbook.R
+import com.example.cookbook.addRecipePage.IngredientBottomSheet
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientDatabase
@@ -71,7 +73,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
-        android.R.id.home-> {
+        android.R.id.home -> {
             onBackPressed()
             true
         }
@@ -85,8 +87,6 @@ class RecipeDetailsActivity : AppCompatActivity() {
         }
 
         else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
     }
@@ -126,10 +126,25 @@ class RecipeDetailsActivity : AppCompatActivity() {
         mRecipeViewModel?.isUpdateModeOn?.observe(this, Observer { isUpdateModeOn ->
             vp_add_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             vp_del_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+            btn_add_ingredient.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+            btn_add_step.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             if (mRecipeViewModel?.actualRecipe?.value != null) {
                 updateUi(mRecipeViewModel?.actualRecipe?.value!!, isUpdateModeOn)
             }
         })
+    }
+
+    // ---------------- LISTENERS -------------------
+
+    fun onClicked(view: View) {
+        if(view is ImageButton){
+            when(view.id){
+                R.id.btn_add_ingredient -> {
+                    val modalBottomSheet = IngredientBottomSheet()
+                    modalBottomSheet.show(supportFragmentManager, IngredientBottomSheet.TAG)
+                }
+            }
+        }
     }
 
     // ---------------- ASYNC -------------------
@@ -167,10 +182,11 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
 
-    private fun viewPagerVisibility(recipe: Recipe){
+    // set visibility of viewpager depending to recipe photo list size
+    private fun viewPagerVisibility(recipe: Recipe) {
         val isListEmpty = recipe.photoList.size == 0
-        viewPager_recipe_details.visibility = if(isListEmpty) View.INVISIBLE else View.VISIBLE
-        empty_photo.visibility = if(isListEmpty) View.VISIBLE else View.INVISIBLE
+        viewPager_recipe_details.visibility = if (isListEmpty) View.INVISIBLE else View.VISIBLE
+        empty_photo.visibility = if (isListEmpty) View.VISIBLE else View.INVISIBLE
     }
 
     // set status bar state

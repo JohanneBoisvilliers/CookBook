@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="@dimen/margin_to_border"
+    tools:context=".addRecipePage.IngredientBottomSheet">
+
+    <!-- INGREDIENTS -->
+
+    <TextView
+        android:id="@+id/qt_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/quantity_ingredient_text"
+        app:layout_constraintBottom_toBottomOf="@id/qt_field"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/qt_field" />
+
+    <EditText
+        android:id="@+id/qt_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_to_border"
+        android:layout_marginEnd="@dimen/margin_to_border"
+        app:layout_constraintLeft_toRightOf="@+id/qt_text"
+        app:layout_constraintRight_toLeftOf="@id/unit_text"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/unit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unit_ingredient_text"
+        app:layout_constraintBottom_toBottomOf="@id/qt_field"
+        app:layout_constraintLeft_toRightOf="@id/qt_field"
+        app:layout_constraintRight_toLeftOf="@+id/unit_spinner"
+        app:layout_constraintTop_toTopOf="@id/qt_field" />
+
+    <Spinner
+        android:id="@+id/unit_spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_to_border"
+        app:layout_constraintBottom_toBottomOf="@id/qt_field"
+        app:layout_constraintLeft_toRightOf="@id/unit_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/qt_field" />
+
+
+    <TextView
+        android:id="@+id/name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/name_ingredient_text"
+        app:layout_constraintBottom_toBottomOf="@id/name_field"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/qt_field" />
+
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:id="@+id/name_field"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/margin_to_border"
+        app:layout_constraintLeft_toRightOf="@+id/name_text"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/qt_field" />
+
+    <Button
+        android:id="@+id/cancel_ingredient_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_to_border"
+        android:text="@string/cancel_ingredient_text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/save_ingredient_button"
+        app:layout_constraintTop_toBottomOf="@+id/name_field" />
+
+    <Button
+        android:id="@+id/save_ingredient_button"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_to_border"
+        android:background="@android:color/transparent"
+        android:text="@string/add_ingredient_text"
+        android:textColor="@color/colorAccent"
+        app:layout_constraintLeft_toRightOf="@id/cancel_ingredient_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_field" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
