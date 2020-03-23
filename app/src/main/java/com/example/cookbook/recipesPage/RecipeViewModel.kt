@@ -20,6 +20,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val actualRecipe = MutableLiveData<Recipe>()
     val ingredientList = MutableLiveData<MutableList<Ingredient>>()
     val quantity = MutableLiveData<Int>()
+    val unit = MutableLiveData<String>()
 
 
     fun getSpecificRecipe(recipeId: Long): LiveData<Recipe> {

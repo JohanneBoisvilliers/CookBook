@@ -6,6 +6,8 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
@@ -22,6 +24,10 @@ import kotlinx.android.synthetic.main.fragment_ingredient_bottom_sheet.*
 class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: RecipeViewModel
+    // use for instantiate fragment
+    companion object {
+        const val TAG = "ModalIngredientBottomSheet"
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -37,9 +43,11 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        this.initSpinner()
         listenerOnCancelButton()
         listenerOnAddButton()
         listenerOnQuantityField()
+        listenerOnUnitSpinner()
     }
 
     // ---------------- INIT -------------------
@@ -47,6 +55,20 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     //get recipe view model for requests
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+    }
+    // configure the unit spinner for ingredient unit
+    private fun initSpinner(){
+        // Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+                activity!!,
+                R.array.unit_list,
+                android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            unit_spinner.adapter = adapter
+        }
     }
 
     // ---------------- LISTENERS -------------------
@@ -57,7 +79,6 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             dismiss()
         }
     }
-
     /*
     set a new ingredient depending to different inputs,
     and put this new ingredient in ingredient list in view model
@@ -67,21 +88,30 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             val ingredientDatabase = IngredientDatabase(name = "blabla")
             val ingredient = Ingredient(
                     quantity = viewModel.quantity.value!!,
-                    unit = "gr",
+                    unit = viewModel.unit.value!!,
                     ingredientDatabaseId = 1,
-                    recipeId = 1,
-                    ingredientId = 1,
+                    recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!,
                     ingredientDatabase = ingredientDatabase)
             viewModel.ingredientList.plus(ingredient)
         }
     }
-
+    // get ingredient quantity from quantity field and save it into view model
     private fun listenerOnQuantityField(){
         qt_field.onTextChanged { viewModel.quantity.value = it.toInt() }
     }
-    companion object {
-        const val TAG = "ModalIngredientBottomSheet"
-    }
+    // get value in unit spinner
+    private fun listenerOnUnitSpinner(){
+        unit_spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+            override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
+                // set unit value in viewmodel when choose an item in unit spinner
+                viewModel.unit.value = parent.getItemAtPosition(pos).toString()
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>) {
+            }
+        }
+}
 
     // ---------------- EXTENSIONS -------------------
 
