@@ -13,11 +13,11 @@
                 android:layout_height="wrap_content"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toTopOf="@id/add_step_description"
+                app:layout_constraintBottom_toTopOf="@id/step_field"
                 android:layout_marginBottom="@dimen/margin_to_border"
                 android:text="@string/add_step_description"/>
             <EditText
-                android:id="@+id/add_step_description"
+                android:id="@+id/step_field"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintTop_toBottomOf="@+id/step_level"
@@ -34,7 +34,7 @@
                 android:text="@string/cancel_ingredient_text"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/save_step_button"
-                app:layout_constraintTop_toBottomOf="@+id/add_step_description" />
+                app:layout_constraintTop_toBottomOf="@+id/step_field" />
 
             <Button
                 android:id="@+id/save_step_button"
@@ -47,7 +47,7 @@
                 android:textColor="@color/colorAccent"
                 app:layout_constraintLeft_toRightOf="@id/cancel_step_button"
                 app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/add_step_description" />
+                app:layout_constraintTop_toBottomOf="@+id/step_field" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -19,6 +19,7 @@ import com.example.cookbook.models.IngredientDatabase
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_ingredient_bottom_sheet.*
+import kotlinx.android.synthetic.main.fragment_step_bottom_sheet.*
 
 class IngredientBottomSheet : BottomSheetDialogFragment() {
 
@@ -44,8 +45,8 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.initSpinner()
-        listenerOnCancelButton()
-        listenerOnAddButton()
+        listenerOnCancelIngredientButton()
+        listenerOnAddIngredientButton()
         listenerOnQuantityField()
         listenerOnUnitSpinner()
     }
@@ -93,7 +94,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     // ---------------- LISTENERS -------------------
 
     //dismiss modal bottom sheet when pressing cancel button
-    private fun listenerOnCancelButton() {
+    private fun listenerOnCancelIngredientButton() {
         cancel_ingredient_button.setOnClickListener {
             dismiss()
         }
@@ -102,7 +103,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     set a new ingredient depending to different inputs,
     and put this new ingredient in ingredient list in view model
     */
-    private fun listenerOnAddButton() {
+    private fun listenerOnAddIngredientButton() {
         save_ingredient_button.setOnClickListener {
             val ingredientDatabase = IngredientDatabase(name = viewModel.ingredientName.value!!)
             val ingredient = Ingredient(
@@ -131,7 +132,6 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             }
         }
 }
-
 
     // ---------------- OBSERVER -------------------
 

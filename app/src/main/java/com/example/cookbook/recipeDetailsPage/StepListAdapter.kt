@@ -27,7 +27,7 @@ class StepListAdapter constructor(list: MutableList<Step>,isEditMode:Boolean):Re
     }
 
     override fun onBindViewHolder(holder: StepListViewHolder, position: Int) {
-        holder.bind(mStepList[position],mIsEditMode)
+        holder.bind(mStepList[position],position,mIsEditMode)
     }
 
     fun updateStepList(list:List<Step>,isEditMode: Boolean){

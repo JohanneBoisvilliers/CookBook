@@ -21,6 +21,7 @@ import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientDatabase
 import com.example.cookbook.models.Recipe
+import com.example.cookbook.models.Step
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
@@ -73,6 +74,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.initStepRecyclerview()
         this.observerOnEditMode()
         this.observerOnIngredientList()
+        this.observerOnStepList()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -140,7 +142,13 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     private fun observerOnIngredientList(){
         mRecipeViewModel?.ingredientList?.observe(this,Observer{ list->
-            updateItemsList(list)
+            updateIngredientList(list)
+        })
+    }
+
+    private fun observerOnStepList(){
+        mRecipeViewModel?.stepList?.observe(this, Observer { list ->
+            updateStepList(list)
         })
     }
 
@@ -198,8 +206,12 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
     //notify adapter that an item has changed
-    private fun updateItemsList(ingredientList: MutableList<Ingredient>?) {
+    private fun updateIngredientList(ingredientList: MutableList<Ingredient>?) {
         ingredientAdapter?.updateIngredientList(ingredientList!!,false)
+    }
+    //notify adapter that an item has changed
+    private fun updateStepList(stepList: MutableList<Step>?) {
+        stepAdapter?.updateStepList(stepList!!,false)
     }
     // set visibility of viewpager depending to recipe photo list size
     private fun viewPagerVisibility(recipe: Recipe) {

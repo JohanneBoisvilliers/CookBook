@@ -31,6 +31,7 @@
     <string name="pick_camera">Pick image from camera</string>
     <string name="add_step_description">Add a new step</string>
     <string name="update_button">SAVE</string>
+    <string name="step">Step %s</string>
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>

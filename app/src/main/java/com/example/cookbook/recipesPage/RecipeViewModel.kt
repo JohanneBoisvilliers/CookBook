@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import com.example.cookbook.database.dao.IngredientDao
-import com.example.cookbook.models.BaseDataRecipe
-import com.example.cookbook.models.Ingredient
-import com.example.cookbook.models.IngredientDatabase
-import com.example.cookbook.models.Recipe
+import com.example.cookbook.models.*
 import com.example.cookbook.repositories.IngredientDataRepository
 import com.example.cookbook.repositories.RecipesDataRepository
 import kotlinx.coroutines.runBlocking
@@ -20,15 +17,16 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val isUpdateModeOn = MutableLiveData(false)
     val actualRecipe = MutableLiveData<Recipe>()
     val ingredientList = MutableLiveData<MutableList<Ingredient>>()
+    val stepList = MutableLiveData<MutableList<Step>>()
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()
     val ingredientName = MutableLiveData<String>()
+    val newStepText = MutableLiveData<String>()
 
     val ingredientListName: LiveData<List<String>> = liveData {
         val data = mIngredientDataRepository.getIngredientList()
         emit(data)
     }
-
 
     fun getSpecificRecipe(recipeId: Long): LiveData<Recipe> {
         return mRecipesDataRepository.getSpecificRecipe(recipeId)
