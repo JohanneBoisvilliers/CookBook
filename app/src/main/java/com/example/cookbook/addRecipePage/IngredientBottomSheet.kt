@@ -16,7 +16,6 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cookbook.R
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientDatabase
-import com.example.cookbook.recipeDetailsPage.IngredientsListAdapter
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_ingredient_bottom_sheet.*
@@ -39,6 +38,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
         super.onCreate(savedInstanceState)
         setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
         this.initViewModel()
+        observerOnIngredientList()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,11 +70,30 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             unit_spinner.adapter = adapter
         }
     }
+    // set adapter on autocomplete text field for ingredient name
+    private fun initIngredientNameField(ingredientList: List<String>) {
+        // Initialize a new array adapter object
+        val adapter = ArrayAdapter<String>(
+                activity!!, // Context
+                android.R.layout.simple_dropdown_item_1line, // Layout
+                ingredientList // Array
+        )
+        name_field.setAdapter(adapter)
+        // Auto complete threshold
+        // The minimum number of characters to type to show the drop down
+        name_field.threshold = 2
+
+        // Set an item click listener for auto complete text view
+        name_field.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+            viewModel.ingredientName.value = parent.getItemAtPosition(position).toString()
+        }
+
+    }
 
     // ---------------- LISTENERS -------------------
 
     //dismiss modal bottom sheet when pressing cancel button
-    fun listenerOnCancelButton() {
+    private fun listenerOnCancelButton() {
         cancel_ingredient_button.setOnClickListener {
             dismiss()
         }
@@ -85,7 +104,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     */
     private fun listenerOnAddButton() {
         save_ingredient_button.setOnClickListener {
-            val ingredientDatabase = IngredientDatabase(name = "blabla")
+            val ingredientDatabase = IngredientDatabase(name = viewModel.ingredientName.value!!)
             val ingredient = Ingredient(
                     quantity = viewModel.quantity.value!!,
                     unit = viewModel.unit.value!!,
@@ -112,6 +131,16 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             }
         }
 }
+
+
+    // ---------------- OBSERVER -------------------
+
+    // get ingredient list from view model and set auto complete text field adapter
+    private fun observerOnIngredientList(){
+        viewModel.ingredientListName.observe(this, Observer { list ->
+            initIngredientNameField(list)
+        })
+    }
 
     // ---------------- EXTENSIONS -------------------
 

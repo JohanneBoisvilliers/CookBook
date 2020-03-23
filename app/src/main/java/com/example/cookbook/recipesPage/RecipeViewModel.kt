@@ -3,6 +3,7 @@ package com.example.cookbook.recipesPage
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import com.example.cookbook.database.dao.IngredientDao
 import com.example.cookbook.models.BaseDataRecipe
 import com.example.cookbook.models.Ingredient
@@ -21,6 +22,12 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val ingredientList = MutableLiveData<MutableList<Ingredient>>()
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()
+    val ingredientName = MutableLiveData<String>()
+
+    val ingredientListName: LiveData<List<String>> = liveData {
+        val data = mIngredientDataRepository.getIngredientList()
+        emit(data)
+    }
 
 
     fun getSpecificRecipe(recipeId: Long): LiveData<Recipe> {
