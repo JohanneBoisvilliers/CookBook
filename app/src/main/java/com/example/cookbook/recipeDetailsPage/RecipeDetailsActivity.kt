@@ -142,13 +142,21 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     private fun observerOnIngredientList(){
         mRecipeViewModel?.ingredientList?.observe(this,Observer{ list->
-            updateIngredientList(list)
+//            updateIngredientList(list)
+            if (mRecipeViewModel?.actualRecipe?.value != null) {
+                mRecipeViewModel?.actualRecipe?.value!!.ingredientList = list
+                updateUi(mRecipeViewModel?.actualRecipe?.value!!, true)
+            }
         })
     }
 
     private fun observerOnStepList(){
         mRecipeViewModel?.stepList?.observe(this, Observer { list ->
-            updateStepList(list)
+//            updateStepList(list)
+            if (mRecipeViewModel?.actualRecipe?.value != null) {
+                mRecipeViewModel?.actualRecipe?.value!!.stepList = list
+                updateUi(mRecipeViewModel?.actualRecipe?.value!!, true)
+            }
         })
     }
 

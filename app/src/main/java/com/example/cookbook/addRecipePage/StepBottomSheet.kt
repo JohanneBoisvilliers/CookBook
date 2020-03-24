@@ -59,8 +59,14 @@ class StepBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenerOnAddStepButton(){
         save_step_button.setOnClickListener {
-            val stepToAdd = Step(description = viewModel.newStepText.value!!,recipeId = 1)
-            viewModel.stepList.plus(stepToAdd)
+            when(step_field.length()==0){
+                true -> step_field.error = getString(R.string.step_bottom_sheet_qt_error)
+                false -> {
+                    val stepToAdd = Step(description = viewModel.newStepText.value!!,recipeId = 1)
+                    viewModel.stepList.plus(stepToAdd)
+                    step_field.text.clear()
+                }
+            }
         }
     }
     // close step bottom sheet

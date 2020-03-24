@@ -12,7 +12,7 @@ class StepListAdapter constructor(list: MutableList<Step>,isEditMode:Boolean):Re
 
     private var mStepList:MutableList<Step> = list
     private var mContext: Context? = null
-    private var mIsEditMode = false
+    private var mIsEditMode = isEditMode
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StepListViewHolder {
         mContext = parent.context

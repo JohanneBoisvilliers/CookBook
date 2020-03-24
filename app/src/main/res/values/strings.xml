@@ -32,6 +32,9 @@
     <string name="add_step_description">Add a new step</string>
     <string name="update_button">SAVE</string>
     <string name="step">Step %s</string>
+    <string name="step_bottom_sheet_qt_error">Insert a description for this step</string>
+    <string name="ingredient_bottom_sheet_qt_error">Insert a quantity</string>
+    <string name="ingredient_bottom_sheet_name_error">Insert a name</string>
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>
