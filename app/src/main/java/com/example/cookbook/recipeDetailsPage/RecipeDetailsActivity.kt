@@ -75,6 +75,8 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.observerOnEditMode()
         this.observerOnIngredientList()
         this.observerOnStepList()
+        this.observerOnPhotoList()
+        this.listenerOnUpdateButton()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -159,6 +161,14 @@ class RecipeDetailsActivity : AppCompatActivity() {
             }
         })
     }
+    private fun observerOnPhotoList(){
+        mRecipeViewModel?.photoList?.observe(this, Observer { list ->
+            if (mRecipeViewModel?.actualRecipe?.value != null) {
+                mRecipeViewModel?.actualRecipe?.value!!.photoList = list
+                updateUi(mRecipeViewModel?.actualRecipe?.value!!, true)
+            }
+        })
+    }
 
     // ---------------- LISTENERS -------------------
 
@@ -176,6 +186,12 @@ class RecipeDetailsActivity : AppCompatActivity() {
                 }
 
             }
+        }
+    }
+
+    private fun listenerOnUpdateButton(){
+        btn_save.setOnClickListener {
+            mRecipeViewModel?.updateRecipe(mRecipeViewModel?.actualRecipe?.value?.baseDataRecipe!!)
         }
     }
 
@@ -213,14 +229,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.ingredientAdapter?.updateIngredientList(recipe.ingredientList, isEditMode)
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
-    //notify adapter that an item has changed
-    private fun updateIngredientList(ingredientList: MutableList<Ingredient>?) {
-        ingredientAdapter?.updateIngredientList(ingredientList!!,false)
-    }
-    //notify adapter that an item has changed
-    private fun updateStepList(stepList: MutableList<Step>?) {
-        stepAdapter?.updateStepList(stepList!!,false)
-    }
+
     // set visibility of viewpager depending to recipe photo list size
     private fun viewPagerVisibility(recipe: Recipe) {
         val isListEmpty = recipe.photoList.size == 0
