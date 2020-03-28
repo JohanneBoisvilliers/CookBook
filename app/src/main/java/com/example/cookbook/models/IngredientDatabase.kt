@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 data class IngredientDatabase (
 
         @PrimaryKey(autoGenerate = true)
-        var ingredientDatabaseId: Long = 0,
+        var ingredientDatabaseId: Long,
         var name: String
 ){
         constructor():this(0,"")

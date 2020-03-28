@@ -6,7 +6,6 @@ import com.example.cookbook.repositories.IngredientDataRepository
 import com.example.cookbook.repositories.RecipesDataRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.util.concurrent.ConcurrentLinkedQueue
 
@@ -21,33 +20,42 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val stepList = MutableLiveData<MutableList<Step>>()
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()
-    val ingredientName = MutableLiveData<String>()
     val newStepText = MutableLiveData<String>()
+    val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
 
-
-    val ingredientListName: LiveData<List<String>> = liveData {
-        val data = mIngredientDataRepository.getIngredientList()
+    val ingredientListPicked: LiveData<List<IngredientDatabase>> = liveData {
+        val data = withContext(Dispatchers.IO) { mIngredientDataRepository.getIngredientList() }
         emit(data)
     }
 
-    suspend fun getSpecificRecipe(recipeId: Long): Recipe {
+    private suspend fun getSpecificRecipe(recipeId: Long): Recipe {
         return mRecipesDataRepository.getSpecificRecipe(recipeId)
     }
 
-    suspend fun getIngredientDatabase(ingredientDatabaseId: Long): IngredientDatabase {
+    private suspend fun getIngredientDatabase(ingredientDatabaseId: Long): IngredientDatabase {
         return mIngredientDataRepository.getIngredientDatabase(ingredientDatabaseId)
     }
 
     fun getRecipeWithIngredient(recipeId: Long) = liveData {
+        val tempIngredientList = mutableListOf<Ingredient>()
+        // get the recipe
         val recipe = withContext(Dispatchers.Default) { getSpecificRecipe(recipeId) }
+        // for each item in recipe ingredient list, get the ingredient database
         withContext(Dispatchers.Default) {
             recipe.ingredientList.forEach {
                 launch(Dispatchers.IO) {
-                    ingredientDatabaseList.add(getIngredientDatabase(it.ingredientDatabaseId))
+                    // create a new ingredient with it(ingredientData) + ingredientDatabase
+                    val ingredient = Ingredient(it, getIngredientDatabase(it.ingredientDatabaseId))
+                    // save ingredient database fetch into a list
+                    ingredientDatabaseList.add(ingredient.ingredientDatabase)
+                    // save ingredient into a list
+                    tempIngredientList.add(ingredient)
                 }
             }
         }
+        // post the new ingredient list for update UI
+        ingredientList.postValue(tempIngredientList)
         emit(recipe)
     }
 

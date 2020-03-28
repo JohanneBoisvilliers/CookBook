@@ -11,8 +11,8 @@ interface IngredientDao {
     @Query("SELECT * FROM IngredientDatabase WHERE ingredientDatabaseId= :id")
     suspend fun getIngredientDatabase(id:Long):IngredientDatabase
 
-    @Query("SELECT name FROM IngredientDatabase")
-    suspend fun getIngredientList():List<String>
+    @Query("SELECT * FROM IngredientDatabase")
+    suspend fun getIngredientList():List<IngredientDatabase>
 
     @Update
     fun updateIngredient(vararg ingredients:IngredientDatabase)

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,7 @@ import kotlinx.android.synthetic.main.activity_recipe_details.*
 
 class RecipeDetailsActivity : AppCompatActivity() {
 
-    private var mRecipeViewModel: RecipeViewModel? = null
+    private var viewModel: RecipeViewModel? = null
     private var recipeId: Long? = 0
     private var recipe: Recipe? = Recipe()
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
@@ -68,7 +69,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.initIngredientRecyclerview()
         this.initStepRecyclerview()
         this.observerOnEditMode()
-//        this.observerOnIngredientList()
+        this.observerOnIngredientList()
         this.observerOnStepList()
         this.observerOnPhotoList()
         this.listenerOnUpdateButton()
@@ -80,7 +81,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
             true
         }
         R.id.action_modify -> {
-            mRecipeViewModel?.isUpdateModeOn?.value = !mRecipeViewModel?.isUpdateModeOn?.value!!
+            viewModel?.isUpdateModeOn?.value = !viewModel?.isUpdateModeOn?.value!!
             true
         }
 
@@ -97,7 +98,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     private fun initRecipeViewModel() {
         val viewModelFactory = Injections.provideViewModelFactory(this)
-        mRecipeViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel::class.java)
     }
 
     // settings of viewpager
@@ -125,42 +126,43 @@ class RecipeDetailsActivity : AppCompatActivity() {
     // ---------------- OBSERVERS -------------------
 
     private fun observerOnEditMode() {
-        mRecipeViewModel?.isUpdateModeOn?.observe(this, Observer { isUpdateModeOn ->
+        viewModel?.isUpdateModeOn?.observe(this, Observer { isUpdateModeOn ->
             vp_add_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             vp_del_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_ingredient.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_step.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_save.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
-            if (mRecipeViewModel?.actualRecipe?.value != null) {
-                updateUi(mRecipeViewModel?.actualRecipe?.value!!, isUpdateModeOn)
+            if (viewModel?.actualRecipe?.value != null) {
+                updateUi(viewModel?.actualRecipe?.value!!, isUpdateModeOn)
             }
         })
     }
 
-//    private fun observerOnIngredientList() {
-//        mRecipeViewModel?.ingredientList?.observe(this, Observer { list ->
-//            if (mRecipeViewModel?.actualRecipe?.value != null) {
-//                mRecipeViewModel?.actualRecipe?.value!!.ingredientList = list
-//                updateUi(mRecipeViewModel?.actualRecipe?.value!!, true)
-//            }
-//        })
-//    }
+    private fun observerOnIngredientList() {
+        viewModel?.ingredientList?.observe(this, Observer { list ->
+            viewModel?.actualRecipe?.value!!.ingredientList.clear()
+            if (viewModel?.actualRecipe?.value != null) {
+                viewModel?.actualRecipe?.value!!.ingredientList.plusAssign(list.map { it.ingredientData }.toList())
+                updateUi(viewModel?.actualRecipe?.value!!, viewModel?.isUpdateModeOn?.value!!)
+            }
+        })
+    }
 
     private fun observerOnStepList() {
-        mRecipeViewModel?.stepList?.observe(this, Observer { list ->
+        viewModel?.stepList?.observe(this, Observer { list ->
 //            updateStepList(list)
-            if (mRecipeViewModel?.actualRecipe?.value != null) {
-                mRecipeViewModel?.actualRecipe?.value!!.stepList = list
-                updateUi(mRecipeViewModel?.actualRecipe?.value!!, true)
+            if (viewModel?.actualRecipe?.value != null) {
+                viewModel?.actualRecipe?.value!!.stepList = list
+                updateUi(viewModel?.actualRecipe?.value!!, true)
             }
         })
     }
 
     private fun observerOnPhotoList() {
-        mRecipeViewModel?.photoList?.observe(this, Observer { list ->
-            if (mRecipeViewModel?.actualRecipe?.value != null) {
-                mRecipeViewModel?.actualRecipe?.value!!.photoList = list
-                updateUi(mRecipeViewModel?.actualRecipe?.value!!, true)
+        viewModel?.photoList?.observe(this, Observer { list ->
+            if (viewModel?.actualRecipe?.value != null) {
+                viewModel?.actualRecipe?.value!!.photoList = list
+                updateUi(viewModel?.actualRecipe?.value!!, true)
             }
         })
     }
@@ -186,7 +188,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     private fun listenerOnUpdateButton() {
         btn_save.setOnClickListener {
-            mRecipeViewModel?.updateRecipe(mRecipeViewModel?.actualRecipe?.value?.baseDataRecipe!!)
+            viewModel?.updateRecipe(viewModel?.actualRecipe?.value?.baseDataRecipe!!)
         }
     }
 
@@ -194,9 +196,8 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     private fun fetchRecipe() {
         recipeId = intent.getLongExtra("recipe", 0)
-        mRecipeViewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
-            mRecipeViewModel?.actualRecipe?.value = recipeFetch
-            updateUi(recipeFetch)
+        viewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
+            viewModel?.actualRecipe?.value = recipeFetch
         }
         )
     }
@@ -211,7 +212,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         list.forEach {
             val ingredientDatabase =
                     //find the first ingredientDatabase who has the same id than ingredientData's ingredientDatabaseId
-                    mRecipeViewModel?.ingredientDatabaseList?.first { item -> item.ingredientDatabaseId == it.ingredientDatabaseId }
+                    viewModel?.ingredientDatabaseList?.firstOrNull { item -> item.ingredientDatabaseId == it.ingredientDatabaseId }
                             // create an ingredient with this ingredientDatabase and this ingredientData and add it into final ingredient list
             ingredientList.add(Ingredient(it, ingredientDatabase!!))
         }
@@ -248,5 +249,14 @@ class RecipeDetailsActivity : AppCompatActivity() {
             winParams.flags = winParams.flags and bits.inv()
         }
         win.attributes = winParams
+    }
+
+    // ---------------- EXTENSIONS -------------------
+
+    //extension for adding an item in a mutablelivedata list
+    operator fun <T> MutableLiveData<MutableList<T>>.plusAssign(values: T) {
+        val value = this.value ?: arrayListOf()
+        value.add(values)
+        this.value = value
     }
 }

@@ -11,7 +11,7 @@ import com.example.cookbook.recipesPage.RecipesListViewHolder
 class IngredientsListAdapter constructor(list:MutableList<Ingredient>,isEditMode:Boolean) : RecyclerView.Adapter<IngredientsListViewHolder>(){
     private var mIngredientList:MutableList<Ingredient> = list
     private var mContext: Context? = null
-    private var mIsEditModeOn = false
+    private var mIsEditModeOn = isEditMode
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IngredientsListViewHolder {
         mContext = parent.context

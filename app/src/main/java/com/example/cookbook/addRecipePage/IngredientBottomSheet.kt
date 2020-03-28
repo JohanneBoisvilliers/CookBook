@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cookbook.R
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientDatabase
+import com.example.cookbook.models.IngredientData
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_ingredient_bottom_sheet.*
@@ -74,12 +75,12 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     }
 
     // set adapter on autocomplete text field for ingredient name
-    private fun initIngredientNameField(ingredientList: List<String>) {
+    private fun initIngredientNameField(ingredientList: List<IngredientDatabase>) {
         // Initialize a new array adapter object
         val adapter = ArrayAdapter<String>(
                 activity!!, // Context
                 android.R.layout.simple_dropdown_item_1line, // Layout
-                ingredientList // Array
+                ingredientList.map { it.name }.toList() // Array
         )
         name_field.setAdapter(adapter)
         // Auto complete threshold
@@ -88,7 +89,9 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
         // Set an item click listener for auto complete text view
         name_field.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            viewModel.ingredientName.value = parent.getItemAtPosition(position).toString()
+            val ingredientPickedOnList=
+                    ingredientList.firstOrNull{item -> item.name == parent.getItemAtPosition(position).toString()}
+            viewModel.ingredientPicked.value = ingredientPickedOnList
         }
 
     }
@@ -111,14 +114,21 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             val isValid = !isAFieldEmpty() && isAnIngredientPicked()
 
             if (isValid) {
-                val ingredientDatabase = IngredientDatabase(name = viewModel.ingredientName.value!!)
-                val ingredient = Ingredient(
+                val ingredientDetails = IngredientData(
                         quantity = viewModel.quantity.value!!,
                         unit = viewModel.unit.value!!,
-                        ingredientDatabaseId = 1,
-                        recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!,
-                        ingredientDatabase = ingredientDatabase)
-                viewModel.ingredientList.plus(ingredient)
+                        ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
+                        recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!
+                )
+                val ingredientDatabase = IngredientDatabase(
+                        ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
+                        name = viewModel.ingredientPicked.value!!.name
+                )
+                val ingredient = Ingredient(
+                        ingredientDetails,
+                        ingredientDatabase)
+                viewModel.ingredientDatabaseList.add(ingredientDatabase)
+                viewModel.ingredientList.plusAssign(ingredient)
                 clearFieldsAfterInsert()
             }
         }
@@ -155,7 +165,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     // get ingredient list from view model and set auto complete text field adapter
     private fun observerOnIngredientList() {
-        viewModel.ingredientListName.observe(this, Observer { list ->
+        viewModel.ingredientListPicked.observe(this, Observer { list ->
             initIngredientNameField(list)
         })
     }
@@ -183,7 +193,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     is a valid ingredient
     */
     private fun isAnIngredientPicked(): Boolean {
-        when (isNullOrEmpty(viewModel.ingredientName.value)) {
+        when (viewModel.ingredientPicked.value == null) {
             true -> {
                 name_field.error = "pick a proposed ingredient"
                 return false
@@ -205,13 +215,13 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     private fun clearFieldsAfterInsert(){
         qt_field.text.clear()
         name_field.text.clear()
-        viewModel.ingredientName.value = null
+        viewModel.ingredientPicked.value = null
     }
 
     // ---------------- EXTENSIONS -------------------
 
     //extension for adding an item in a mutablelivedata list
-    operator fun <T> MutableLiveData<MutableList<T>>.plus(values: T) {
+    operator fun <T> MutableLiveData<MutableList<T>>.plusAssign(values: T) {
         val value = this.value ?: arrayListOf()
         value.add(values)
         this.value = value

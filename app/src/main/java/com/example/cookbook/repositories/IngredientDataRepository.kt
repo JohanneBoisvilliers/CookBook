@@ -9,7 +9,7 @@ class IngredientDataRepository(val ingredientDao: IngredientDao) {
         return ingredientDao.getIngredientDatabase(id)
     }
 
-    suspend fun getIngredientList():List<String>{
+    suspend fun getIngredientList():List<IngredientDatabase>{
         return ingredientDao.getIngredientList()
     }
 
