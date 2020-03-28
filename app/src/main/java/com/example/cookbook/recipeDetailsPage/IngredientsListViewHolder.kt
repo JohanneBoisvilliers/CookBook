@@ -8,9 +8,9 @@ import kotlinx.android.synthetic.main.recyclerview_ingredient_item.view.*
 class IngredientsListViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
 
  fun bind(ingredient: Ingredient,isEditModeOn:Boolean){
-     itemView.ingredient_quantity.text = ingredient.quantity.toString()
-     itemView.ingredient_unit.text = ingredient.unit
-     itemView.ingredient_name.text = ingredient.ingredientDatabase?.name
+     itemView.ingredient_quantity.text = ingredient.ingredientData.quantity.toString()
+     itemView.ingredient_unit.text = ingredient.ingredientData.unit
+     itemView.ingredient_name.text = ingredient.ingredientDatabase.name
 
      itemView.update_icon.visibility = if(isEditModeOn) View.VISIBLE else View.GONE
      itemView.remove_icon.visibility = if(isEditModeOn) View.VISIBLE else View.GONE

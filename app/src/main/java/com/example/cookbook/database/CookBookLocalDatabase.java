@@ -17,10 +17,8 @@ import com.example.cookbook.database.dao.RecipeDao;
 import com.example.cookbook.database.dao.UserDao;
 import com.example.cookbook.models.BaseDataRecipe;
 import com.example.cookbook.models.BaseRecipeIngredientCrossRef;
-import com.example.cookbook.models.Ingredient;
-import com.example.cookbook.models.IngredientDataInfoCrossRef;
 import com.example.cookbook.models.IngredientDatabase;
-import com.example.cookbook.models.IngredientDetails;
+import com.example.cookbook.models.IngredientData;
 import com.example.cookbook.models.Photo;
 import com.example.cookbook.models.Step;
 import com.example.cookbook.utils.MyApp;
@@ -33,7 +31,7 @@ import java.nio.charset.Charset;
 
 
 @Database(entities = {
-        Ingredient.class,
+        IngredientData.class,
         IngredientDatabase.class,
         BaseDataRecipe.class,
         Photo.class,

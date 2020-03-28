@@ -15,8 +15,11 @@ interface RecipeDao {
 
     @Query("SELECT * FROM BaseDataRecipe WHERE baseRecipeId= :recipeId")
     @Transaction
-    fun getSpecificRecipe(recipeId : Long): LiveData<Recipe>
+    suspend fun getSpecificRecipe(recipeId : Long): Recipe
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRecipe(recipe: BaseDataRecipe): Long
+
+    @Update
+    fun updateRecipe(recipe:BaseDataRecipe)
 }

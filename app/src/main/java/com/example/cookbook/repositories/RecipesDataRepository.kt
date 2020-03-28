@@ -9,12 +9,16 @@ class RecipesDataRepository(private val mRecipeDao: RecipeDao) {
     val recipes: LiveData<List<Recipe>>
         get() = mRecipeDao.getRecipes()
 
-    fun getSpecificRecipe(recipeId: Long): LiveData<Recipe> {
+    suspend fun getSpecificRecipe(recipeId: Long): Recipe {
         return mRecipeDao.getSpecificRecipe(recipeId)
     }
 
     suspend fun insertRecipe(recipe: BaseDataRecipe): Long {
         return mRecipeDao.insertRecipe(recipe)
+    }
+
+    fun updateRecipe(recipe:BaseDataRecipe){
+        return mRecipeDao.updateRecipe(recipe)
     }
 
 }

@@ -18,16 +18,11 @@ import com.example.cookbook.addRecipePage.IngredientBottomSheet
 import com.example.cookbook.addRecipePage.PhotoBottomSheet
 import com.example.cookbook.addRecipePage.StepBottomSheet
 import com.example.cookbook.injections.Injections
-import com.example.cookbook.models.Ingredient
-import com.example.cookbook.models.IngredientDatabase
-import com.example.cookbook.models.Recipe
-import com.example.cookbook.models.Step
+import com.example.cookbook.models.*
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class RecipeDetailsActivity : AppCompatActivity() {
 
@@ -37,7 +32,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
     private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false)
     private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false)
-    var testList = mutableListOf<IngredientDatabase>()
+    private var ingredientList = mutableListOf<Ingredient>()
 
     override fun onResume() {
         super.onResume()
@@ -73,7 +68,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         this.initIngredientRecyclerview()
         this.initStepRecyclerview()
         this.observerOnEditMode()
-        this.observerOnIngredientList()
+//        this.observerOnIngredientList()
         this.observerOnStepList()
         this.observerOnPhotoList()
         this.listenerOnUpdateButton()
@@ -142,17 +137,16 @@ class RecipeDetailsActivity : AppCompatActivity() {
         })
     }
 
-    private fun observerOnIngredientList(){
-        mRecipeViewModel?.ingredientList?.observe(this,Observer{ list->
-//            updateIngredientList(list)
-            if (mRecipeViewModel?.actualRecipe?.value != null) {
-                mRecipeViewModel?.actualRecipe?.value!!.ingredientList = list
-                updateUi(mRecipeViewModel?.actualRecipe?.value!!, true)
-            }
-        })
-    }
+//    private fun observerOnIngredientList() {
+//        mRecipeViewModel?.ingredientList?.observe(this, Observer { list ->
+//            if (mRecipeViewModel?.actualRecipe?.value != null) {
+//                mRecipeViewModel?.actualRecipe?.value!!.ingredientList = list
+//                updateUi(mRecipeViewModel?.actualRecipe?.value!!, true)
+//            }
+//        })
+//    }
 
-    private fun observerOnStepList(){
+    private fun observerOnStepList() {
         mRecipeViewModel?.stepList?.observe(this, Observer { list ->
 //            updateStepList(list)
             if (mRecipeViewModel?.actualRecipe?.value != null) {
@@ -161,7 +155,8 @@ class RecipeDetailsActivity : AppCompatActivity() {
             }
         })
     }
-    private fun observerOnPhotoList(){
+
+    private fun observerOnPhotoList() {
         mRecipeViewModel?.photoList?.observe(this, Observer { list ->
             if (mRecipeViewModel?.actualRecipe?.value != null) {
                 mRecipeViewModel?.actualRecipe?.value!!.photoList = list
@@ -173,23 +168,23 @@ class RecipeDetailsActivity : AppCompatActivity() {
     // ---------------- LISTENERS -------------------
 
     fun onClicked(view: View) {
-        if(view is ImageButton){
-            when(view.id){
+        if (view is ImageButton) {
+            when (view.id) {
                 R.id.btn_add_ingredient -> {
                     showModalBottomSheet(IngredientBottomSheet(), IngredientBottomSheet.TAG)
                 }
                 R.id.btn_add_step -> {
-                    showModalBottomSheet(StepBottomSheet(),StepBottomSheet.TAG)
+                    showModalBottomSheet(StepBottomSheet(), StepBottomSheet.TAG)
                 }
                 R.id.vp_add_photo -> {
-                    showModalBottomSheet(PhotoBottomSheet(),PhotoBottomSheet.TAG)
+                    showModalBottomSheet(PhotoBottomSheet(), PhotoBottomSheet.TAG)
                 }
 
             }
         }
     }
 
-    private fun listenerOnUpdateButton(){
+    private fun listenerOnUpdateButton() {
         btn_save.setOnClickListener {
             mRecipeViewModel?.updateRecipe(mRecipeViewModel?.actualRecipe?.value?.baseDataRecipe!!)
         }
@@ -199,34 +194,36 @@ class RecipeDetailsActivity : AppCompatActivity() {
 
     private fun fetchRecipe() {
         recipeId = intent.getLongExtra("recipe", 0)
-        mRecipeViewModel?.getSpecificRecipe(recipeId!!)?.observe(this, Observer { recipeFetch ->
+        mRecipeViewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
             mRecipeViewModel?.actualRecipe?.value = recipeFetch
-            runBlocking {
-                launch { updateUi(recipeFetch) }
-                initIngredientList(recipeFetch.ingredientList)
-            }
+            updateUi(recipeFetch)
         }
         )
     }
 
-    private fun fetchIngredientsDatabase(ingredient: Ingredient) {
-        mRecipeViewModel?.getIngredientDatabase(ingredient.ingredientId)?.observe(this, Observer { ingredientReturned ->
-            testList.add(ingredientReturned)
-        })
-    }
-
-    private fun initIngredientList(list: List<Ingredient>) {
-        list.forEach { fetchIngredientsDatabase(it) }
-    }
-
     // ---------------- UTILS -------------------
+
+    // create ingredient list depending to ingredientData in recipe
+    private fun initIngredientList(list: List<IngredientData>):List<Ingredient> {
+        // init an ingredient list
+        val ingredientList = mutableListOf<Ingredient>()
+        // for each ingredientData in recipe, search the corresponding ingredientDatabase object
+        list.forEach {
+            val ingredientDatabase =
+                    //find the first ingredientDatabase who has the same id than ingredientData's ingredientDatabaseId
+                    mRecipeViewModel?.ingredientDatabaseList?.first { item -> item.ingredientDatabaseId == it.ingredientDatabaseId }
+                            // create an ingredient with this ingredientDatabase and this ingredientData and add it into final ingredient list
+            ingredientList.add(Ingredient(it, ingredientDatabase!!))
+        }
+        return ingredientList
+    }
 
     private fun updateUi(recipe: Recipe, isEditMode: Boolean = false) {
         this.recipe = recipe
         recipe_name.text = recipe.baseDataRecipe?.name
         viewPagerVisibility(recipe)
         this.viewPagerAdapter?.updatePhotoList(recipe.photoList)
-        this.ingredientAdapter?.updateIngredientList(recipe.ingredientList, isEditMode)
+        this.ingredientAdapter?.updateIngredientList(initIngredientList(recipe.ingredientList), isEditMode)
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
 
@@ -237,9 +234,10 @@ class RecipeDetailsActivity : AppCompatActivity() {
         empty_photo.visibility = if (isListEmpty) View.VISIBLE else View.INVISIBLE
     }
 
-    private fun showModalBottomSheet(modal: BottomSheetDialogFragment, tag :String ) {
+    private fun showModalBottomSheet(modal: BottomSheetDialogFragment, tag: String) {
         modal.show(supportFragmentManager, tag)
     }
+
     // set status bar state
     private fun setWindowFlag(bits: Int, on: Boolean) {
         val win = window
