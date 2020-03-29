@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
@@ -24,14 +25,15 @@ import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
+import kotlinx.android.synthetic.main.recyclerview_ingredient_item.view.*
 
-class RecipeDetailsActivity : AppCompatActivity() {
+class RecipeDetailsActivity : AppCompatActivity(),IngredientsListAdapter.Listener{
 
     private var viewModel: RecipeViewModel? = null
     private var recipeId: Long? = 0
     private var recipe: Recipe? = Recipe()
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
-    private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false)
+    private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false,this)
     private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false)
     private var ingredientList = mutableListOf<Ingredient>()
 
@@ -102,21 +104,21 @@ class RecipeDetailsActivity : AppCompatActivity() {
     }
 
     // settings of viewpager
-    fun initViewPager() {
+    private fun initViewPager() {
         viewPager_recipe_details.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         viewPager_recipe_details.adapter = viewPagerAdapter
 
         TabLayoutMediator(rd_tab_layout, viewPager_recipe_details) { tab, position -> Unit }.attach()
     }
 
-    fun initIngredientRecyclerview() {
+    private fun initIngredientRecyclerview() {
         ingredient_recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = ingredientAdapter
         }
     }
 
-    fun initStepRecyclerview() {
+    private fun initStepRecyclerview() {
         recipe_step_recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
             adapter = stepAdapter
@@ -205,7 +207,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
     // ---------------- UTILS -------------------
 
     // create ingredient list depending to ingredientData in recipe
-    private fun initIngredientList(list: List<IngredientData>):List<Ingredient> {
+    private fun initIngredientList(list: List<IngredientData>): List<Ingredient> {
         // init an ingredient list
         val ingredientList = mutableListOf<Ingredient>()
         // for each ingredientData in recipe, search the corresponding ingredientDatabase object
@@ -213,7 +215,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
             val ingredientDatabase =
                     //find the first ingredientDatabase who has the same id than ingredientData's ingredientDatabaseId
                     viewModel?.ingredientDatabaseList?.firstOrNull { item -> item.ingredientDatabaseId == it.ingredientDatabaseId }
-                            // create an ingredient with this ingredientDatabase and this ingredientData and add it into final ingredient list
+            // create an ingredient with this ingredientDatabase and this ingredientData and add it into final ingredient list
             ingredientList.add(Ingredient(it, ingredientDatabase!!))
         }
         return ingredientList
@@ -235,7 +237,7 @@ class RecipeDetailsActivity : AppCompatActivity() {
         empty_photo.visibility = if (isListEmpty) View.VISIBLE else View.INVISIBLE
     }
 
-    private fun showModalBottomSheet(modal: BottomSheetDialogFragment, tag: String) {
+    fun showModalBottomSheet(modal: BottomSheetDialogFragment, tag: String) {
         modal.show(supportFragmentManager, tag)
     }
 
@@ -258,5 +260,14 @@ class RecipeDetailsActivity : AppCompatActivity() {
         val value = this.value ?: arrayListOf()
         value.add(values)
         this.value = value
+    }
+
+    // ---------------- CALLBACKS -------------------
+
+    override fun onClickDeleteIngredientButton(ingredient: Ingredient) {
+        Toast.makeText(this, "remove ${ingredient.ingredientDatabase.name}", Toast.LENGTH_SHORT).show()
+    }
+    override fun onClickUpdateIngredientButton(ingredient: Ingredient) {
+        Toast.makeText(this, "update ${ingredient.ingredientDatabase.name}", Toast.LENGTH_SHORT).show()
     }
 }
