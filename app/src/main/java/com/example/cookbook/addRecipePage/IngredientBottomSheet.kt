@@ -15,15 +15,19 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.example.cookbook.R
 import com.example.cookbook.models.Ingredient
-import com.example.cookbook.models.IngredientDatabase
 import com.example.cookbook.models.IngredientData
+import com.example.cookbook.models.IngredientDatabase
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_ingredient_bottom_sheet.*
 
+
 class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: RecipeViewModel
+    private var ingredientQuantity: String? = null
+    private var ingredientName: String? = null
+    private var ingredientUnit: String? = null
 
     // use for instantiate fragment
     companion object {
@@ -45,6 +49,8 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fetchIngredientDataIfExist()
+
         this.initSpinner()
         listenerOnCancelIngredientButton()
         listenerOnAddIngredientButton()
@@ -71,6 +77,8 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             // Apply the adapter to the spinner
             unit_spinner.adapter = adapter
+            if (!isNullOrEmpty(ingredientUnit))
+                unit_spinner.setSelection(adapter.getPosition(ingredientUnit))
         }
     }
 
@@ -83,14 +91,18 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
                 ingredientList.map { it.name }.toList() // Array
         )
         name_field.setAdapter(adapter)
+        if (!isNullOrEmpty(ingredientName)) {
+            name_field.setText(ingredientName)
+            viewModel.ingredientPicked.value = ingredientList.first { item -> item.name == ingredientName }
+        }
         // Auto complete threshold
         // The minimum number of characters to type to show the drop down
         name_field.threshold = 2
 
         // Set an item click listener for auto complete text view
         name_field.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            val ingredientPickedOnList=
-                    ingredientList.firstOrNull{item -> item.name == parent.getItemAtPosition(position).toString()}
+            val ingredientPickedOnList =
+                    ingredientList.firstOrNull { item -> item.name == parent.getItemAtPosition(position).toString() }
             viewModel.ingredientPicked.value = ingredientPickedOnList
         }
 
@@ -137,11 +149,10 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     // get ingredient quantity from quantity field and save it into view model
     private fun listenerOnQuantityField() {
         qt_field.onTextChanged {
-            var quantityValue: Int?
-            if (isNullOrEmpty(it)) {
-                quantityValue = null
+            val quantityValue: Int? = if (isNullOrEmpty(it)) {
+                null
             } else {
-                quantityValue = it.toInt()
+                it.toInt()
             }
             viewModel.quantity.value = quantityValue
         }
@@ -159,6 +170,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             override fun onNothingSelected(parent: AdapterView<*>) {
             }
         }
+
     }
 
     // ---------------- OBSERVER -------------------
@@ -188,6 +200,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
         }
         return qtIsEmpty or nameIsEmpty
     }
+
     /*
     check if user picked an ingredient into proposed ingredient list for ensure that
     is a valid ingredient
@@ -201,21 +214,33 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
             false -> return true
         }
     }
+
     // check if string is null or empty
     private fun isNullOrEmpty(str: String?): Boolean {
         if (str != null && !str.trim().isEmpty())
             return false
         return true
     }
+
     /*
     after insert a new ingredient, clear all fields and set ingredient picked in viewmodel to null,
     to avoid that if a user picked an ingredient, and insert a second ingredient, viewmodel don't
     keep first ingredient name in memory
     */
-    private fun clearFieldsAfterInsert(){
+    private fun clearFieldsAfterInsert() {
         qt_field.text.clear()
         name_field.text.clear()
         viewModel.ingredientPicked.value = null
+    }
+
+    private fun fetchIngredientDataIfExist() {
+        val name = arguments?.getString("name")
+        val quantity = arguments?.getString("quantity")
+        val unit = arguments?.getString("unit")
+        ingredientName = if (isNullOrEmpty(name)) "" else name
+        ingredientQuantity = if (isNullOrEmpty(quantity)) "" else quantity
+        ingredientUnit = if (isNullOrEmpty(unit)) "" else unit
+        qt_field.setText(ingredientQuantity)
     }
 
     // ---------------- EXTENSIONS -------------------
