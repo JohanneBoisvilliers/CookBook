@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Update
+import com.example.cookbook.models.IngredientData
 import com.example.cookbook.models.IngredientDatabase
 
 @Dao
@@ -15,5 +16,5 @@ interface IngredientDao {
     suspend fun getIngredientList():List<IngredientDatabase>
 
     @Update
-    fun updateIngredient(vararg ingredients:IngredientDatabase)
+    suspend fun updateIngredient(vararg ingredients:IngredientData)
 }

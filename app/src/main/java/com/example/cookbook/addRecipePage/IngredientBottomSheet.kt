@@ -13,6 +13,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.map
 import com.example.cookbook.R
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.IngredientData
@@ -56,6 +57,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
         listenerOnAddIngredientButton()
         listenerOnQuantityField()
         listenerOnUnitSpinner()
+        initIngredientTextButton()
     }
 
     // ---------------- INIT -------------------
@@ -108,6 +110,13 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     }
 
+    // check if user clicked on add ingredient button or update ingredient icon
+    // and set button text (ADD or UPDATE) depending on previous action
+    private fun initIngredientTextButton() {
+        val isUpdatePressed = viewModel.isUpdateIconPressed.value!!
+        save_ingredient_button.text = if (isUpdatePressed) getString(R.string.update_button_text) else getString(R.string.add_button_text)
+    }
+
     // ---------------- LISTENERS -------------------
 
     //dismiss modal bottom sheet when pressing cancel button
@@ -124,25 +133,28 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     private fun listenerOnAddIngredientButton() {
         save_ingredient_button.setOnClickListener {
             val isValid = !isAFieldEmpty() && isAnIngredientPicked()
-
-            if (isValid) {
-                val ingredientDetails = IngredientData(
-                        quantity = viewModel.quantity.value!!,
-                        unit = viewModel.unit.value!!,
-                        ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
-                        recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!
-                )
-                val ingredientDatabase = IngredientDatabase(
-                        ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
-                        name = viewModel.ingredientPicked.value!!.name
-                )
-                val ingredient = Ingredient(
-                        ingredientDetails,
-                        ingredientDatabase)
-                viewModel.ingredientDatabaseList.add(ingredientDatabase)
-                viewModel.ingredientList.plusAssign(ingredient)
-                clearFieldsAfterInsert()
+            if (viewModel.isUpdateIconPressed.value == true) {
+                fetchAndUpdateIngredient()
+            } else {
+                if (isValid) {
+                    val ingredientDetails = IngredientData(
+                            quantity = viewModel.quantity.value!!,
+                            unit = viewModel.unit.value!!,
+                            ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
+                            recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!
+                    )
+                    val ingredientDatabase = IngredientDatabase(
+                            ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
+                            name = viewModel.ingredientPicked.value!!.name
+                    )
+                    val ingredient = Ingredient(
+                            ingredientDetails,
+                            ingredientDatabase)
+                    viewModel.ingredientDatabaseList.add(ingredientDatabase)
+                    viewModel.ingredientList.plusAssign(ingredient)
+                }
             }
+            clearFieldsAfterInsert()
         }
     }
 
@@ -233,14 +245,48 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
         viewModel.ingredientPicked.value = null
     }
 
+    // if we are in update case, fetch all information about the picked ingredient
     private fun fetchIngredientDataIfExist() {
+        //get three arguments from bundle
         val name = arguments?.getString("name")
         val quantity = arguments?.getString("quantity")
         val unit = arguments?.getString("unit")
+        //set local variable with bundle's data
         ingredientName = if (isNullOrEmpty(name)) "" else name
         ingredientQuantity = if (isNullOrEmpty(quantity)) "" else quantity
         ingredientUnit = if (isNullOrEmpty(unit)) "" else unit
+        //init quantity field with quantity
         qt_field.setText(ingredientQuantity)
+        // save data in viewmodel
+        viewModel.ingredientPicked.value?.name = name!!
+        viewModel.quantity.value = quantity?.toInt()
+        viewModel.unit.value = unit!!
+    }
+
+    // if user want to update an ingredient
+    private fun fetchAndUpdateIngredient() {
+        // get the actual ingredient data to update
+        val updatedIngredient =
+                /*
+                ingredientPicked can't be updated, so when user want to update an ingredient he
+                can only update ingredient data(quantity and unit). So we have to search the first ingredientData which
+                has the same id than ingredientPicked id
+                */
+                viewModel.ingredientList.value?.first { ingredient ->
+                    // fetch ingredientData in viewModel ingredientList
+                    ingredient.ingredientData.ingredientDatabaseId ==
+                            viewModel.ingredientPicked.value?.ingredientDatabaseId
+                }?.ingredientData
+        // ingredientData is immutable so for update it, we have to make a copy
+        val ingredientCopy =
+                updatedIngredient?.copy(
+                        quantity = viewModel.quantity.value!!,
+                        unit = viewModel.unit.value!!
+                )
+        viewModel.ingredientList.replace(ingredientCopy!!)
+        viewModel.ingredientList.postValue(viewModel.ingredientList.value)
+        // request for update the ingredient
+        viewModel.updateIngredients(ingredientCopy)
     }
 
     // ---------------- EXTENSIONS -------------------
@@ -250,6 +296,15 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
         val value = this.value ?: arrayListOf()
         value.add(values)
         this.value = value
+    }
+
+    // extension for replace an item in a mutableLiveData list with the one in parameter
+    private fun MutableLiveData<MutableList<Ingredient>>.replace(ingredientData: IngredientData) {
+        val index = this.value?.indexOf(this.value?.first { item ->
+            item.ingredientData.ingredientDetailsId == ingredientData.ingredientDetailsId
+        })
+
+        this.value!![index!!].ingredientData = ingredientData
     }
 
     //extension for using lambda for onTextChanged function

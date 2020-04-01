@@ -28,14 +28,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
 import kotlinx.android.synthetic.main.recyclerview_ingredient_item.view.*
 
-class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listener {
+class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listener,StepListAdapter.Listener {
 
     private var viewModel: RecipeViewModel? = null
     private var recipeId: Long? = 0
     private var recipe: Recipe? = Recipe()
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
     private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false, this)
-    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false)
+    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false,this)
     private var ingredientList = mutableListOf<Ingredient>()
 
     override fun onResume() {
@@ -176,6 +176,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         if (view is ImageButton) {
             when (view.id) {
                 R.id.btn_add_ingredient -> {
+                    viewModel?.isUpdateIconPressed?.value = false
                     showModalBottomSheet(IngredientBottomSheet(), IngredientBottomSheet.TAG)
                 }
                 R.id.btn_add_step -> {
@@ -273,6 +274,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 
     // callback to handle click on update ingredient icon
     override fun onClickUpdateIngredientButton(ingredient: Ingredient) {
+        viewModel?.isUpdateIconPressed?.value = true
         val ingredientBottomSheet = IngredientBottomSheet()
         ingredientBottomSheet.arguments = bundleOf(
                 "quantity" to ingredient.ingredientData.quantity.toString(),
@@ -280,5 +282,19 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                 "unit" to ingredient.ingredientData.unit
         )
         showModalBottomSheet(ingredientBottomSheet, IngredientBottomSheet.TAG)
+    }
+
+    override fun onClickUpdateStep(step: Step) {
+        viewModel?.isUpdateIconPressed?.value = true
+        val stepBottomSheet = StepBottomSheet()
+        stepBottomSheet.arguments = bundleOf(
+                "description" to step.description
+        )
+        showModalBottomSheet(stepBottomSheet, StepBottomSheet.TAG)
+    }
+
+    override fun onClickRemoveStep(step: Step) {
+        viewModel?.stepList?.value?.remove(step)
+        viewModel?.stepList?.postValue(viewModel?.stepList?.value)
     }
 }

@@ -14,6 +14,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
 
     val recipes: LiveData<List<Recipe>> = mRecipesDataRepository.recipes
     val isUpdateModeOn = MutableLiveData(false)
+    val isUpdateIconPressed = MutableLiveData(false)
     val actualRecipe = MutableLiveData<Recipe>()
     val ingredientList = MutableLiveData<MutableList<Ingredient>>()
     val photoList = MutableLiveData<MutableList<Photo>>()
@@ -63,8 +64,10 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         return mRecipesDataRepository.updateRecipe(recipe)
     }
 
-    fun updateIngredients(ingredients: IngredientDatabase) {
-        return mIngredientDataRepository.updateIngredients(ingredients)
+    fun updateIngredients(vararg ingredients: IngredientData) {
+        viewModelScope.launch {
+            withContext(Dispatchers.Default) { mIngredientDataRepository.updateIngredients(*ingredients) }
+        }
     }
 
 }

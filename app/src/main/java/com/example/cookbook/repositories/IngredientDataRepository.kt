@@ -2,6 +2,7 @@ package com.example.cookbook.repositories
 
 import androidx.lifecycle.LiveData
 import com.example.cookbook.database.dao.IngredientDao
+import com.example.cookbook.models.IngredientData
 import com.example.cookbook.models.IngredientDatabase
 
 class IngredientDataRepository(val ingredientDao: IngredientDao) {
@@ -13,7 +14,7 @@ class IngredientDataRepository(val ingredientDao: IngredientDao) {
         return ingredientDao.getIngredientList()
     }
 
-    fun updateIngredients(ingredients:IngredientDatabase){
-        return ingredientDao.updateIngredient(ingredients)
+    suspend fun updateIngredients(vararg ingredients:IngredientData){
+        return ingredientDao.updateIngredient(*ingredients)
     }
 }

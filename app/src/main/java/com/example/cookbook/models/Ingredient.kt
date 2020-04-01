@@ -2,11 +2,11 @@ package com.example.cookbook.models
 
 import androidx.room.*
 
-data class Ingredient(
+ class Ingredient(
         @Embedded
-        val ingredientData: IngredientData,
+        var ingredientData: IngredientData,
         @Relation(parentColumn = "ingredientDatabaseId",entityColumn = "ingredientDatabaseId")
-        val ingredientDatabase: IngredientDatabase
+        var ingredientDatabase: IngredientDatabase
 //        @PrimaryKey(autoGenerate = true)
 //        var ingredientId:Long=0L,
 //        var recipeId:Long,
