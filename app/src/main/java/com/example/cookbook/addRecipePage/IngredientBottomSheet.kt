@@ -50,8 +50,9 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        fetchIngredientDataIfExist()
-
+        arguments?.let {
+            fetchIngredientDataIfExist()
+        }
         this.initSpinner()
         listenerOnCancelIngredientButton()
         listenerOnAddIngredientButton()
@@ -133,28 +134,14 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     private fun listenerOnAddIngredientButton() {
         save_ingredient_button.setOnClickListener {
             val isValid = !isAFieldEmpty() && isAnIngredientPicked()
-            if (viewModel.isUpdateIconPressed.value == true) {
-                fetchAndUpdateIngredient()
-            } else {
-                if (isValid) {
-                    val ingredientDetails = IngredientData(
-                            quantity = viewModel.quantity.value!!,
-                            unit = viewModel.unit.value!!,
-                            ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
-                            recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!
-                    )
-                    val ingredientDatabase = IngredientDatabase(
-                            ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
-                            name = viewModel.ingredientPicked.value!!.name
-                    )
-                    val ingredient = Ingredient(
-                            ingredientDetails,
-                            ingredientDatabase)
-                    viewModel.ingredientDatabaseList.add(ingredientDatabase)
-                    viewModel.ingredientList.plusAssign(ingredient)
+            if (isValid) {
+                if (viewModel.isUpdateIconPressed.value == true) {
+                    fetchAndUpdateIngredient()
+                } else {
+                    createIngredient()
                 }
+                clearFieldsAfterInsert()
             }
-            clearFieldsAfterInsert()
         }
     }
 
@@ -287,6 +274,25 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
         viewModel.ingredientList.postValue(viewModel.ingredientList.value)
         // request for update the ingredient
         viewModel.updateIngredients(ingredientCopy)
+    }
+
+    // create ingredientData and IngredientDatabase depending on user inputs
+    private fun createIngredient() {
+        val ingredientDetails = IngredientData(
+                quantity = viewModel.quantity.value!!,
+                unit = viewModel.unit.value!!,
+                ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
+                recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!
+        )
+        val ingredientDatabase = IngredientDatabase(
+                ingredientDatabaseId = viewModel.ingredientPicked.value!!.ingredientDatabaseId,
+                name = viewModel.ingredientPicked.value!!.name
+        )
+        val ingredient = Ingredient(
+                ingredientDetails,
+                ingredientDatabase)
+        viewModel.ingredientDatabaseList.add(ingredientDatabase)
+        viewModel.ingredientList.plusAssign(ingredient)
     }
 
     // ---------------- EXTENSIONS -------------------

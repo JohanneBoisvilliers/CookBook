@@ -268,8 +268,9 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 
     // callback to handle click on remove ingredient icon
     override fun onClickDeleteIngredientButton(ingredient: Ingredient) {
-        viewModel?.ingredientList?.value?.remove(ingredient)
+        viewModel?.ingredientList?.remove(ingredient)
         viewModel?.ingredientList?.postValue(viewModel?.ingredientList?.value)
+        viewModel?.deleteIngredients(ingredient.ingredientData)
     }
 
     // callback to handle click on update ingredient icon
@@ -296,5 +297,17 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     override fun onClickRemoveStep(step: Step) {
         viewModel?.stepList?.value?.remove(step)
         viewModel?.stepList?.postValue(viewModel?.stepList?.value)
+    }
+
+    // ---------------- EXTENSIONS -------------------
+
+    // extension for remove an item in a mutableLiveData list
+    private fun MutableLiveData<MutableList<Ingredient>>.remove(ingredient: Ingredient) {
+        // find position of ingredient to remove
+        val index = this.value?.indexOf(this.value?.first { item ->
+            item.ingredientDatabase.ingredientDatabaseId == ingredient.ingredientDatabase.ingredientDatabaseId
+        })
+        // remove ingredient
+        this.value?.removeAt(index!!)
     }
 }

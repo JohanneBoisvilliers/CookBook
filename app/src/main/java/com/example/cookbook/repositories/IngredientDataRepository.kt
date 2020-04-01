@@ -15,6 +15,10 @@ class IngredientDataRepository(val ingredientDao: IngredientDao) {
     }
 
     suspend fun updateIngredients(vararg ingredients:IngredientData){
-        return ingredientDao.updateIngredient(*ingredients)
+         ingredientDao.updateIngredient(*ingredients)
+    }
+
+    suspend fun deleteIngredient(vararg ingredients:IngredientData){
+        ingredientDao.deleteIngredient(*ingredients)
     }
 }

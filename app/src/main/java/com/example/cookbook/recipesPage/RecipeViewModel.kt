@@ -70,4 +70,10 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
+    fun deleteIngredients(vararg ingredients:IngredientData){
+        viewModelScope.launch {
+            withContext(Dispatchers.Default){mIngredientDataRepository.deleteIngredient(*ingredients)}
+        }
+    }
+
 }

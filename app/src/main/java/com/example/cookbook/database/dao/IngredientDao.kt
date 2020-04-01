@@ -2,6 +2,7 @@ package com.example.cookbook.database.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Query
 import androidx.room.Update
 import com.example.cookbook.models.IngredientData
@@ -17,4 +18,7 @@ interface IngredientDao {
 
     @Update
     suspend fun updateIngredient(vararg ingredients:IngredientData)
+
+    @Delete
+    suspend fun deleteIngredient(vararg ingredients:IngredientData)
 }
