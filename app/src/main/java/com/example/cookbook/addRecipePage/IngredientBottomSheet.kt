@@ -291,8 +291,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
         val ingredient = Ingredient(
                 ingredientDetails,
                 ingredientDatabase)
-        viewModel.ingredientDatabaseList.add(ingredientDatabase)
-        viewModel.ingredientList.plusAssign(ingredient)
+        viewModel.addIngredient(ingredient)
     }
 
     // ---------------- EXTENSIONS -------------------

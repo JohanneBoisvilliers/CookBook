@@ -21,4 +21,8 @@ class IngredientDataRepository(val ingredientDao: IngredientDao) {
     suspend fun deleteIngredient(vararg ingredients:IngredientData){
         ingredientDao.deleteIngredient(*ingredients)
     }
+
+    suspend fun addIngredient(ingredient:IngredientData):Long{
+        return ingredientDao.addIngredient(ingredient)
+    }
 }
