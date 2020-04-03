@@ -14,6 +14,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import com.example.cookbook.R;
 import com.example.cookbook.database.dao.IngredientDao;
 import com.example.cookbook.database.dao.RecipeDao;
+import com.example.cookbook.database.dao.StepDao;
 import com.example.cookbook.database.dao.UserDao;
 import com.example.cookbook.models.BaseDataRecipe;
 import com.example.cookbook.models.BaseRecipeIngredientCrossRef;
@@ -47,8 +48,8 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
     // --- DAO ---
     public abstract UserDao userDao();
     public abstract IngredientDao ingredientDao();
-
     public abstract RecipeDao recipeDao();
+    public abstract StepDao stepDao();
 
     // --- INSTANCE ---
     public static CookBookLocalDatabase getInstance(Context context) {

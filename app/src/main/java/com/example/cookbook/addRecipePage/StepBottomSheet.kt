@@ -14,12 +14,12 @@ import com.example.cookbook.R
 import com.example.cookbook.models.Step
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlinx.android.synthetic.main.activity_recipe_details.*
 import kotlinx.android.synthetic.main.fragment_step_bottom_sheet.*
 
 class StepBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: RecipeViewModel
+    private var stepDescription: String? = null
 
     companion object {
         const val TAG = "ModalStepBottomSheet"
@@ -39,6 +39,8 @@ class StepBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initStepButtonText()
+        fetchStepDataIfExist()
         listenerOnStepField()
         listenerOnAddStepButton()
         listenerOnCancelButton()
@@ -51,29 +53,49 @@ class StepBottomSheet : BottomSheetDialogFragment() {
         viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
     }
 
+    // check if user clicked on add ingredient button or update ingredient icon
+    // and set button text (ADD or UPDATE) depending on previous action
+    private fun initStepButtonText() {
+        val isUpdatePressed = viewModel.isUpdateIconPressed.value!!
+        save_step_button.text = if (isUpdatePressed) getString(R.string.update_button_text) else getString(R.string.add_button_text)
+    }
+
     // ---------------- LISTENERS -------------------
 
-    private fun listenerOnStepField(){
+    private fun listenerOnStepField() {
         step_field.onTextChanged { viewModel.newStepText.value = it }
     }
 
-    private fun listenerOnAddStepButton(){
+    private fun listenerOnAddStepButton() {
         save_step_button.setOnClickListener {
-            when(step_field.length()==0){
+            when (step_field.length() == 0) {
                 true -> step_field.error = getString(R.string.step_bottom_sheet_qt_error)
                 false -> {
-                    val stepToAdd = Step(description = viewModel.newStepText.value!!,recipeId = 1)
-                    viewModel.stepList.plus(stepToAdd)
+                    val stepToAdd = Step(
+                            description = viewModel.newStepText.value!!,
+                            recipeId = viewModel.actualRecipe.value?.baseDataRecipe!!.baseRecipeId
+                    )
+                    viewModel.addStep(stepToAdd)
                     step_field.text.clear()
                 }
             }
         }
     }
+
     // close step bottom sheet
-    private fun listenerOnCancelButton(){
+    private fun listenerOnCancelButton() {
         cancel_step_button.setOnClickListener {
             dismiss()
         }
+    }
+
+    // ---------------- UTILS -------------------
+
+    private fun fetchStepDataIfExist(){
+        val description = arguments?.getString("description")
+        stepDescription = if (description.isNullOrEmpty()) "" else description
+        step_field.setText(stepDescription)
+        viewModel.newStepText.value = stepDescription
     }
 
     // ---------------- EXTENSIONS -------------------

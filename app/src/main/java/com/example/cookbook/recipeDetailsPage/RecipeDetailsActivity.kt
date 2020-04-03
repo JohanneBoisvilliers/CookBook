@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -28,14 +29,14 @@ import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
 import kotlinx.android.synthetic.main.recyclerview_ingredient_item.view.*
 
-class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listener,StepListAdapter.Listener {
+class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listener, StepListAdapter.Listener {
 
     private var viewModel: RecipeViewModel? = null
     private var recipeId: Long? = 0
     private var recipe: Recipe? = Recipe()
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
     private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false, this)
-    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false,this)
+    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false, this)
     private var ingredientList = mutableListOf<Ingredient>()
 
     override fun onResume() {
@@ -156,7 +157,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 //            updateStepList(list)
             if (viewModel?.actualRecipe?.value != null) {
                 viewModel?.actualRecipe?.value!!.stepList = list
-                updateUi(viewModel?.actualRecipe?.value!!, true)
+                updateUi(viewModel?.actualRecipe?.value!!, viewModel?.isUpdateModeOn?.value!!)
             }
         })
     }
@@ -165,7 +166,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         viewModel?.photoList?.observe(this, Observer { list ->
             if (viewModel?.actualRecipe?.value != null) {
                 viewModel?.actualRecipe?.value!!.photoList = list
-                updateUi(viewModel?.actualRecipe?.value!!, true)
+                updateUi(viewModel?.actualRecipe?.value!!, viewModel?.isUpdateModeOn?.value!!)
             }
         })
     }
@@ -185,7 +186,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                 R.id.vp_add_photo -> {
                     showModalBottomSheet(PhotoBottomSheet(), PhotoBottomSheet.TAG)
                 }
-
             }
         }
     }
@@ -239,6 +239,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         empty_photo.visibility = if (isListEmpty) View.VISIBLE else View.INVISIBLE
     }
 
+    // show a modal depending on what button user clicked(add ingredient, add step, add photo)
     private fun showModalBottomSheet(modal: BottomSheetDialogFragment, tag: String) {
         modal.show(supportFragmentManager, tag)
     }

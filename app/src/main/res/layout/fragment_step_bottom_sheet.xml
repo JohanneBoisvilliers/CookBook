@@ -43,7 +43,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_to_border"
                 android:background="@android:color/transparent"
-                android:text="@string/add_ingredient_text"
+                android:text="@string/add_button_text"
                 android:textColor="@color/colorAccent"
                 app:layout_constraintLeft_toRightOf="@id/cancel_step_button"
                 app:layout_constraintRight_toRightOf="parent"
