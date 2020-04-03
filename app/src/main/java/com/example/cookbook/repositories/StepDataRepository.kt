@@ -9,4 +9,12 @@ class StepDataRepository(private val stepDao: StepDao) {
         return stepDao.addStep(step)
     }
 
+    suspend fun updateStep(step: Step){
+        stepDao.updateStep(step)
+    }
+
+    suspend fun deleteStep(step: Step){
+        stepDao.deleteStep(step)
+    }
+
 }

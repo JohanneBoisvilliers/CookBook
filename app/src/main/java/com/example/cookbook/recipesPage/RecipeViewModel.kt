@@ -107,6 +107,14 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
+    fun updateStep(step: Step){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mStepDataRepository.updateStep(step)
+            }
+        }
+    }
+
     //----------------- ASYNC PHOTOS -----------------
 
 

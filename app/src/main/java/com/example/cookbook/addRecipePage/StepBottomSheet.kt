@@ -20,6 +20,7 @@ class StepBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: RecipeViewModel
     private var stepDescription: String? = null
+    private var stepId:Long?=0
 
     companion object {
         const val TAG = "ModalStepBottomSheet"
@@ -40,7 +41,9 @@ class StepBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initStepButtonText()
-        fetchStepDataIfExist()
+        arguments?.let{
+            fetchStepDataIfExist()
+        }
         listenerOnStepField()
         listenerOnAddStepButton()
         listenerOnCancelButton()
@@ -68,14 +71,21 @@ class StepBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenerOnAddStepButton() {
         save_step_button.setOnClickListener {
+            val step = Step(
+                    description = viewModel.newStepText.value!!,
+                    recipeId = viewModel.actualRecipe.value?.baseDataRecipe!!.baseRecipeId
+            )
             when (step_field.length() == 0) {
                 true -> step_field.error = getString(R.string.step_bottom_sheet_qt_error)
                 false -> {
-                    val stepToAdd = Step(
-                            description = viewModel.newStepText.value!!,
-                            recipeId = viewModel.actualRecipe.value?.baseDataRecipe!!.baseRecipeId
-                    )
-                    viewModel.addStep(stepToAdd)
+                    if (viewModel.isUpdateIconPressed.value!!){
+                        val stepUpdate = step.copy(id=stepId!!)
+                        viewModel.updateStep(stepUpdate)
+                        viewModel.stepList.replace(stepUpdate)
+                        viewModel.stepList.postValue(viewModel.stepList.value!!)
+                    }else {
+                        viewModel.addStep(step)
+                    }
                     step_field.text.clear()
                 }
             }
@@ -91,8 +101,9 @@ class StepBottomSheet : BottomSheetDialogFragment() {
 
     // ---------------- UTILS -------------------
 
-    private fun fetchStepDataIfExist(){
+    private fun fetchStepDataIfExist() {
         val description = arguments?.getString("description")
+        stepId = arguments?.getLong("id")
         stepDescription = if (description.isNullOrEmpty()) "" else description
         step_field.setText(stepDescription)
         viewModel.newStepText.value = stepDescription
@@ -105,6 +116,15 @@ class StepBottomSheet : BottomSheetDialogFragment() {
         val value = this.value ?: arrayListOf()
         value.add(values)
         this.value = value
+    }
+
+    // extension for replace an item in a mutableLiveData list with the one in parameter
+    private fun MutableLiveData<MutableList<Step>>.replace(step: Step) {
+        val index = this.value?.indexOf(this.value?.first { item ->
+            item.id == step.id
+        })
+
+        this.value!![index!!] = step
     }
 
     //extension for using lambda for onTextChanged function

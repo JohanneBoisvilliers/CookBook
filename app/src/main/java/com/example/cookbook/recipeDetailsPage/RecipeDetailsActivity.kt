@@ -290,7 +290,8 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         viewModel?.isUpdateIconPressed?.value = true
         val stepBottomSheet = StepBottomSheet()
         stepBottomSheet.arguments = bundleOf(
-                "description" to step.description
+                "description" to step.description,
+                "id" to step.id
         )
         showModalBottomSheet(stepBottomSheet, StepBottomSheet.TAG)
     }
