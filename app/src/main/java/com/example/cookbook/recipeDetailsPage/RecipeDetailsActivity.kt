@@ -268,7 +268,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     // ---------------- CALLBACKS -------------------
 
     // callback to handle click on remove ingredient icon
-    override fun onClickDeleteIngredientButton(ingredient: Ingredient) {
+    override fun onClickDeleteIngredientButton(ingredient: Ingredient){
         viewModel?.ingredientList?.remove(ingredient)
         viewModel?.ingredientList?.postValue(viewModel?.ingredientList?.value)
         viewModel?.deleteIngredients(ingredient.ingredientData)
@@ -299,6 +299,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     override fun onClickRemoveStep(step: Step) {
         viewModel?.stepList?.value?.remove(step)
         viewModel?.stepList?.postValue(viewModel?.stepList?.value)
+        viewModel?.deleteStep(step)
     }
 
     // ---------------- EXTENSIONS -------------------

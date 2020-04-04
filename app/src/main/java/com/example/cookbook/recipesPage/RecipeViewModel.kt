@@ -98,6 +98,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
 
     //----------------- ASYNC STEPS -----------------
 
+    // add a step into database and add it into stepList at the same time
     fun addStep(step:Step){
         viewModelScope.launch {
             val id = withContext(Dispatchers.IO){mStepDataRepository.addStep(step)}
@@ -106,11 +107,19 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
             stepList.plusAssign(stepToAdd)
         }
     }
-
+    // update a step into database
     fun updateStep(step: Step){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
                 mStepDataRepository.updateStep(step)
+            }
+        }
+    }
+
+    fun deleteStep(step:Step){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mStepDataRepository.deleteStep(step)
             }
         }
     }
