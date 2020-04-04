@@ -156,10 +156,8 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 
     private fun observerOnStepList() {
         viewModel?.stepList?.observe(this, Observer { list ->
-//            updateStepList(list)
             if (viewModel?.actualRecipe?.value != null) {
-                viewModel?.actualRecipe?.value!!.stepList = list
-                updateUi(viewModel?.actualRecipe?.value!!, viewModel?.isUpdateModeOn?.value!!)
+                updateStepList(list)
             }
         })
     }
@@ -238,7 +236,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
         return ingredientList
     }
-
+    // update all the recipe detail page (specially for edit mode activation)
     private fun updateUi(recipe: Recipe, isEditMode: Boolean = false) {
         this.recipe = recipe
         recipe_name.setText(recipe.baseDataRecipe?.name)
@@ -247,9 +245,13 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         this.ingredientAdapter?.updateIngredientList(initIngredientList(recipe.ingredientList), isEditMode)
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
-
+    // update only the ingredient list
     private fun updateIngredientList(ingredientList:MutableList<Ingredient>){
         this.ingredientAdapter?.updateIngredientList(ingredientList)
+    }
+    //update only the step list
+    private fun updateStepList(stepList: MutableList<Step>){
+        this.stepAdapter?.updateStepList(stepList)
     }
 
     // set visibility of viewpager depending to recipe photo list size

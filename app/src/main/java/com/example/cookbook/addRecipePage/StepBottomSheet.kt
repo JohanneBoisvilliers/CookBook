@@ -79,6 +79,7 @@ class StepBottomSheet : BottomSheetDialogFragment() {
                 true -> step_field.error = getString(R.string.step_bottom_sheet_qt_error)
                 false -> {
                     if (viewModel.isUpdateIconPressed.value!!){
+                        viewModel.isUpdateIconPressed.value = false
                         val stepUpdate = step.copy(id=stepId!!)
                         viewModel.updateStep(stepUpdate)
                         viewModel.stepList.replace(stepUpdate)
