@@ -21,4 +21,8 @@ class RecipesDataRepository(private val mRecipeDao: RecipeDao) {
         return mRecipeDao.updateRecipe(recipe)
     }
 
+    suspend fun updateRecipeName(recipeId: Long, name:String){
+        mRecipeDao.updateRecipeName(recipeId,name)
+    }
+
 }

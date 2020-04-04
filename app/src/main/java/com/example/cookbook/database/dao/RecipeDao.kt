@@ -22,4 +22,7 @@ interface RecipeDao {
 
     @Update
     fun updateRecipe(recipe:BaseDataRecipe)
+
+    @Query("UPDATE BaseDataRecipe SET name = :name WHERE baseRecipeId= :recipeId")
+    suspend fun updateRecipeName(recipeId:Long,name : String)
 }

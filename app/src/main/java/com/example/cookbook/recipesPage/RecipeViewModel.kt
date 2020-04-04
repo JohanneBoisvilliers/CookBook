@@ -55,8 +55,12 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         emit(recipe)
     }
 
-    fun updateRecipe(recipe: BaseDataRecipe) {
-        return mRecipesDataRepository.updateRecipe(recipe)
+    fun updateRecipeName(recipeId: Long,name:String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mRecipesDataRepository.updateRecipeName(recipeId,name)
+            }
+        }
     }
 
     //----------------- ASYNC INGREDIENTS -----------------

@@ -1,19 +1,22 @@
 package com.example.cookbook.recipeDetailsPage
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.viewpager2.widget.ViewPager2
@@ -27,7 +30,6 @@ import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
-import kotlinx.android.synthetic.main.recyclerview_ingredient_item.view.*
 
 class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listener, StepListAdapter.Listener {
 
@@ -65,7 +67,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         setContentView(R.layout.activity_recipe_details)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
         this.initRecipeViewModel()
 
         this.fetchRecipe()
@@ -76,7 +77,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         this.observerOnIngredientList()
         this.observerOnStepList()
         this.observerOnPhotoList()
-        this.listenerOnUpdateButton()
+        this.listenerOnRecipeName()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -136,6 +137,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             btn_add_ingredient.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_step.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_save.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+            recipeNameSetting(isUpdateModeOn)
             if (viewModel?.actualRecipe?.value != null) {
                 updateUi(viewModel?.actualRecipe?.value!!, isUpdateModeOn)
             }
@@ -176,6 +178,18 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     fun onClicked(view: View) {
         if (view is ImageButton) {
             when (view.id) {
+                R.id.btn_update_recipe_name -> {
+                    //get actual recipe
+                    val recipe = viewModel?.actualRecipe?.value?.baseDataRecipe
+                    //hide keyboard and unset focus on edit text
+                    recipe_name.hideKeyboard()
+                    recipe_name.clearFocus()
+                    //update recipe name into database
+                    viewModel?.updateRecipeName(
+                            recipe?.baseRecipeId!!,
+                            recipe.name!!
+                    )
+                }
                 R.id.btn_add_ingredient -> {
                     viewModel?.isUpdateIconPressed?.value = false
                     showModalBottomSheet(IngredientBottomSheet(), IngredientBottomSheet.TAG)
@@ -189,10 +203,12 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             }
         }
     }
-
-    private fun listenerOnUpdateButton() {
-        btn_save.setOnClickListener {
-            viewModel?.updateRecipe(viewModel?.actualRecipe?.value?.baseDataRecipe!!)
+    // save the new recipe name depending to user input and save it into view model
+    private fun listenerOnRecipeName(){
+        recipe_name.onTextChanged {
+            val recipe = viewModel?.actualRecipe?.value?.baseDataRecipe
+            val recipeCopy = recipe?.copy(name = it)
+            viewModel?.actualRecipe?.value?.baseDataRecipe = recipeCopy!!
         }
     }
 
@@ -225,7 +241,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 
     private fun updateUi(recipe: Recipe, isEditMode: Boolean = false) {
         this.recipe = recipe
-        recipe_name.text = recipe.baseDataRecipe?.name
+        recipe_name.setText(recipe.baseDataRecipe?.name)
         viewPagerVisibility(recipe)
         this.viewPagerAdapter?.updatePhotoList(recipe.photoList)
         this.ingredientAdapter?.updateIngredientList(initIngredientList(recipe.ingredientList), isEditMode)
@@ -256,6 +272,16 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         win.attributes = winParams
     }
 
+    /*
+    depending on if we are on update mode or not, set update button visibility for recipe name,
+    and set edit text focusable for edit field
+    */
+    private fun recipeNameSetting(isUpdateModeOn: Boolean) {
+        btn_update_recipe_name.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+        recipe_name.isFocusableInTouchMode = isUpdateModeOn
+        recipe_name.isFocusable = isUpdateModeOn
+    }
+
     // ---------------- EXTENSIONS -------------------
 
     //extension for adding an item in a mutablelivedata list
@@ -268,7 +294,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     // ---------------- CALLBACKS -------------------
 
     // callback to handle click on remove ingredient icon
-    override fun onClickDeleteIngredientButton(ingredient: Ingredient){
+    override fun onClickDeleteIngredientButton(ingredient: Ingredient) {
         viewModel?.ingredientList?.remove(ingredient)
         viewModel?.ingredientList?.postValue(viewModel?.ingredientList?.value)
         viewModel?.deleteIngredients(ingredient.ingredientData)
@@ -312,5 +338,24 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         })
         // remove ingredient
         this.value?.removeAt(index!!)
+    }
+    // extension for hiding keyboard from a view
+    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+    //extension for using lambda for onTextChanged function
+    private fun EditText.onTextChanged(onTextChanged: (String) -> Unit) {
+        this.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                onTextChanged.invoke(p0.toString())
+            }
+
+            override fun afterTextChanged(editable: Editable?) {
+            }
+        })
     }
 }

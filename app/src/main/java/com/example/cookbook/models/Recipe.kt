@@ -8,9 +8,9 @@ import androidx.room.Junction
 import androidx.room.Relation
 
 
-data class Recipe (
+class Recipe (
         @Embedded
-        val baseDataRecipe: BaseDataRecipe?,
+        var baseDataRecipe: BaseDataRecipe?,
         @Relation(parentColumn = "baseRecipeId",entityColumn = "recipeId")
         var photoList:MutableList<Photo>,
         @Relation(parentColumn = "baseRecipeId",
