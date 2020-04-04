@@ -149,7 +149,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             viewModel?.actualRecipe?.value!!.ingredientList.clear()
             if (viewModel?.actualRecipe?.value != null) {
                 viewModel?.actualRecipe?.value!!.ingredientList.plusAssign(list.map { it.ingredientData }.toList())
-                updateUi(viewModel?.actualRecipe?.value!!, viewModel?.isUpdateModeOn?.value!!)
+                updateIngredientList(list)
             }
         })
     }
@@ -246,6 +246,10 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         this.viewPagerAdapter?.updatePhotoList(recipe.photoList)
         this.ingredientAdapter?.updateIngredientList(initIngredientList(recipe.ingredientList), isEditMode)
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
+    }
+
+    private fun updateIngredientList(ingredientList:MutableList<Ingredient>){
+        this.ingredientAdapter?.updateIngredientList(ingredientList)
     }
 
     // set visibility of viewpager depending to recipe photo list size

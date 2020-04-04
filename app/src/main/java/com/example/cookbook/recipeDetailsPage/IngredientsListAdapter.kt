@@ -35,7 +35,7 @@ class IngredientsListAdapter constructor(list:MutableList<Ingredient>,isEditMode
         holder.bind(mIngredientList[position],mIsEditModeOn,callback)
     }
 
-    fun updateIngredientList(list:List<Ingredient>,isEditMode: Boolean){
+    fun updateIngredientList(list:List<Ingredient>,isEditMode: Boolean = true){
         mIsEditModeOn=isEditMode
         mIngredientList.clear()
         mIngredientList.addAll(list)
