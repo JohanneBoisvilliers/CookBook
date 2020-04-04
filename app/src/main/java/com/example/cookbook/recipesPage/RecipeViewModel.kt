@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.example.cookbook.addRecipePage.plusAssign
 import com.example.cookbook.models.*
 import com.example.cookbook.repositories.IngredientDataRepository
+import com.example.cookbook.repositories.PhotoDataRepository
 import com.example.cookbook.repositories.RecipesDataRepository
 import com.example.cookbook.repositories.StepDataRepository
 import kotlinx.coroutines.Dispatchers
@@ -13,7 +14,8 @@ import java.util.concurrent.ConcurrentLinkedQueue
 
 class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
                       private val mIngredientDataRepository: IngredientDataRepository,
-                      private val mStepDataRepository: StepDataRepository) : ViewModel() {
+                      private val mStepDataRepository: StepDataRepository,
+                      private val mPhotoDataRepository: PhotoDataRepository) : ViewModel() {
 
     val recipes: LiveData<List<Recipe>> = mRecipesDataRepository.recipes
     val isUpdateModeOn = MutableLiveData(false)
@@ -52,13 +54,15 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         ingredientList.postValue(tempIngredientList)
         // post the new step list for update UI
         stepList.postValue(recipe.stepList)
+        // post the new photo list for update UI
+        photoList.postValue(recipe.photoList)
         emit(recipe)
     }
 
-    fun updateRecipeName(recipeId: Long,name:String) {
+    fun updateRecipeName(recipeId: Long, name: String) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                mRecipesDataRepository.updateRecipeName(recipeId,name)
+            withContext(Dispatchers.IO) {
+                mRecipesDataRepository.updateRecipeName(recipeId, name)
             }
         }
     }
@@ -103,26 +107,27 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     //----------------- ASYNC STEPS -----------------
 
     // add a step into database and add it into stepList at the same time
-    fun addStep(step:Step){
+    fun addStep(step: Step) {
         viewModelScope.launch {
-            val id = withContext(Dispatchers.IO){mStepDataRepository.addStep(step)}
+            val id = withContext(Dispatchers.IO) { mStepDataRepository.addStep(step) }
             val stepToAdd = step.copy(id = id)
 
             stepList.plusAssign(stepToAdd)
         }
     }
+
     // update a step into database
-    fun updateStep(step: Step){
+    fun updateStep(step: Step) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 mStepDataRepository.updateStep(step)
             }
         }
     }
 
-    fun deleteStep(step:Step){
+    fun deleteStep(step: Step) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 mStepDataRepository.deleteStep(step)
             }
         }
@@ -130,7 +135,13 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
 
     //----------------- ASYNC PHOTOS -----------------
 
-
+    fun insertPhoto(vararg photo:Photo){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mPhotoDataRepository.insertPhoto(*photo)
+            }
+        }
+    }
     //----------------- PRIVATE METHODS -----------------
 
     private suspend fun fetchIngredientList(ingredientData: IngredientData, tempIngredientList: MutableList<Ingredient>) {

@@ -36,7 +36,7 @@ class StepListAdapter constructor(list: MutableList<Step>,isEditMode:Boolean,cal
         holder.bind(mStepList[position],position,mIsEditMode,callback)
     }
 
-    fun updateStepList(list:List<Step>,isEditMode: Boolean = true){
+    fun updateStepList(list:List<Step>,isEditMode: Boolean){
         mIsEditMode = isEditMode
         mStepList.clear()
         mStepList.addAll(list)

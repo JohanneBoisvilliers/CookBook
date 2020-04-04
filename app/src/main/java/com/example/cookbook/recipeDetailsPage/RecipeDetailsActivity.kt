@@ -39,7 +39,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
     private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false, this)
     private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false, this)
-    private var ingredientList = mutableListOf<Ingredient>()
 
     override fun onResume() {
         super.onResume()
@@ -149,7 +148,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             viewModel?.actualRecipe?.value!!.ingredientList.clear()
             if (viewModel?.actualRecipe?.value != null) {
                 viewModel?.actualRecipe?.value!!.ingredientList.plusAssign(list.map { it.ingredientData }.toList())
-                updateIngredientList(list)
+                updateIngredientList(list,viewModel?.isUpdateModeOn?.value!!)
             }
         })
     }
@@ -157,7 +156,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private fun observerOnStepList() {
         viewModel?.stepList?.observe(this, Observer { list ->
             if (viewModel?.actualRecipe?.value != null) {
-                updateStepList(list)
+                updateStepList(list,viewModel?.isUpdateModeOn?.value!!)
             }
         })
     }
@@ -166,7 +165,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         viewModel?.photoList?.observe(this, Observer { list ->
             if (viewModel?.actualRecipe?.value != null) {
                 viewModel?.actualRecipe?.value!!.photoList = list
-                updateUi(viewModel?.actualRecipe?.value!!, viewModel?.isUpdateModeOn?.value!!)
+                updatePhotoList(list)
             }
         })
     }
@@ -216,6 +215,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         recipeId = intent.getLongExtra("recipe", 0)
         viewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
             viewModel?.actualRecipe?.value = recipeFetch
+            recipe_name.setText(recipeFetch.baseDataRecipe?.name)
         }
         )
     }
@@ -239,24 +239,28 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     // update all the recipe detail page (specially for edit mode activation)
     private fun updateUi(recipe: Recipe, isEditMode: Boolean = false) {
         this.recipe = recipe
-        recipe_name.setText(recipe.baseDataRecipe?.name)
-        viewPagerVisibility(recipe)
+        viewPagerVisibility(recipe.photoList)
         this.viewPagerAdapter?.updatePhotoList(recipe.photoList)
         this.ingredientAdapter?.updateIngredientList(initIngredientList(recipe.ingredientList), isEditMode)
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
     // update only the ingredient list
-    private fun updateIngredientList(ingredientList:MutableList<Ingredient>){
-        this.ingredientAdapter?.updateIngredientList(ingredientList)
+    private fun updateIngredientList(ingredientList:MutableList<Ingredient>,isEditMode: Boolean){
+        this.ingredientAdapter?.updateIngredientList(ingredientList,isEditMode)
     }
     //update only the step list
-    private fun updateStepList(stepList: MutableList<Step>){
-        this.stepAdapter?.updateStepList(stepList)
+    private fun updateStepList(stepList: MutableList<Step>,isEditMode: Boolean){
+        this.stepAdapter?.updateStepList(stepList,isEditMode)
+    }
+    // update only the photo list
+    private fun updatePhotoList(photoList: MutableList<Photo>){
+        viewPagerVisibility(photoList)
+        this.viewPagerAdapter?.updatePhotoList(photoList)
     }
 
     // set visibility of viewpager depending to recipe photo list size
-    private fun viewPagerVisibility(recipe: Recipe) {
-        val isListEmpty = recipe.photoList.size == 0
+    private fun viewPagerVisibility(photoList: MutableList<Photo>) {
+        val isListEmpty = photoList.size == 0
         viewPager_recipe_details.visibility = if (isListEmpty) View.INVISIBLE else View.VISIBLE
         empty_photo.visibility = if (isListEmpty) View.VISIBLE else View.INVISIBLE
     }

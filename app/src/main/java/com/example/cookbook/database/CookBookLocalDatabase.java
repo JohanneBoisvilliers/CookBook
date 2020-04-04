@@ -13,6 +13,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.cookbook.R;
 import com.example.cookbook.database.dao.IngredientDao;
+import com.example.cookbook.database.dao.PhotoDao;
 import com.example.cookbook.database.dao.RecipeDao;
 import com.example.cookbook.database.dao.StepDao;
 import com.example.cookbook.database.dao.UserDao;
@@ -50,6 +51,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
     public abstract IngredientDao ingredientDao();
     public abstract RecipeDao recipeDao();
     public abstract StepDao stepDao();
+    public abstract PhotoDao photoDao();
 
     // --- INSTANCE ---
     public static CookBookLocalDatabase getInstance(Context context) {

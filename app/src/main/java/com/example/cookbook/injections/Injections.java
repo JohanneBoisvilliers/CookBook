@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.example.cookbook.database.CookBookLocalDatabase;
 import com.example.cookbook.repositories.IngredientDataRepository;
+import com.example.cookbook.repositories.PhotoDataRepository;
 import com.example.cookbook.repositories.RecipesDataRepository;
 import com.example.cookbook.repositories.StepDataRepository;
 
@@ -21,16 +22,22 @@ public class Injections {
         CookBookLocalDatabase database = CookBookLocalDatabase.getInstance(context);
         return new IngredientDataRepository(database.ingredientDao());
     }
-    //instantiate ingredient repository
+    //instantiate step repository
     public static StepDataRepository provideStepDataRepository(Context context) {
         CookBookLocalDatabase database = CookBookLocalDatabase.getInstance(context);
         return new StepDataRepository(database.stepDao());
+    }
+    //instantiate photo repository
+    public static PhotoDataRepository providePhotoDataRepository(Context context) {
+        CookBookLocalDatabase database = CookBookLocalDatabase.getInstance(context);
+        return new PhotoDataRepository(database.photoDao());
     }
     //instantiate viewmodel factory
     public static ViewModelFactory provideViewModelFactory(Context context) {
         RecipesDataRepository recipesDataRepository = provideRecipesDataSource(context);
         IngredientDataRepository ingredientDataRepository = provideIngredientDataSource(context);
         StepDataRepository stepDataRepository = provideStepDataRepository(context);
-        return new ViewModelFactory(recipesDataRepository, ingredientDataRepository,stepDataRepository);
+        PhotoDataRepository photoDataRepository = providePhotoDataRepository(context);
+        return new ViewModelFactory(recipesDataRepository, ingredientDataRepository,stepDataRepository,photoDataRepository);
     }
 }
