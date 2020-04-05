@@ -155,14 +155,4 @@
         android:layout_marginTop="@dimen/status_bar_height"
         app:title=""/>
 
-    <Button
-        android:id="@+id/btn_save"
-        android:layout_gravity="center_horizontal|bottom"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/margin_to_border"
-        android:text="@string/update_button"
-        android:background="@color/colorAccent"
-        android:textColor="@color/colorPrimary"
-        android:textStyle="bold"/>
 </FrameLayout>

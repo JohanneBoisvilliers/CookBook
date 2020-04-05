@@ -1,7 +1,6 @@
 package com.example.cookbook.addRecipePage
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -22,6 +21,9 @@ import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import kotlinx.android.synthetic.main.fragment_bottom_sheet_photo.*
 import java.io.File
+import java.io.IOException
+import java.text.SimpleDateFormat
+import java.util.*
 
 class PhotoBottomSheet : BottomSheetDialogFragment() {
 
@@ -31,6 +33,7 @@ class PhotoBottomSheet : BottomSheetDialogFragment() {
     private var mUri: Uri? = null
     lateinit var imagePath: String
     var imagesPathList: MutableList<String> = arrayListOf()
+    lateinit var currentPhotoPath: String
 
     companion object {
         const val TAG = "ModalPhotoBottomSheet"
@@ -57,25 +60,32 @@ class PhotoBottomSheet : BottomSheetDialogFragment() {
 
         super.onActivityResult(requestCode, resultCode, data)
         // When an Image is picked
-        if (requestCode == PICK_IMAGE_MULTIPLE && resultCode == Activity.RESULT_OK
-                && null != data
-        ) {
-            if (data.getClipData() != null) {
-                var count = data.clipData?.itemCount
-                for (i in 0 until count!!) {
-                    var imageUri: Uri = data.clipData?.getItemAt(i)?.uri!!
-                    getPathFromURI(imageUri)
-                    val photo = Photo(photoUrl = imagePath, recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!)
+        when(requestCode){
+            PICK_IMAGE_MULTIPLE ->
+                if(resultCode == Activity.RESULT_OK && null != data){
+                    if (data.clipData != null) {
+                        var count = data.clipData?.itemCount
+                        for (i in 0 until count!!) {
+                            var imageUri: Uri = data.clipData?.getItemAt(i)?.uri!!
+                            getPathFromURI(imageUri)
+                            val photo = Photo(photoUrl = imagePath, recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!)
+                            viewModel.photoList.plus(photo)
+                            viewModel.insertPhoto(photo)
+                        }
+                    } else if (data.data != null) {
+                        var uri: Uri = data.data!!
+                        getPathFromURI(uri)
+                        val photo = Photo(photoUrl = imagePath, recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!)
+                        viewModel.photoList.plus(photo)
+                        viewModel.insertPhoto(photo)
+                    }
+                }
+            PICK_IMAGE_CAMERA ->
+                if (resultCode == Activity.RESULT_OK && null != data){
+                    val photo = Photo(photoUrl = currentPhotoPath, recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!)
                     viewModel.photoList.plus(photo)
                     viewModel.insertPhoto(photo)
                 }
-            } else if (data.data != null) {
-                var uri: Uri = data.data!!
-                getPathFromURI(uri)
-                val photo = Photo(photoUrl = imagePath, recipeId = viewModel.actualRecipe.value?.baseDataRecipe?.baseRecipeId!!)
-                viewModel.photoList.plus(photo)
-                viewModel.insertPhoto(photo)
-            }
         }
     }
 
@@ -125,6 +135,21 @@ class PhotoBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
+    @Throws(IOException::class)
+    private fun createImageFile(): File {
+        // Create an image file name
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+        val storageDir: File = activity?.getExternalFilesDir(Environment.DIRECTORY_PICTURES)!!
+        return File.createTempFile(
+                "JPEG_${timeStamp}_", /* prefix */
+                ".jpg", /* suffix */
+                storageDir /* directory */
+        ).apply {
+            // Save a file: path for use with ACTION_VIEW intents
+            currentPhotoPath = absolutePath
+        }
+    }
+
     // ---------------- LISTENERS -------------------
 
     private fun listenerOnPickFromGallery() {
@@ -139,23 +164,30 @@ class PhotoBottomSheet : BottomSheetDialogFragment() {
 
     private fun listenerOnCameraButton() {
         pick_camera_container.setOnClickListener {
-            val capturedImage = File(activity?.externalCacheDir, "My_Captured_Photo.jpg")
-            if (capturedImage.exists()) {
-                capturedImage.delete()
+            Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
+                // Ensure that there's a camera activity to handle the intent
+                takePictureIntent.resolveActivity(activity?.packageManager!!)?.also {
+                    // Create the File where the photo should go
+                    val photoFile: File? = try {
+                        createImageFile()
+                    } catch (ex: IOException) {
+                        // Error occurred while creating the File
+                        println("PhotoBottomSheet : Error when create photo file")
+                        null
+                    }
+                    // Continue only if the File was successfully created
+                    photoFile?.also {
+                        val photoURI: Uri = FileProvider.getUriForFile(
+                                activity!!,
+                                "com.example.cookbook.fileprovider",
+                                it
+                        )
+                        takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                        startActivityForResult(takePictureIntent, PICK_IMAGE_CAMERA)
+                    }
+                }
             }
-            capturedImage.createNewFile()
-            mUri = if (Build.VERSION.SDK_INT >= 24) {
-                FileProvider.getUriForFile(activity!!, "com.example.cookbook.fileprovider",
-                        capturedImage)
-            } else {
-                Uri.fromFile(capturedImage)
-            }
-
-            val intent = Intent("android.media.action.IMAGE_CAPTURE")
-            intent.putExtra(MediaStore.EXTRA_OUTPUT, mUri)
-            startActivityForResult(intent, PICK_IMAGE_CAMERA)
         }
-
     }
 
     // ---------------- EXTENSIONS -------------------

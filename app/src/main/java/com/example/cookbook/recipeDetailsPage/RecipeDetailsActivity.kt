@@ -140,7 +140,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             vp_del_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_ingredient.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_step.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
-            btn_save.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             recipeNameSetting(isUpdateModeOn)
             if (viewModel?.actualRecipe?.value != null) {
                 updateUi(viewModel?.actualRecipe?.value!!, isUpdateModeOn)
