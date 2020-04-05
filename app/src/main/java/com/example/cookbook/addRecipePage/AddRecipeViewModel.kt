@@ -17,11 +17,8 @@ class AddRecipeViewModel(private val mIngredientDataRepository: IngredientDataRe
 
     val recipeName = MutableLiveData<String>()
     val category = MutableLiveData<String>()
-    val isOnline = MutableLiveData(false)
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()
-    val ingredientName = MutableLiveData<String>()
-    val ingredientList = MutableLiveData<MutableList<Ingredient>>()
 
     fun insertRecipe(recipe: BaseDataRecipe):Long{
         return runBlocking { mRecipesDataRepository.insertRecipe(recipe) }

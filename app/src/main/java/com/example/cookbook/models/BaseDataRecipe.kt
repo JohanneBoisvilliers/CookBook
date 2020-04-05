@@ -13,5 +13,5 @@ data class BaseDataRecipe (
         val numberOfLike:Int = 0,
         val isAlreadyDone: Boolean = false,
         val addDate: String?,
-        val isOnline: Boolean = false
+        val recipeUrl: String?
 )

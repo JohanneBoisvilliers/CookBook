@@ -30,7 +30,6 @@ class PhotoBottomSheet : BottomSheetDialogFragment() {
     private lateinit var viewModel: RecipeViewModel
     var PICK_IMAGE_MULTIPLE = 1
     var PICK_IMAGE_CAMERA = 2
-    private var mUri: Uri? = null
     lateinit var imagePath: String
     var imagesPathList: MutableList<String> = arrayListOf()
     lateinit var currentPhotoPath: String

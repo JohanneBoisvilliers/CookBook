@@ -1,6 +1,7 @@
 package com.example.cookbook.recipeDetailsPage
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -26,6 +27,7 @@ import com.example.cookbook.addRecipePage.PhotoBottomSheet
 import com.example.cookbook.addRecipePage.StepBottomSheet
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.models.*
+import com.example.cookbook.onlineREcipe.RecipeOnlineActivity
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.tabs.TabLayoutMediator
@@ -89,6 +91,9 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
 
         R.id.action_open_url -> {
+            val intent = Intent(this,RecipeOnlineActivity::class.java)
+            intent.putExtra("url",viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
+            startActivity(intent)
             true
         }
 

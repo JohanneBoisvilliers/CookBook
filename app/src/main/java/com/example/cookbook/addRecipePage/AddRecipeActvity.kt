@@ -110,10 +110,8 @@ class AddRecipeActvity : AppCompatActivity() {
         if (view is CheckBox) {
             val checked: Boolean = view.isChecked
             if (checked) {
-                mViewModel.isOnline.value = checked
                 recipe_url.visibility = View.VISIBLE
             } else {
-                mViewModel.isOnline.value = checked
                 recipe_url.visibility = View.GONE
             }
         }
@@ -198,7 +196,7 @@ class AddRecipeActvity : AppCompatActivity() {
                         addDate = getCurrentDateTime().dateToString("dd/MM/yyyy"),
                         isAlreadyDone = false,
                         numberOfLike = 123,
-                        isOnline = mViewModel.isOnline.value!!
+                        recipeUrl = "test"
                 )
                 val newRecipeId = mViewModel.insertRecipe(newRecipe)
 
