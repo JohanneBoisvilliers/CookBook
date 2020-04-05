@@ -60,7 +60,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         return true
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_details)
@@ -109,6 +108,12 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private fun initViewPager() {
         viewPager_recipe_details.orientation = ViewPager2.ORIENTATION_HORIZONTAL
         viewPager_recipe_details.adapter = viewPagerAdapter
+        viewPager_recipe_details.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                viewModel?.photoSelected?.value = position
+            }
+        })
 
         TabLayoutMediator(rd_tab_layout, viewPager_recipe_details) { tab, position -> Unit }.attach()
     }
@@ -196,6 +201,11 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                 }
                 R.id.vp_add_photo -> {
                     showModalBottomSheet(PhotoBottomSheet(), PhotoBottomSheet.TAG)
+                }
+                R.id.vp_del_photo -> {
+                    val photo =
+                            viewModel?.photoList?.value!![viewModel?.photoSelected?.value!!]
+                    viewModel?.deletePhoto(photo)
                 }
             }
         }

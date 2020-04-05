@@ -58,7 +58,8 @@
                     android:layout_marginEnd="@dimen/margin_to_border"
                     android:src="@drawable/baseline_remove_circle_outline_24"
                     android:tint="@color/colorPrimary"
-                    android:background="@android:color/transparent"/>
+                    android:background="@android:color/transparent"
+                    android:onClick="onClicked"/>
                 <EditText
                     android:id="@+id/recipe_name"
                     android:layout_below="@id/viewPager_recipe_details"

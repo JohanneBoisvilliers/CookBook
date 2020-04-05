@@ -7,4 +7,8 @@ class PhotoDataRepository(val photoDao: PhotoDao){
     suspend fun insertPhoto(vararg photo: Photo){
         photoDao.insertPhoto(*photo)
     }
+
+    suspend fun deletePhoto(photo: Photo){
+        photoDao.deletePhoto(photo)
+    }
 }

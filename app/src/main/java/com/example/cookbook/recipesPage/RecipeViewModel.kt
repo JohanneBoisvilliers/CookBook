@@ -29,6 +29,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val newStepText = MutableLiveData<String>()
     val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
+    val photoSelected = MutableLiveData(0)
 
     //----------------- ASYNC RECIPES -----------------
 
@@ -133,7 +134,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
-    //----------------- ASYNC PHOTOS -----------------
+    //----------------- PHOTOS -----------------
 
     fun insertPhoto(vararg photo:Photo){
         viewModelScope.launch {
@@ -142,6 +143,17 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
             }
         }
     }
+
+    fun deletePhoto(photo: Photo){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mPhotoDataRepository.deletePhoto(photo)
+            }
+            photoList.value!!.removeAt(photoSelected.value!!)
+            photoList.postValue(photoList.value)
+        }
+    }
+
     //----------------- PRIVATE METHODS -----------------
 
     private suspend fun fetchIngredientList(ingredientData: IngredientData, tempIngredientList: MutableList<Ingredient>) {

@@ -1,12 +1,10 @@
 package com.example.cookbook.recipeDetailsPage
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cookbook.R
+import androidx.viewpager.widget.PagerAdapter
 import com.example.cookbook.models.Photo
-import com.example.cookbook.recipesPage.RecipesListAdapter
-import com.example.cookbook.recipesPage.RecipesListViewHolder
+
 
 class PhotoViewPagerAdapter constructor(photoList:MutableList<Photo>) : RecyclerView.Adapter<PhotoViewPagerViewHolder>() {
     var list = mutableListOf<String>()
@@ -22,6 +20,10 @@ class PhotoViewPagerAdapter constructor(photoList:MutableList<Photo>) : Recycler
 
     override fun onBindViewHolder(holder: PhotoViewPagerViewHolder, position: Int) {
         holder.bind(mPhotoList[position])
+    }
+
+    fun getItemPosition(test: Any?): Int {
+        return PagerAdapter.POSITION_NONE
     }
 
     fun updatePhotoList(list:MutableList<Photo>){
