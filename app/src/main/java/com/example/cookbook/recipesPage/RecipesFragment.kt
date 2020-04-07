@@ -10,6 +10,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.cookbook.R
+import com.example.cookbook.addRecipePage.AddRecipeActvity
 import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipeDetailsPage.RecipeDetailsActivity
 import com.example.cookbook.utils.RecyclerItemClickListenr
@@ -20,6 +21,8 @@ class RecipesFragment : Fragment() {
     private var mRecipesList = mutableListOf<Recipe>()
     private var mListAdapter: RecipesListAdapter = RecipesListAdapter(mRecipesList)
     lateinit var mRecipeViewModel: RecipeViewModel
+    private val RECIPE_RESULT:Int = 999
+
 
     //--------------LIFE CYCLE--------------
 
@@ -37,6 +40,7 @@ class RecipesFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         configureRecipeViewModel()
         configureRecyclerView()
+        handleFabClick()
         getRecipes()
     }
 
@@ -57,7 +61,7 @@ class RecipesFragment : Fragment() {
                 startActivity(intent)
             }
             override fun onItemLongClick(view: View?, position: Int) {
-                TODO("do nothing")
+                print(position)
             }
         }))
     }
@@ -69,6 +73,12 @@ class RecipesFragment : Fragment() {
         mRecipesList.clear()
         mRecipesList.addAll(recipesList)
         mListAdapter.updateList(recipesList)
+    }
+    private fun handleFabClick(){
+        val intent = Intent(context, AddRecipeActvity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+
+        fab_search_recipe.setOnClickListener { startActivity(intent) }
     }
     //companion for instantiate fragment
     companion object {

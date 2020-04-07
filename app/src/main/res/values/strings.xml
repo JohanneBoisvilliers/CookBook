@@ -1,26 +1,66 @@
 <resources>
     <!--MAIN-->
-    <string name="app_name">CookBook</string>
+    <string name="app_name"></string>
     <!--HOME FRAGMENT-->
     <string name="category_latest">Latest Recipes</string>
     <!--ALL RECIPES FRAGMENT-->
     <string name="all_recipes_title">All Recipes</string>
     <!--PROFILE FRAGMENT-->
     <string name="recipe_description">RECIPES :</string>
-    <!--ADD RECIPES FRAGMENT-->
+    <!--ADD RECIPES ACTIVITY-->
     <string name="add_recipe_title">New Recipes</string>
     <string name="hint_add_recipe_url">Recipe URL</string>
     <string name="or_separator">OR</string>
-    <string name="add_recipe_button_url">ADD RECIPE BY URL</string>
-    <string name="add_recipe_button_manually">ADD RECIPE MANUALLY</string>
+    <string name="add_step_button">ADD STEP</string>
+    <string name="category_title">Category :</string>
+    <string name="recipe_title">Recipe</string>
+    <string name="online_title">Online recipe ?</string>
+    <string name="ingredients_title">Ingredients :</string>
+    <string name="photos_title">Photos :</string>
+    <string name="steps_title">Steps :</string>
+    <string name="error_recipe_name">You have to choose a recipe name</string>
     <!--RECIPES DETAILS ACTIVITY-->
     <string name="ingredient_title">INGREDIENTS</string>
     <string name="recipe_step_title">RECIPE</string>
-
+    <string name="add_button_text">Add</string>
+    <string name="update_button_text">Update</string>
+    <string name="cancel_ingredient_text">Cancel</string>
+    <string name="name_ingredient_text">Name :</string>
+    <string name="unit_ingredient_text">Unit :</string>
+    <string name="quantity_ingredient_text">Qt. :</string>
+    <string name="pick_gallery">Pick image from gallery</string>
+    <string name="pick_camera">Pick image from camera</string>
+    <string name="add_step_description">Add a new step</string>
+    <string name="update_button">SAVE</string>
+    <string name="step">Step %s</string>
+    <string name="step_bottom_sheet_qt_error">Insert a description for this step</string>
+    <string name="ingredient_bottom_sheet_qt_error">Insert a quantity</string>
+    <string name="ingredient_bottom_sheet_name_error">Insert a name</string>
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>
         <item>Favorite recipes</item>
         <item>Todo list</item>
     </string-array>
+
+    <string-array name="unit_list">
+        <item>gr</item>
+        <item>kg</item>
+        <item>ml</item>
+        <item>cl</item>
+        <item>l</item>
+        <item>CaS</item>
+        <item>CaC</item>
+        <item>none</item>
+    </string-array>
+
+    <string-array name="category_list">
+        <item>Starter</item>
+        <item>Main</item>
+        <item>Dessert</item>
+        <item>Drink</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

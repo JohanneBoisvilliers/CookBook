@@ -2,6 +2,7 @@
 <resources>
     <!--GENERAL-->
     <dimen name="margin_to_border">16dp</dimen>
+    <dimen name="half_margin_to_border">8dp</dimen>
     <dimen name="margin_in_button">50dp</dimen>
     <dimen name="margin_title_toolbar">10sp</dimen>
     <!--MAIN ACTIVITY-->
@@ -36,9 +37,19 @@
     <dimen name="viewpager_height">350dp</dimen>
     <dimen name="viewpager_dot_size">6dp</dimen>
     <dimen name="viewpager_default_dot_size">3dp</dimen>
-    <dimen name="ingredients_title_size">25sp</dimen>
-    <dimen name="recipe_text_size">16sp</dimen>
-    <dimen name="recipe_title_size">20sp</dimen>
+    <dimen name="ingredients_title_size">20sp</dimen>
+    <dimen name="recipe_text_size">14sp</dimen>
+    <dimen name="recipe_title_size">18sp</dimen>
     <dimen name="ingredient_word_padding">5dp</dimen>
+    <dimen name="bottom_padding">80dp</dimen>
+    <dimen name="url_width">200dp</dimen>
+    <!-- ADD RECIPE ACTIVITY-->
+    <dimen name="bottom_sheet_icon_size">24dp</dimen>
+    <dimen name="viewpager_update_icon_size">24dp</dimen>
+    <dimen name="step_modify_icon">16dp</dimen>
+    <dimen name="ingredient_modify_icon">16dp</dimen>
+    <dimen name="update_icon_margin">80dp</dimen>
+    <dimen name="icon_margin_to_border">30dp</dimen>
+    <dimen name="status_bar_height">25dp</dimen>
 
 </resources>
