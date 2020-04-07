@@ -30,7 +30,7 @@ class PhotoViewPagerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVie
     fun photoSettings(photo: Photo) {
         Glide.with(itemView.context)
                 .load(Uri.fromFile(File(photo.photoUrl)))
-                .placeholder(R.drawable.assiette_vide)
+                .placeholder(R.drawable.no_photo_low)
                 .centerCrop()
                 .into(itemView.photo_container)
     }

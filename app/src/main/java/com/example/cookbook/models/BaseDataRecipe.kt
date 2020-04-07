@@ -13,5 +13,6 @@ data class BaseDataRecipe (
         val numberOfLike:Int = 0,
         val isAlreadyDone: Boolean = false,
         val addDate: String?,
-        val recipeUrl: String?
+        val recipeUrl: String?,
+        val category: String?
 )

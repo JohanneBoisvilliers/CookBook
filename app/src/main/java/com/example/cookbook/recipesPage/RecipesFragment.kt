@@ -76,7 +76,9 @@ class RecipesFragment : Fragment() {
     }
     private fun handleFabClick(){
         val intent = Intent(context, AddRecipeActvity::class.java)
-        fab_search_recipe.setOnClickListener { startActivityForResult(intent,RECIPE_RESULT) }
+        intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY
+
+        fab_search_recipe.setOnClickListener { startActivity(intent) }
     }
     //companion for instantiate fragment
     companion object {

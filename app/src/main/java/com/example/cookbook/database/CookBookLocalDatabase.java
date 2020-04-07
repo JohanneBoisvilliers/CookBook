@@ -123,6 +123,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
                 recette.put("numberOfLike", tokens[2]);
                 recette.put("addDate", tokens[3]);
                 recette.put("recipeUrl", tokens[4]);
+                recette.put("category", tokens[5]);
                 db.insert("BaseDataRecipe", OnConflictStrategy.REPLACE, recette);
 
             }

@@ -30,8 +30,10 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
     val photoSelected = MutableLiveData(0)
+    val isNotOnline:Boolean
+        get() {return actualRecipe.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()}
 
-    //----------------- ASYNC RECIPES -----------------
+    //----------------- RECIPES -----------------
 
     // fetch a recipe depending on an id (when user click on a recipe in recipe list)
     private suspend fun getSpecificRecipe(recipeId: Long): Recipe {
@@ -68,7 +70,15 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
-    //----------------- ASYNC INGREDIENTS -----------------
+    fun updateRecipeUrl(recipeId: Long, recipeUrl: String) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                mRecipesDataRepository.updateRecipeUrl(recipeId, recipeUrl)
+            }
+        }
+    }
+
+    //----------------- INGREDIENTS -----------------
 
     // fetch ingredient list for autocomplete text view
     val ingredientListPicked: LiveData<List<IngredientDatabase>> = liveData {
@@ -105,7 +115,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
-    //----------------- ASYNC STEPS -----------------
+    //----------------- STEPS -----------------
 
     // add a step into database and add it into stepList at the same time
     fun addStep(step: Step) {

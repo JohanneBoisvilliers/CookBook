@@ -25,4 +25,7 @@ interface RecipeDao {
 
     @Query("UPDATE BaseDataRecipe SET name = :name WHERE baseRecipeId= :recipeId")
     suspend fun updateRecipeName(recipeId:Long,name : String)
+
+    @Query("UPDATE BaseDataRecipe SET recipeUrl = :recipeUrl WHERE baseRecipeId = :recipeId")
+    suspend fun updateRecipeUrl(recipeId: Long,recipeUrl:String)
 }

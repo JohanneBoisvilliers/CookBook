@@ -16,6 +16,7 @@ import kotlinx.coroutines.withContext
 class AddRecipeViewModel(private val mIngredientDataRepository: IngredientDataRepository,private val mRecipesDataRepository: RecipesDataRepository):ViewModel(){
 
     val recipeName = MutableLiveData<String>()
+    val recipeUrl = MutableLiveData("")
     val category = MutableLiveData<String>()
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()

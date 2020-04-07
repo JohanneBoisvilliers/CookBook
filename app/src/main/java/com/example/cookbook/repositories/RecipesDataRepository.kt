@@ -17,12 +17,12 @@ class RecipesDataRepository(private val mRecipeDao: RecipeDao) {
         return mRecipeDao.insertRecipe(recipe)
     }
 
-    fun updateRecipe(recipe:BaseDataRecipe){
-        return mRecipeDao.updateRecipe(recipe)
-    }
-
     suspend fun updateRecipeName(recipeId: Long, name:String){
         mRecipeDao.updateRecipeName(recipeId,name)
+    }
+
+    suspend fun updateRecipeUrl(recipeId: Long,recipeUrl:String){
+        mRecipeDao.updateRecipeUrl(recipeId,recipeUrl)
     }
 
 }

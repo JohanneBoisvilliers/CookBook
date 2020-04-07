@@ -89,7 +89,7 @@
                 app:layout_constraintTop_toTopOf="@+id/online_recipe_text" />
             <!-- RECIPE URL -->
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/recipe_url"
+                android:id="@+id/recipe_url_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_to_border"
@@ -98,6 +98,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/recipe_category">
 
                 <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/recipe_url_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
             </com.google.android.material.textfield.TextInputLayout>

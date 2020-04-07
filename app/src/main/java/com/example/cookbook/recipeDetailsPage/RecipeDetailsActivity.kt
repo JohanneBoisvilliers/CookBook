@@ -41,6 +41,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
     private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false, this)
     private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false, this)
+    private lateinit var menu: Menu
 
     override fun onResume() {
         super.onResume()
@@ -59,6 +60,10 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.toolbar_recipe_detail, menu)
+        this.menu = menu!!
+        invalidateOptionsMenu()
+        menu.findItem(R.id.action_open_url).isEnabled = !viewModel?.isNotOnline!!
+        menu.findItem(R.id.action_open_url).isVisible = !viewModel?.isNotOnline!!
         return true
     }
 
@@ -78,6 +83,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         this.observerOnStepList()
         this.observerOnPhotoList()
         this.listenerOnRecipeName()
+        this.listenerOnUrlField()
     }
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
@@ -90,9 +96,10 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             true
         }
 
-        R.id.action_open_url -> {
-            val intent = Intent(this,RecipeOnlineActivity::class.java)
-            intent.putExtra("url",viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
+        R.id.action_open_url ->
+        {
+            val intent = Intent(this, RecipeOnlineActivity::class.java)
+            intent.putExtra("url", viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
             startActivity(intent)
             true
         }
@@ -137,6 +144,32 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
     }
 
+    /*
+   depending on if we are on update mode or not, set update button visibility for recipe name,
+   and set edit text focusable to edit field
+   */
+    private fun initRecipeNameField(isUpdateModeOn: Boolean) {
+        btn_update_recipe_name.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+        recipe_name.isFocusableInTouchMode = isUpdateModeOn
+        recipe_name.isFocusable = isUpdateModeOn
+    }
+
+    /*
+    depending on if we are on update mode or not, set url field visibility,
+    and set edit text focusable to edit field
+    */
+    private fun initUrlField(isUpdateModeOn: Boolean) {
+        url_icon.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+        url_field.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+        if (url_field.visibility == View.VISIBLE){
+            url_field.setText(viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
+        }
+        btn_update_url.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
+        url_field.isFocusableInTouchMode = isUpdateModeOn
+        url_field.isFocusable = isUpdateModeOn
+        url_field.isLongClickable = isUpdateModeOn
+    }
+
     // ---------------- OBSERVERS -------------------
 
     private fun observerOnEditMode() {
@@ -145,7 +178,8 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             vp_del_photo.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_ingredient.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             btn_add_step.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
-            recipeNameSetting(isUpdateModeOn)
+            initRecipeNameField(isUpdateModeOn)
+            initUrlField(isUpdateModeOn)
             if (viewModel?.actualRecipe?.value != null) {
                 updateUi(viewModel?.actualRecipe?.value!!, isUpdateModeOn)
             }
@@ -157,7 +191,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             viewModel?.actualRecipe?.value!!.ingredientList.clear()
             if (viewModel?.actualRecipe?.value != null) {
                 viewModel?.actualRecipe?.value!!.ingredientList.plusAssign(list.map { it.ingredientData }.toList())
-                updateIngredientList(list,viewModel?.isUpdateModeOn?.value!!)
+                updateIngredientList(list, viewModel?.isUpdateModeOn?.value!!)
             }
         })
     }
@@ -165,7 +199,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private fun observerOnStepList() {
         viewModel?.stepList?.observe(this, Observer { list ->
             if (viewModel?.actualRecipe?.value != null) {
-                updateStepList(list,viewModel?.isUpdateModeOn?.value!!)
+                updateStepList(list, viewModel?.isUpdateModeOn?.value!!)
             }
         })
     }
@@ -196,6 +230,18 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                             recipe.name!!
                     )
                 }
+                R.id.btn_update_url -> {
+                    //get actual recipe
+                    val recipe = viewModel?.actualRecipe?.value?.baseDataRecipe
+                    //hide keyboard and unset focus on edit text
+                    url_field.hideKeyboard()
+                    url_field.clearFocus()
+                    //update recipe url into database
+                    viewModel?.updateRecipeUrl(
+                            recipe?.baseRecipeId!!,
+                            recipe.recipeUrl!!
+                    )
+                }
                 R.id.btn_add_ingredient -> {
                     viewModel?.isUpdateIconPressed?.value = false
                     showModalBottomSheet(IngredientBottomSheet(), IngredientBottomSheet.TAG)
@@ -214,11 +260,20 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             }
         }
     }
+
     // save the new recipe name depending to user input and save it into view model
-    private fun listenerOnRecipeName(){
+    private fun listenerOnRecipeName() {
         recipe_name.onTextChanged {
             val recipe = viewModel?.actualRecipe?.value?.baseDataRecipe
             val recipeCopy = recipe?.copy(name = it)
+            viewModel?.actualRecipe?.value?.baseDataRecipe = recipeCopy!!
+        }
+    }
+
+    private fun listenerOnUrlField(){
+        url_field.onTextChanged {
+            val recipe = viewModel?.actualRecipe?.value?.baseDataRecipe
+            val recipeCopy = recipe?.copy(recipeUrl = it)
             viewModel?.actualRecipe?.value?.baseDataRecipe = recipeCopy!!
         }
     }
@@ -250,6 +305,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
         return ingredientList
     }
+
     // update all the recipe detail page (specially for edit mode activation)
     private fun updateUi(recipe: Recipe, isEditMode: Boolean = false) {
         this.recipe = recipe
@@ -258,16 +314,19 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         this.ingredientAdapter?.updateIngredientList(initIngredientList(recipe.ingredientList), isEditMode)
         this.stepAdapter?.updateStepList(recipe.stepList, isEditMode)
     }
+
     // update only the ingredient list
-    private fun updateIngredientList(ingredientList:MutableList<Ingredient>,isEditMode: Boolean){
-        this.ingredientAdapter?.updateIngredientList(ingredientList,isEditMode)
+    private fun updateIngredientList(ingredientList: MutableList<Ingredient>, isEditMode: Boolean) {
+        this.ingredientAdapter?.updateIngredientList(ingredientList, isEditMode)
     }
+
     //update only the step list
-    private fun updateStepList(stepList: MutableList<Step>,isEditMode: Boolean){
-        this.stepAdapter?.updateStepList(stepList,isEditMode)
+    private fun updateStepList(stepList: MutableList<Step>, isEditMode: Boolean) {
+        this.stepAdapter?.updateStepList(stepList, isEditMode)
     }
+
     // update only the photo list
-    private fun updatePhotoList(photoList: MutableList<Photo>){
+    private fun updatePhotoList(photoList: MutableList<Photo>) {
         viewPagerVisibility(photoList)
         this.viewPagerAdapter?.updatePhotoList(photoList)
     }
@@ -294,16 +353,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             winParams.flags = winParams.flags and bits.inv()
         }
         win.attributes = winParams
-    }
-
-    /*
-    depending on if we are on update mode or not, set update button visibility for recipe name,
-    and set edit text focusable for edit field
-    */
-    private fun recipeNameSetting(isUpdateModeOn: Boolean) {
-        btn_update_recipe_name.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
-        recipe_name.isFocusableInTouchMode = isUpdateModeOn
-        recipe_name.isFocusable = isUpdateModeOn
     }
 
     // ---------------- EXTENSIONS -------------------
@@ -363,11 +412,13 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         // remove ingredient
         this.value?.removeAt(index!!)
     }
+
     // extension for hiding keyboard from a view
     private fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
+
     //extension for using lambda for onTextChanged function
     private fun EditText.onTextChanged(onTextChanged: (String) -> Unit) {
         this.addTextChangedListener(object : TextWatcher {
