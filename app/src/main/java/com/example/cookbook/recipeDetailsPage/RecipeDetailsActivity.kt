@@ -127,7 +127,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             }
         })
 
-        TabLayoutMediator(rd_tab_layout, viewPager_recipe_details) { tab, position -> Unit }.attach()
+        TabLayoutMediator(rd_tab_layout, viewPager_recipe_details) { _, _ -> Unit }.attach()
     }
 
     private fun initIngredientRecyclerview() {

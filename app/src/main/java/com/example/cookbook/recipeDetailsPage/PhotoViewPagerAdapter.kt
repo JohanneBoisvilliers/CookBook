@@ -22,10 +22,6 @@ class PhotoViewPagerAdapter constructor(photoList:MutableList<Photo>) : Recycler
         holder.bind(mPhotoList[position])
     }
 
-    fun getItemPosition(test: Any?): Int {
-        return PagerAdapter.POSITION_NONE
-    }
-
     fun updatePhotoList(list:MutableList<Photo>){
         mPhotoList.clear()
         mPhotoList.addAll(list)

@@ -13,12 +13,12 @@ import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.example.cookbook.database.CookBookLocalDatabase
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.recipesPage.RecipeViewModel
-import com.facebook.flipper.android.AndroidFlipperClient
-import com.facebook.flipper.android.utils.FlipperUtils
-import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
-import com.facebook.flipper.plugins.inspector.DescriptorMapping
-import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
-import com.facebook.soloader.SoLoader
+//import com.facebook.flipper.android.AndroidFlipperClient
+//import com.facebook.flipper.android.utils.FlipperUtils
+//import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
+//import com.facebook.flipper.plugins.inspector.DescriptorMapping
+//import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+//import com.facebook.soloader.SoLoader
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -40,14 +40,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        SoLoader.init(this, false)
+        //SoLoader.init(this, false)
 
-        if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(application)) {
-            val client = AndroidFlipperClient.getInstance(application)
-            client.addPlugin(InspectorFlipperPlugin(application, DescriptorMapping.withDefaults()))
-            client.addPlugin( DatabasesFlipperPlugin(application));
-            client.start()
-        }
+        //if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(application)) {
+        //    val client = AndroidFlipperClient.getInstance(application)
+        //    client.addPlugin(InspectorFlipperPlugin(application, DescriptorMapping.withDefaults()))
+        //    client.addPlugin( DatabasesFlipperPlugin(application));
+        //    client.start()
+        //}
         configureViewPager()
         configureBottomView()
         configureRecipeViewModel()
