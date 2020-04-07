@@ -8,20 +8,14 @@ import androidx.room.Junction
 import androidx.room.Relation
 
 
-data class Recipe (
+class Recipe (
         @Embedded
-        var baseDataRecipe: BaseDataRecipe? = null,
+        var baseDataRecipe: BaseDataRecipe?,
         @Relation(parentColumn = "baseRecipeId",entityColumn = "recipeId")
         var photoList:MutableList<Photo>,
         @Relation(parentColumn = "baseRecipeId",
-                entity = Ingredient::class,
-                entityColumn = "ingredientId",
-                associateBy = Junction(
-                        value = BaseRecipeIngredientCrossRef::class,
-                        parentColumn = "baseRecipeId",
-                        entityColumn = "ingredientId"
-                        ))
-        var ingredientList:MutableList<Ingredient>,
+                entityColumn = "recipeId")
+        var ingredientList:MutableList<IngredientData>,
         @Relation(parentColumn="baseRecipeId",entityColumn = "recipeId")
         var stepList:MutableList<Step>
 ){

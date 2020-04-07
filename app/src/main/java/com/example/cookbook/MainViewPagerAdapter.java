@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
-import com.example.cookbook.addRecipePage.AddRecipeFragment;
 import com.example.cookbook.homePage.HomeFragment;
 import com.example.cookbook.profilePage.ProfileFragment;
 import com.example.cookbook.recipesPage.RecipesFragment;

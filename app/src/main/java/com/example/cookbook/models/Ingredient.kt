@@ -1,12 +1,21 @@
 package com.example.cookbook.models
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
 
-@Entity
-data class Ingredient (
-
-        @PrimaryKey(autoGenerate = true)
-        val ingredientId: Long = 0,
-        val name: String? = null
+ class Ingredient(
+        @Embedded
+        var ingredientData: IngredientData,
+        @Relation(parentColumn = "ingredientDatabaseId",entityColumn = "ingredientDatabaseId")
+        var ingredientDatabase: IngredientDatabase
+//        @PrimaryKey(autoGenerate = true)
+//        var ingredientId:Long=0L,
+//        var recipeId:Long,
+//        var ingredientDatabaseId:Long,
+//        var unit: String,
+//        var quantity: Int,
+//        @Ignore
+//        var ingredientDatabase: IngredientDatabase?
 )
+//{
+//     constructor():this(0,0,0,"gr",0,IngredientDatabase())
+//}

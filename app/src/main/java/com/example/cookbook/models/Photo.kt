@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity
 data class Photo (
     @PrimaryKey(autoGenerate = true)
-    val id: Long,
+    val id: Long=0L,
     val recipeId: Long,
     val photoUrl: String
 )

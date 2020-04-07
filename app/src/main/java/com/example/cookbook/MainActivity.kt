@@ -1,48 +1,62 @@
 package com.example.cookbook
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.example.cookbook.database.CookBookLocalDatabase
 import com.example.cookbook.injections.Injections
 import com.example.cookbook.recipesPage.RecipeViewModel
-import com.facebook.stetho.Stetho
+//import com.facebook.flipper.android.AndroidFlipperClient
+//import com.facebook.flipper.android.utils.FlipperUtils
+//import com.facebook.flipper.plugins.databases.DatabasesFlipperPlugin
+//import com.facebook.flipper.plugins.inspector.DescriptorMapping
+//import com.facebook.flipper.plugins.inspector.InspectorFlipperPlugin
+//import com.facebook.soloader.SoLoader
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity() {
 
     private var mRecipeViewModel: RecipeViewModel? = null
-    private val PERMISSIONS:Int = 1
+    var PERMISSION_ALL = 1
+    var PERMISSIONS = arrayOf(
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.WRITE_CONTACTS,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_SMS,
+            Manifest.permission.CAMERA
+    )
 
+    // ----------------------------------- LIFE CYCLE -----------------------------------
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        Stetho.initializeWithDefaults(this)
+        //SoLoader.init(this, false)
+
+        //if (BuildConfig.DEBUG && FlipperUtils.shouldEnableFlipper(application)) {
+        //    val client = AndroidFlipperClient.getInstance(application)
+        //    client.addPlugin(InspectorFlipperPlugin(application, DescriptorMapping.withDefaults()))
+        //    client.addPlugin( DatabasesFlipperPlugin(application));
+        //    client.start()
+        //}
         configureViewPager()
         configureBottomView()
         configureRecipeViewModel()
         val cookBookLocalDatabase = CookBookLocalDatabase.getInstance(this)
 
         // TODO créer vraie méthode pour gestion de permission
-        if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-
-                ActivityCompat.requestPermissions(this,
-                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
-                        PERMISSIONS)
-
-            }
+        if (!hasPermissions(this, *PERMISSIONS)) {
+            ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
+        }
 
     }
 
@@ -72,7 +86,6 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_recipes -> activity_main_viewpager.currentItem = 1
             R.id.nav_social -> activity_main_viewpager.currentItem = 2
             R.id.nav_user -> activity_main_viewpager.currentItem = 3
-            R.id.nav_add -> activity_main_viewpager.currentItem = 4
         }
     }
 
@@ -80,4 +93,10 @@ class MainActivity : AppCompatActivity() {
         val viewModelFactory = Injections.provideViewModelFactory(this)
         mRecipeViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel::class.java)
     }
+
+    fun hasPermissions(context: Context, vararg permissions: String): Boolean = permissions.all {
+        ActivityCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+    }
+
+
 }

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:src="http://schemas.android.com/tools">
+
+    <LinearLayout
+        android:id="@+id/pick_camera_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="@dimen/bottom_sheet_icon_size"
+            android:layout_height="@dimen/bottom_sheet_icon_size"
+            android:layout_margin="@dimen/margin_to_border"
+            android:src="@drawable/camera"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/margin_to_border"
+            android:text="@string/pick_camera"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/pick_from_gallery_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/pick_camera_container"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center_vertical">
+        <ImageView
+            android:layout_width="@dimen/bottom_sheet_icon_size"
+            android:layout_height="@dimen/bottom_sheet_icon_size"
+            android:layout_margin="@dimen/margin_to_border"
+            android:src="@drawable/picture"/>
+        <TextView
+            android:layout_margin="@dimen/margin_to_border"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/pick_gallery"/>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
