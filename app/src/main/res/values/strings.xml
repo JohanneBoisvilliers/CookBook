@@ -15,7 +15,6 @@
     <!--ADD RECIPES ACTIVITY-->
     <string name="add_recipe_title">New Recipes</string>
     <string name="hint_add_recipe_url">Recipe URL</string>
-    <string name="or_separator">OR</string>
     <string name="add_step_button">ADD STEP</string>
     <string name="category_title">Category :</string>
     <string name="recipe_title">Recipe</string>

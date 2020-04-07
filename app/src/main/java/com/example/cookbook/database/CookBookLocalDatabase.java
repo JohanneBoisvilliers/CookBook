@@ -77,7 +77,7 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    public static void insertIngredientHelper(SupportSQLiteDatabase db,Context context){
+    public static void insertIngredientHelper(SupportSQLiteDatabase db){
 
         InputStream is = MyApp.getContext().getResources().openRawResource(R.raw.ingredients);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
