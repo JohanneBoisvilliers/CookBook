@@ -7,7 +7,8 @@
 
     <ImageView
         android:id="@+id/photo_container"
-        android:src="@drawable/assiette_vide"
+        android:src="@drawable/no_photo_low"
+        android:scaleType="centerInside"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

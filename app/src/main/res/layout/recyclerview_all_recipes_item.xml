@@ -10,7 +10,6 @@
     <ImageView
         android:id="@+id/photo_container"
         android:layout_width="match_parent"
-        android:scaleType="centerCrop"
         android:layout_height="@dimen/base_height_card" />
 
     <ImageView

@@ -43,6 +43,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.0-alpha01"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha01"
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-beta01'
     //ButterKnife
     implementation 'com.jakewharton:butterknife:10.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:10.0.0'
@@ -62,13 +63,16 @@ dependencies {
     testImplementation "androidx.room:room-testing:$room_version"
     //VIEW MODEL & LIVE DATA
     implementation "android.arch.lifecycle:extensions:1.1.1"
-    //Stetho
-    implementation 'com.facebook.stetho:stetho:1.5.1'
     implementation "androidx.core:core-ktx:1.2.0"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    debugImplementation 'com.amitshekhar.android:debug-db:1.0.6'
+    debugImplementation 'com.facebook.flipper:flipper:0.35.0'
+    debugImplementation 'com.facebook.soloader:soloader:0.8.2'
+
+    releaseImplementation 'com.facebook.flipper:flipper-noop:0.35.0'
+
+
 }
 repositories {
     mavenCentral()

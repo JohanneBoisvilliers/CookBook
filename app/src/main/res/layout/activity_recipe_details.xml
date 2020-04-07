@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <ScrollView
@@ -14,11 +15,11 @@
                 tools:context=".recipeDetailsPage.RecipeDetailsActivity">
 
                 <ImageView
+                    android:scaleType="centerCrop"
                     android:id="@+id/empty_photo"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/viewpager_height"
-                    android:src="@drawable/assiette_vide"
-                    android:scaleType="centerCrop"/>
+                    android:src="@drawable/no_photo_low"/>
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager_recipe_details"
@@ -87,11 +88,50 @@
                     android:tint="@color/colorAccent"
                     android:onClick="onClicked"/>
 
+                <ImageView
+                    android:visibility="gone"
+                    android:id="@+id/url_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/baseline_language_24"
+                    android:layout_below="@id/recipe_name"
+                    android:layout_margin="@dimen/margin_to_border"/>
+                <EditText
+                    android:visibility="gone"
+                    android:id="@+id/url_field"
+                    android:layout_below="@id/viewPager_recipe_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/url_icon"
+                    android:layout_alignTop="@id/url_icon"
+                    android:textSize="@dimen/recipe_title_size"
+                    android:text="url ici"
+                    android:inputType="textNoSuggestions"
+                    android:maxWidth="@dimen/url_width"
+                    android:layout_marginEnd="@dimen/margin_to_border"
+                    android:longClickable="false"
+                    android:focusable="false"
+                    android:background="@android:color/transparent"
+                    tools:ignore="TextFields" />
+                <ImageButton
+                    android:visibility="gone"
+                    android:background="@android:color/transparent"
+                    android:id="@+id/btn_update_url"
+                    android:layout_width="@dimen/viewpager_update_icon_size"
+                    android:layout_height="@dimen/viewpager_update_icon_size"
+                    android:layout_toEndOf="@id/url_field"
+                    android:layout_alignTop="@id/url_field"
+                    android:layout_alignBottom="@id/url_field"
+                    android:src="@drawable/baseline_create_24"
+                    android:scaleType="fitCenter"
+                    android:tint="@color/colorAccent"
+                    android:onClick="onClicked"/>
+
                 <TextView
                     android:id="@+id/ingredient_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/recipe_name"
+                    android:layout_below="@id/url_icon"
                     android:layout_margin="@dimen/margin_to_border"
                     android:text="@string/ingredient_title"
                     android:textSize="@dimen/ingredients_title_size"
