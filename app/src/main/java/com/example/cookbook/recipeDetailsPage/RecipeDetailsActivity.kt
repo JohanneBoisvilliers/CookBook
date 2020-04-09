@@ -95,12 +95,14 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             viewModel?.isUpdateModeOn?.value = !viewModel?.isUpdateModeOn?.value!!
             true
         }
-
-        R.id.action_open_url ->
-        {
+        R.id.action_open_url -> {
             val intent = Intent(this, RecipeOnlineActivity::class.java)
             intent.putExtra("url", viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
             startActivity(intent)
+            true
+        }
+        R.id.action_share -> {
+            viewModel?.sharedRecipe(viewModel?.actualRecipe?.value!!)
             true
         }
 

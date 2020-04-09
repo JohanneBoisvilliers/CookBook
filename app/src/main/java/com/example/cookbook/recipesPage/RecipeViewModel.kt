@@ -1,12 +1,10 @@
 package com.example.cookbook.recipesPage
 
+import android.util.Log
 import androidx.lifecycle.*
 import com.example.cookbook.addRecipePage.plusAssign
 import com.example.cookbook.models.*
-import com.example.cookbook.repositories.IngredientDataRepository
-import com.example.cookbook.repositories.PhotoDataRepository
-import com.example.cookbook.repositories.RecipesDataRepository
-import com.example.cookbook.repositories.StepDataRepository
+import com.example.cookbook.repositories.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -15,8 +13,10 @@ import java.util.concurrent.ConcurrentLinkedQueue
 class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
                       private val mIngredientDataRepository: IngredientDataRepository,
                       private val mStepDataRepository: StepDataRepository,
-                      private val mPhotoDataRepository: PhotoDataRepository) : ViewModel() {
+                      private val mPhotoDataRepository: PhotoDataRepository,
+private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel() {
 
+    val TAG = "RECIPE_VIEW_MODEL"
     val recipes: LiveData<List<Recipe>> = mRecipesDataRepository.recipes
     val isUpdateModeOn = MutableLiveData(false)
     val isUpdateIconPressed = MutableLiveData(false)
@@ -75,6 +75,12 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
             withContext(Dispatchers.IO) {
                 mRecipesDataRepository.updateRecipeUrl(recipeId, recipeUrl)
             }
+        }
+    }
+
+    fun sharedRecipe(recipe:Recipe){
+        mFirestoreRecipeRepository.sharedRecipe(recipe).addOnFailureListener {
+            Log.e(TAG,"Failed to save recipe!")
         }
     }
 

@@ -86,6 +86,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:19.2.0'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation 'com.facebook.android:facebook-android-sdk:[5,6)'
+    implementation 'com.google.firebase:firebase-firestore-ktx:21.4.2'
 
     debugImplementation 'com.facebook.flipper:flipper:0.36.0'
     debugImplementation 'com.facebook.soloader:soloader:0.8.2'

@@ -45,7 +45,7 @@
                     android:layout_alignBottom="@id/viewPager_recipe_details"
                     android:layout_marginEnd="@dimen/icon_margin_to_border"
                     android:src="@drawable/baseline_add_circle_outline_24"
-                    android:tint="@color/colorPrimary"
+                    android:tint="@color/colorAccent"
                     android:onClick="onClicked"
                     android:background="@android:color/transparent"/>
 
@@ -58,7 +58,7 @@
                     android:layout_marginBottom="@dimen/margin_to_border"
                     android:layout_marginEnd="@dimen/margin_to_border"
                     android:src="@drawable/baseline_remove_circle_outline_24"
-                    android:tint="@color/colorPrimary"
+                    android:tint="@color/colorAccent"
                     android:background="@android:color/transparent"
                     android:onClick="onClicked"/>
                 <EditText
