@@ -70,8 +70,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_details)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        this.initToolbar()
         this.initRecipeViewModel()
 
         this.fetchRecipe()
@@ -103,7 +102,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
         R.id.action_share -> {
             showModalBottomSheet(ShareBottomSheet(),ShareBottomSheet.TAG)
-//            viewModel?.sharedRecipe(viewModel?.actualRecipe?.value!!)
             true
         }
 
@@ -113,6 +111,15 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     }
 
     // ---------------- INIT -------------------
+
+    private fun initToolbar(){
+        //set toolbar
+        setSupportActionBar(toolbar)
+        //show the back button on toolbar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //hide app name in toolbar
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
 
     private fun initRecipeViewModel() {
         val viewModelFactory = Injections.provideViewModelFactory(this)

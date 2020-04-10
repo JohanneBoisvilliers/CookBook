@@ -26,6 +26,7 @@ private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel()
     val stepList = MutableLiveData<MutableList<Step>>()
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()
+    val shareDescription = MutableLiveData("")
     val newStepText = MutableLiveData<String>()
     val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
@@ -78,8 +79,8 @@ private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel()
         }
     }
 
-    fun sharedRecipe(recipe:Recipe){
-        mFirestoreRecipeRepository.sharedRecipe(recipe).addOnFailureListener {
+    fun sharedRecipe(recipe:Recipe,description:String){
+        mFirestoreRecipeRepository.sharedRecipe(recipe,description).addOnFailureListener {
             Log.e(TAG,"Failed to save recipe!")
         }
     }

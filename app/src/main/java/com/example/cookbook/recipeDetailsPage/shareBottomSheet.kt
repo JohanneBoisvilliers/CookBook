@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import com.example.cookbook.R
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import kotlinx.android.synthetic.main.fragment_share_bottom_sheet.*
 
 class ShareBottomSheet : BottomSheetDialogFragment() {
 
@@ -35,7 +36,9 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        this.listenerOnShareButton()
+        this.listenerOnCancelShareButton()
+        this.listenerOnDescriptionField()
     }
 
     //------------------ INIT ------------------
@@ -44,6 +47,30 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
     private fun initViewModel() {
         viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
     }
+
+    //------------------ LISTENER ------------------
+
+    //take recipe saved in viewmodel and take input in share_description field then call shared function in viewmodel
+    private fun listenerOnShareButton(){
+        share_button.setOnClickListener {
+            viewModel.sharedRecipe(viewModel.actualRecipe.value!!,viewModel.shareDescription.value!!)
+            dismiss()
+        }
+    }
+    //close bottom sheet if user click on cancel button
+    private fun listenerOnCancelShareButton(){
+        cancel_share_button.setOnClickListener {
+            dismiss()
+        }
+    }
+    // save the description that user put into share_description field in view model
+    private fun listenerOnDescriptionField(){
+        shared_description.onTextChanged {
+            viewModel.shareDescription.value = it
+        }
+    }
+
+    //------------------ EXTENSION ------------------
 
     //extension for using lambda for onTextChanged function
     fun EditText.onTextChanged(onTextChanged: (String) -> Unit) {

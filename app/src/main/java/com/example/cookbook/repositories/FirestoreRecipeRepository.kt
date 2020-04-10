@@ -8,10 +8,10 @@ class FirestoreRecipeRepository {
     var firestoreDB = FirebaseFirestore.getInstance()
 
 
-    fun sharedRecipe(recipe: Recipe): Task<Void> {
+    fun sharedRecipe(recipe: Recipe,description: String): Task<Void> {
         val test = hashMapOf(
                 "recipe" to recipe,
-                "description" to "un petit test de description"
+                "description" to description
         )
         var documentReference =
                 firestoreDB
