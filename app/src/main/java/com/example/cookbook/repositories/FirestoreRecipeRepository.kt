@@ -9,10 +9,14 @@ class FirestoreRecipeRepository {
 
 
     fun sharedRecipe(recipe: Recipe): Task<Void> {
+        val test = hashMapOf(
+                "recipe" to recipe,
+                "description" to "un petit test de description"
+        )
         var documentReference =
                 firestoreDB
                         .collection("sharedRecipes")
                         .document(recipe.baseDataRecipe?.name!!)
-        return documentReference.set(recipe)
+        return documentReference.set(test)
     }
 }

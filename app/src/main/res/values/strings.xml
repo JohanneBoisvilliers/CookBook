@@ -41,7 +41,6 @@
     <string name="title_login_page">Welcome, please Login</string>
     <!--PROFILE FRAGMENT-->
     <string name="register_date">Registered since: %s</string>
-
     <string name="facebook_app_id">190699912159028</string>
     <string name="fb_login_protocol_scheme">fb190699912159028</string>
     <!--RECIPES DETAILS ACTIVITY-->
@@ -61,6 +60,7 @@
     <string name="step_bottom_sheet_qt_error">Insert a description for this step</string>
     <string name="ingredient_bottom_sheet_qt_error">Insert a quantity</string>
     <string name="ingredient_bottom_sheet_name_error">Insert a name</string>
+    <string name="share_bottom_sheet_title">Add a description to present your recipe :</string>
 
     <string-array name="titles_main_recycler_view">
         <item>Latest recipes</item>

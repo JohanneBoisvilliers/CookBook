@@ -44,6 +44,7 @@
     <dimen name="recipe_text_size">14sp</dimen>
     <dimen name="recipe_title_size">18sp</dimen>
     <dimen name="ingredient_word_padding">5dp</dimen>
+    <dimen name="margin_share_bottom_sheet">30dp</dimen>
     <!-- LANDING PAGE -->
     <dimen name="separator_width">80dp</dimen>
     <dimen name="textfield_width">300dp</dimen>

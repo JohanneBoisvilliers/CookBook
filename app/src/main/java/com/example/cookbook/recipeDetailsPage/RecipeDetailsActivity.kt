@@ -102,7 +102,8 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             true
         }
         R.id.action_share -> {
-            viewModel?.sharedRecipe(viewModel?.actualRecipe?.value!!)
+            showModalBottomSheet(ShareBottomSheet(),ShareBottomSheet.TAG)
+//            viewModel?.sharedRecipe(viewModel?.actualRecipe?.value!!)
             true
         }
 
