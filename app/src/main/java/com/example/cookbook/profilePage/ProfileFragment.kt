@@ -30,13 +30,11 @@ class ProfileFragment : Fragment() {
 
     private var fbAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private var currentUser: FirebaseUser? = null
-    private var name: String? = null
     private var _binding: FragmentProfileBinding? = null
     private val binding get() = _binding!!
     private lateinit var profileViewModel: ProfileViewModel
     private var photoUrl: String? = null
     private lateinit var actualContext: Context
-    private lateinit var mGoogleSignInClient:GoogleSignInClient
 
     override fun onAttach(context: Context) {
         super.onAttach(context)

@@ -28,7 +28,7 @@
         android:textSize="@dimen/text_bottom_gradient_size"
         android:layout_margin="@dimen/margin_text_bottom"
         android:textColor="@color/colorPrimary"
-        android:fontFamily="@font/segoepr"
+        android:fontFamily="@font/playfair_display_italic"
         android:ellipsize="end" />
 
 </androidx.cardview.widget.CardView>

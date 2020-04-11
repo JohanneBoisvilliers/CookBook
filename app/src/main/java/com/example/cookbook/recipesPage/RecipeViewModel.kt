@@ -1,13 +1,16 @@
 package com.example.cookbook.recipesPage
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.cookbook.addRecipePage.plusAssign
 import com.example.cookbook.models.*
 import com.example.cookbook.repositories.*
+import com.facebook.internal.Mutable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
@@ -31,6 +34,7 @@ private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel()
     val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
     val photoSelected = MutableLiveData(0)
+    val uriList:MutableList<String> = mutableListOf()
     val isNotOnline:Boolean
         get() {return actualRecipe.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()}
 
@@ -79,9 +83,13 @@ private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel()
         }
     }
 
-    fun sharedRecipe(recipe:Recipe,description:String){
-        mFirestoreRecipeRepository.sharedRecipe(recipe,description).addOnFailureListener {
-            Log.e(TAG,"Failed to save recipe!")
+    fun sharedRecipe(recipe:Recipe,description:String,photoUrls:List<String>){
+        mFirestoreRecipeRepository.sharedRecipe(recipe,description,photoUrls)
+                .addOnSuccessListener {
+                    println("Shared recipe success")
+                }
+                .addOnFailureListener {
+                    println("Error in : recipeViewModel => shareRecipe()")
         }
     }
 
@@ -168,6 +176,25 @@ private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel()
             }
             photoList.value!!.removeAt(photoSelected.value!!)
             photoList.postValue(photoList.value)
+        }
+    }
+
+    fun uploadPhoto(recipe:Recipe,files: MutableList<File>){
+        viewModelScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.IO){
+                files.forEach{
+                    launch {
+                        uriList.add(mFirestoreRecipeRepository.uploadPhoto(recipe,it).toString())
+                    }
+                }
+            }
+            withContext(Dispatchers.IO){
+                sharedRecipe(
+                        recipe = recipe,
+                        description = shareDescription.value!!,
+                        photoUrls = uriList
+                )
+            }
         }
     }
 

@@ -1,6 +1,12 @@
 package com.example.cookbook.recipeDetailsPage
 
+import android.R.attr
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -9,10 +15,20 @@ import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProviders
+import androidx.lifecycle.lifecycleScope
 import com.example.cookbook.R
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.quality
+import id.zelory.compressor.constraint.size
 import kotlinx.android.synthetic.main.fragment_share_bottom_sheet.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.File
+
 
 class ShareBottomSheet : BottomSheetDialogFragment() {
 
@@ -48,23 +64,50 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
         viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
     }
 
+    fun byteSizeOf(bitmap: Bitmap): Int {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            bitmap.allocationByteCount
+        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR1) {
+            bitmap.byteCount
+        } else {
+            bitmap.rowBytes * bitmap.height
+        }
+    }
+
     //------------------ LISTENER ------------------
 
     //take recipe saved in viewmodel and take input in share_description field then call shared function in viewmodel
-    private fun listenerOnShareButton(){
+    private fun listenerOnShareButton() {
+        val compressedList:MutableList<File> = mutableListOf()
         share_button.setOnClickListener {
-            viewModel.sharedRecipe(viewModel.actualRecipe.value!!,viewModel.shareDescription.value!!)
-            dismiss()
+            val actualRecipe = viewModel.actualRecipe.value
+
+            lifecycleScope.launch {
+                withContext(Dispatchers.Default) {
+                    actualRecipe?.photoList?.forEach {
+                        launch {
+                            val compressedFile = Compressor.compress(activity!!, File(it.photoUrl)) {
+                                size(50_000)
+                            }
+                            compressedList.add(compressedFile)
+                        }
+                    }
+                }
+                viewModel.uploadPhoto(actualRecipe!!,compressedList)
+            }
+//            dismiss()
         }
     }
+
     //close bottom sheet if user click on cancel button
-    private fun listenerOnCancelShareButton(){
+    private fun listenerOnCancelShareButton() {
         cancel_share_button.setOnClickListener {
             dismiss()
         }
     }
+
     // save the description that user put into share_description field in view model
-    private fun listenerOnDescriptionField(){
+    private fun listenerOnDescriptionField() {
         shared_description.onTextChanged {
             viewModel.shareDescription.value = it
         }
