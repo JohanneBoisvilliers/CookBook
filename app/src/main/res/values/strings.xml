@@ -43,6 +43,10 @@
     <string name="register_date">Registered since: %s</string>
     <string name="facebook_app_id">190699912159028</string>
     <string name="fb_login_protocol_scheme">fb190699912159028</string>
+    <!--SOCIAL FRAGMENT-->
+    <string name="social_fragment_title">Social</string>
+    <string name="posted_by">Posted by %s</string>
+    <string name="timestamp">%d minute(s) ago</string>
     <!--RECIPES DETAILS ACTIVITY-->
     <string name="ingredient_title">INGREDIENTS</string>
     <string name="recipe_step_title">RECIPE</string>

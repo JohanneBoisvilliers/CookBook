@@ -19,7 +19,6 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
                       private val mPhotoDataRepository: PhotoDataRepository,
 private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel() {
 
-    val TAG = "RECIPE_VIEW_MODEL"
     val recipes: LiveData<List<Recipe>> = mRecipesDataRepository.recipes
     val isUpdateModeOn = MutableLiveData(false)
     val isUpdateIconPressed = MutableLiveData(false)
@@ -34,12 +33,19 @@ private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel()
     val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
     val photoSelected = MutableLiveData(0)
-    val uriList:MutableList<String> = mutableListOf()
+    private val uriList:MutableList<String> = mutableListOf()
     val isNotOnline:Boolean
         get() {return actualRecipe.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()}
+    val sharedRecipesList = MutableLiveData<MutableList<Map<String,Any>>>()
+
 
     //----------------- RECIPES -----------------
 
+    fun getSharedRecipes(){
+        viewModelScope.launch (Dispatchers.IO){
+            sharedRecipesList.postValue(mFirestoreRecipeRepository.getSharedRecipe())
+        }
+    }
     // fetch a recipe depending on an id (when user click on a recipe in recipe list)
     private suspend fun getSpecificRecipe(recipeId: Long): Recipe {
         return mRecipesDataRepository.getSpecificRecipe(recipeId)

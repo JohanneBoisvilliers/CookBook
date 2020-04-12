@@ -28,6 +28,9 @@
     <dimen name="margin_title">-10dp</dimen>
     <dimen name="title_size">30sp</dimen>
     <dimen name="base_height_card">250dp</dimen>
+    <!--SOCIAL FRAGMENT-->
+    <dimen name="category_text_size">14sp</dimen>
+    <dimen name="photo_profile_size">55dp</dimen>
     <!--USER PROFILE-->
     <dimen name="bottom_container">200dp</dimen>
     <dimen name="username_size">20sp</dimen>
