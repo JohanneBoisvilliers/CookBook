@@ -57,18 +57,19 @@ class SocialFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = mListAdapter
         }
-//        shared_recipes_recyclerview.addOnItemTouchListener(RecyclerItemClickListenr(requireContext(), shared_recipes_recyclerview, object : RecyclerItemClickListenr.OnItemClickListener {
-//
-//            override fun onItemClick(view: View, position: Int) {
-//                val intent = Intent(context, RecipeDetailsActivity::class.java)
-//                intent.putExtra("recipe",mRecipesList[position].baseDataRecipe?.baseRecipeId)
-//
-//                startActivity(intent)
-//            }
-//            override fun onItemLongClick(view: View?, position: Int) {
-//                print(position)
-//            }
-//        }))
+        shared_recipes_recyclerview.addOnItemTouchListener(RecyclerItemClickListenr(requireContext(), shared_recipes_recyclerview, object : RecyclerItemClickListenr.OnItemClickListener {
+
+            override fun onItemClick(view: View, position: Int) {
+                val intent = Intent(context, RecipeDetailsActivity::class.java)
+                val map =  HashMap<String,Any>(sharedRecipeAsMap[position])
+                intent.putExtra("sharedRecipe",map)
+
+                startActivity(intent)
+            }
+            override fun onItemLongClick(view: View?, position: Int) {
+                print(position)
+            }
+        }))
     }
 
     //------------------- ASYNC -------------------

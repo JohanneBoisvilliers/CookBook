@@ -64,6 +64,10 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         invalidateOptionsMenu()
         menu.findItem(R.id.action_open_url).isEnabled = !viewModel?.isNotOnline!!
         menu.findItem(R.id.action_open_url).isVisible = !viewModel?.isNotOnline!!
+        menu.findItem(R.id.action_modify).isEnabled = !viewModel?.isReadOnly?.value!!
+        menu.findItem(R.id.action_modify).isVisible = !viewModel?.isReadOnly?.value!!
+        menu.findItem(R.id.action_share).isEnabled = !viewModel?.isReadOnly?.value!!
+        menu.findItem(R.id.action_share).isVisible = !viewModel?.isReadOnly?.value!!
         return true
     }
 
@@ -101,7 +105,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             true
         }
         R.id.action_share -> {
-            showModalBottomSheet(ShareBottomSheet(),ShareBottomSheet.TAG)
+            showModalBottomSheet(ShareBottomSheet(), ShareBottomSheet.TAG)
             true
         }
 
@@ -112,7 +116,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 
     // ---------------- INIT -------------------
 
-    private fun initToolbar(){
+    private fun initToolbar() {
         //set toolbar
         setSupportActionBar(toolbar)
         //show the back button on toolbar
@@ -171,7 +175,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private fun initUrlField(isUpdateModeOn: Boolean) {
         url_icon.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
         url_field.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
-        if (url_field.visibility == View.VISIBLE){
+        if (url_field.visibility == View.VISIBLE) {
             url_field.setText(viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
         }
         btn_update_url.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
@@ -280,7 +284,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
     }
 
-    private fun listenerOnUrlField(){
+    private fun listenerOnUrlField() {
         url_field.onTextChanged {
             val recipe = viewModel?.actualRecipe?.value?.baseDataRecipe
             val recipeCopy = recipe?.copy(recipeUrl = it)
@@ -292,11 +296,26 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 
     private fun fetchRecipe() {
         recipeId = intent.getLongExtra("recipe", 0)
-        viewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
-            viewModel?.actualRecipe?.value = recipeFetch
-            recipe_name.setText(recipeFetch.baseDataRecipe?.name)
+        if (recipeId != 0L) {
+            viewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
+                viewModel?.actualRecipe?.value = recipeFetch
+                recipe_name.setText(recipeFetch.baseDataRecipe?.name)
+            })
+        } else {
+            val sharedRecipe = intent.getSerializableExtra("sharedRecipe") as HashMap<String, Any>
+            val recipeAsMap =  sharedRecipe["recipe"] as HashMap<String, Any>
+            val baseDataRecipeAsMap = recipeAsMap["baseDataRecipe"] as HashMap<String, Any>
+            val recipe = Recipe(
+                    baseDataRecipe = baseDataRecipeFromMap(baseDataRecipeAsMap),
+                    ingredientList = mutableListOf(),
+                    photoList = mutableListOf(),
+                    stepList = mutableListOf()
+            )
+            viewModel?.actualRecipe?.value = recipe
+            viewModel?.isReadOnly?.value = true
+            recipe_name.setText(recipe.baseDataRecipe?.name)
         }
-        )
+
     }
 
     // ---------------- UTILS -------------------
@@ -363,6 +382,18 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             winParams.flags = winParams.flags and bits.inv()
         }
         win.attributes = winParams
+    }
+
+    private fun baseDataRecipeFromMap(baseDataRecipeAsMap: Map<String, Any>): BaseDataRecipe {
+        return BaseDataRecipe(
+                category = baseDataRecipeAsMap["category"].toString(),
+                recipeUrl = baseDataRecipeAsMap["recipeUrl"].toString(),
+                name = baseDataRecipeAsMap["name"].toString(),
+                numberOfLike = baseDataRecipeAsMap["numberOfLike"].toString().toInt(),
+                isAlreadyDone = baseDataRecipeAsMap["isAlreadyDone"].toString().toBoolean(),
+                baseRecipeId = baseDataRecipeAsMap["baseRecipeId"].toString().toLong(),
+                addDate = baseDataRecipeAsMap["addDate"].toString()
+        )
     }
 
     // ---------------- EXTENSIONS -------------------

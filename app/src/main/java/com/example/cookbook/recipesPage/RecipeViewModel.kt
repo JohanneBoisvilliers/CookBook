@@ -36,6 +36,7 @@ private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel()
     private val uriList:MutableList<String> = mutableListOf()
     val isNotOnline:Boolean
         get() {return actualRecipe.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()}
+    val isReadOnly = MutableLiveData(false)
     val sharedRecipesList = MutableLiveData<MutableList<Map<String,Any>>>()
 
 
