@@ -75,7 +75,7 @@ class SocialFragment : Fragment() {
 
     //------------------- ASYNC -------------------
 
-    fun fetchSharedRecipeMap(){
+    private fun fetchSharedRecipeMap(){
         viewmodel.sharedRecipesList.observe(viewLifecycleOwner, Observer {
             list -> updateItemsList(list) }
         )

@@ -27,6 +27,12 @@ class IngredientsListViewHolder<T>(itemView:View):RecyclerView.ViewHolder(itemVi
             itemView.update_icon.setOnClickListener {
                 callbackWeakRef!!.get()?.onClickUpdateIngredientButton(ingredient)
             }
+        }else {
+            itemView.ingredient_name.text = ingredient as String
+            itemView.ingredient_quantity.visibility = if(isEditModeOn) View.VISIBLE else View.GONE
+            itemView.ingredient_unit.visibility = if(isEditModeOn) View.VISIBLE else View.GONE
+            itemView.update_icon.visibility = if(isEditModeOn) View.VISIBLE else View.GONE
+            itemView.remove_icon.visibility = if(isEditModeOn) View.VISIBLE else View.GONE
         }
 
  }

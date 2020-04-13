@@ -40,6 +40,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private var recipe: Recipe? = Recipe()
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
     private var ingredientAdapter = IngredientsListAdapter<Ingredient>(mutableListOf(), false, this)
+    private var ingredientStringAdapter = IngredientsListAdapter<String>(mutableListOf(), false, this)
     private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false, this)
     private lateinit var menu: Menu
 
@@ -79,7 +80,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 
         this.fetchRecipe()
         this.initViewPager()
-        this.initIngredientRecyclerview()
         this.initStepRecyclerview()
         this.observerOnEditMode()
         this.observerOnIngredientList()
@@ -144,10 +144,10 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         TabLayoutMediator(rd_tab_layout, viewPager_recipe_details) { _, _ -> Unit }.attach()
     }
 
-    private fun initIngredientRecyclerview() {
+    private fun <T>initIngredientRecyclerview(customAdapter:IngredientsListAdapter<T>) {
         ingredient_recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = ingredientAdapter
+            adapter = customAdapter
         }
     }
 
@@ -209,6 +209,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             }
         })
     }
+
 
     private fun observerOnStepList() {
         viewModel?.stepList?.observe(this, Observer { list ->
@@ -301,7 +302,10 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                 viewModel?.actualRecipe?.value = recipeFetch
                 recipe_name.setText(recipeFetch.baseDataRecipe?.name)
             })
+            this.initIngredientRecyclerview(ingredientAdapter)
+
         } else {
+
             val sharedRecipe = intent.getSerializableExtra("sharedRecipe") as HashMap<String, Any>
             val recipeAsMap =  sharedRecipe["recipe"] as HashMap<String, Any>
             val baseDataRecipeAsMap = recipeAsMap["baseDataRecipe"] as HashMap<String, Any>
@@ -313,6 +317,9 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             )
             viewModel?.actualRecipe?.value = recipe
             viewModel?.isReadOnly?.value = true
+            this.initIngredientRecyclerview(ingredientStringAdapter)
+
+            updateIngredientList(sharedRecipe["ingredient_list"] as MutableList<String>,false)
             recipe_name.setText(recipe.baseDataRecipe?.name)
         }
 
@@ -345,8 +352,12 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     }
 
     // update only the ingredient list
-    private fun updateIngredientList(ingredientList: MutableList<Ingredient>, isEditMode: Boolean) {
-        this.ingredientAdapter?.updateIngredientList(ingredientList, isEditMode)
+    private fun <T>updateIngredientList(ingredientList: MutableList<T>, isEditMode: Boolean) {
+        if(viewModel?.isReadOnly?.value!!){
+            this.ingredientStringAdapter.updateIngredientList(ingredientList as List<String>, isEditMode)
+        }else{
+            this.ingredientAdapter.updateIngredientList(ingredientList as List<Ingredient>, isEditMode)
+        }
     }
 
     //update only the step list
@@ -396,10 +407,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         )
     }
 
-//    private fun ingredientListFromMap(recipeAsMap: Map<String,Any>):List<Ingredient>{
-//        val ingredientListAsMap = recipeAsMap["ingredientList"] as List<Map<String,Any>>
-//
-//    }
 
     // ---------------- EXTENSIONS -------------------
 
