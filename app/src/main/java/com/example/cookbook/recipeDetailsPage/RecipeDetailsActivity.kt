@@ -194,7 +194,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             btn_add_step.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             initRecipeNameField(isUpdateModeOn)
             initUrlField(isUpdateModeOn)
-            if (viewModel?.actualRecipe?.value != null) {
+            if (viewModel?.actualRecipe?.value != null && viewModel?.isReadOnly?.value==false) {
                 updateUi(viewModel?.actualRecipe?.value!!, isUpdateModeOn)
             }
         })
@@ -295,19 +295,29 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     // ---------------- ASYNC -------------------
 
     private fun fetchRecipe() {
+        // get the recipe id send when user click on a recipe card in recipe list
         recipeId = intent.getLongExtra("recipe", 0)
+        // if recipe list == 0, we are in read only mode(in social tab when user click on a recipe)
         if (recipeId != 0L) {
+            // call request with recipeId to get the recipe
             viewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
                 viewModel?.actualRecipe?.value = recipeFetch
+                // set the recipe title
                 recipe_name.setText(recipeFetch.baseDataRecipe?.name)
             })
+            // init listview with adapter containing objects (photos, Ingredient, step)
             this.initViewPager(viewPagerAdapter)
             this.initIngredientRecyclerview(ingredientAdapter)
             this.initStepRecyclerview(stepAdapter)
         } else {
+            // get the map of entire shard recipe saved on firebase(recipe + infos) and sent by user's click on
+            // recipe card in social tab
             val sharedRecipe = intent.getSerializableExtra("sharedRecipe") as HashMap<String, Any>
+            // get the map of recipe(baseDatarecipe + photolist + ingredientList...)
             val recipeAsMap =  sharedRecipe["recipe"] as HashMap<String, Any>
+            // get the map of recipe details(baseDataRecipe)
             val baseDataRecipeAsMap = recipeAsMap["baseDataRecipe"] as HashMap<String, Any>
+            // build a new recipe object with maps information
             val recipe = Recipe(
                     baseDataRecipe = baseDataRecipeFromMap(baseDataRecipeAsMap),
                     ingredientList = mutableListOf(),
@@ -315,11 +325,15 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                     stepList = mutableListOf()
             )
             viewModel?.actualRecipe?.value = recipe
+            // when user come from social tab, the recipe detail page is in read only mode: user can't update anything
             viewModel?.isReadOnly?.value = true
+            // init lists view with adapters containing list of string : when a user share a recipe, in his database, ingredients
+            // can have a different Ids than in an another user's database. So to avoid misleading content, we send all recipes fields as
+            // string. And we have to get them as list<Sting> to show them in read only mode
             this.initIngredientRecyclerview(ingredientStringAdapter)
             this.initStepRecyclerview(stepStringAdapter)
-
             this.initViewPager(viewPagerStringAdapter)
+            // trigger adapter notifydatasetchanged function
             this.updateIngredientList(sharedRecipe["ingredient_list"] as MutableList<String>,false)
             this.updateStepList(sharedRecipe["step_list"] as MutableList<String>,false)
             this.updatePhotoList(sharedRecipe["photosUrl"] as MutableList<String>)
