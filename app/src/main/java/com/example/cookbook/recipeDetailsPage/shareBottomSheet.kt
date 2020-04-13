@@ -95,7 +95,6 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
                 }
                 viewModel.uploadPhoto(actualRecipe!!,compressedList)
             }
-
         }
     }
 

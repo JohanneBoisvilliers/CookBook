@@ -3,6 +3,7 @@ package com.example.cookbook.repositories
 import android.net.Uri
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.Recipe
+import com.example.cookbook.models.Step
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -39,7 +40,8 @@ class FirestoreRecipeRepository {
                 "shared_date" to getCurrentDateTime().dateToString("dd/MM/yyyy"),
                 "description" to description,
                 "photosUrl" to photoUrls,
-                "ingredient_list" to convertIngredientIntoString(ingredientList.toMutableList())
+                "ingredient_list" to convertIngredientIntoString(ingredientList.toMutableList()),
+                "step_list" to convertStepIntoString(recipe.stepList)
         )
         var documentReference =
                 firestoreDB
@@ -80,6 +82,16 @@ class FirestoreRecipeRepository {
             )
         }
         return convertedIngredientList
+    }
+
+    private fun convertStepIntoString(stepList:MutableList<Step>) : List<String>{
+        val convertedSteplist = mutableListOf<String>()
+        for (step in stepList) {
+            convertedSteplist.add(
+                    step.description
+            )
+        }
+        return convertedSteplist
     }
 
     //-------------------- EXTENSIONS ------------------------

@@ -18,8 +18,7 @@
                     android:scaleType="centerCrop"
                     android:id="@+id/empty_photo"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/viewpager_height"
-                    android:src="@drawable/no_photo_low"/>
+                    android:layout_height="@dimen/viewpager_height"/>
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager_recipe_details"

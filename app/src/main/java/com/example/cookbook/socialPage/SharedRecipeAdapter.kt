@@ -12,7 +12,6 @@ import java.util.*
 
 class SharedRecipeAdapter constructor(list : MutableList<Map<String,Any>>) : RecyclerView.Adapter<SharedRecipeViewHolder>() {
     private var mContext: Context? = null
-    private var mRandom: Random? = null
     private var mRecipeList:MutableList<Map<String,Any>> = list
 
 
@@ -25,7 +24,6 @@ class SharedRecipeAdapter constructor(list : MutableList<Map<String,Any>>) : Rec
     }
 
     override fun onBindViewHolder(holder: SharedRecipeViewHolder, position: Int) {
-        mRandom = Random()
         holder.updateRecipeCardUi(mRecipeList[position])
     }
 

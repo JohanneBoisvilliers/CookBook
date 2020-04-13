@@ -38,10 +38,12 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private var viewModel: RecipeViewModel? = null
     private var recipeId: Long? = 0
     private var recipe: Recipe? = Recipe()
-    private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
+    private var viewPagerAdapter= PhotoViewPagerAdapter<Photo>(mutableListOf())
+    private var viewPagerStringAdapter= PhotoViewPagerAdapter<String>(mutableListOf())
     private var ingredientAdapter = IngredientsListAdapter<Ingredient>(mutableListOf(), false, this)
     private var ingredientStringAdapter = IngredientsListAdapter<String>(mutableListOf(), false, this)
-    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false, this)
+    private var stepAdapter = StepListAdapter<Step>(mutableListOf(), false, this)
+    private var stepStringAdapter = StepListAdapter<String>(mutableListOf(), false, this)
     private lateinit var menu: Menu
 
     override fun onResume() {
@@ -79,8 +81,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         this.initRecipeViewModel()
 
         this.fetchRecipe()
-        this.initViewPager()
-        this.initStepRecyclerview()
         this.observerOnEditMode()
         this.observerOnIngredientList()
         this.observerOnStepList()
@@ -131,9 +131,9 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     }
 
     // settings of viewpager
-    private fun initViewPager() {
+    private fun <T>initViewPager(customAdapter: PhotoViewPagerAdapter<T>) {
         viewPager_recipe_details.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        viewPager_recipe_details.adapter = viewPagerAdapter
+        viewPager_recipe_details.adapter = customAdapter
         viewPager_recipe_details.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -151,10 +151,10 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
     }
 
-    private fun initStepRecyclerview() {
+    private fun <T>initStepRecyclerview(customAdapter: StepListAdapter<T>) {
         recipe_step_recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = stepAdapter
+            adapter = customAdapter
         }
     }
 
@@ -209,7 +209,6 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             }
         })
     }
-
 
     private fun observerOnStepList() {
         viewModel?.stepList?.observe(this, Observer { list ->
@@ -302,10 +301,10 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                 viewModel?.actualRecipe?.value = recipeFetch
                 recipe_name.setText(recipeFetch.baseDataRecipe?.name)
             })
+            this.initViewPager(viewPagerAdapter)
             this.initIngredientRecyclerview(ingredientAdapter)
-
+            this.initStepRecyclerview(stepAdapter)
         } else {
-
             val sharedRecipe = intent.getSerializableExtra("sharedRecipe") as HashMap<String, Any>
             val recipeAsMap =  sharedRecipe["recipe"] as HashMap<String, Any>
             val baseDataRecipeAsMap = recipeAsMap["baseDataRecipe"] as HashMap<String, Any>
@@ -318,8 +317,12 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             viewModel?.actualRecipe?.value = recipe
             viewModel?.isReadOnly?.value = true
             this.initIngredientRecyclerview(ingredientStringAdapter)
+            this.initStepRecyclerview(stepStringAdapter)
 
-            updateIngredientList(sharedRecipe["ingredient_list"] as MutableList<String>,false)
+            this.initViewPager(viewPagerStringAdapter)
+            this.updateIngredientList(sharedRecipe["ingredient_list"] as MutableList<String>,false)
+            this.updateStepList(sharedRecipe["step_list"] as MutableList<String>,false)
+            this.updatePhotoList(sharedRecipe["photosUrl"] as MutableList<String>)
             recipe_name.setText(recipe.baseDataRecipe?.name)
         }
 
@@ -361,18 +364,27 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     }
 
     //update only the step list
-    private fun updateStepList(stepList: MutableList<Step>, isEditMode: Boolean) {
-        this.stepAdapter?.updateStepList(stepList, isEditMode)
+    private fun <T>updateStepList(stepList: MutableList<T>, isEditMode: Boolean) {
+        if(viewModel?.isReadOnly?.value!!){
+            this.stepStringAdapter?.updateStepList(stepList as List<String>, isEditMode)
+        }else{
+            this.stepAdapter?.updateStepList(stepList as List<Step>, isEditMode)
+        }
     }
 
     // update only the photo list
-    private fun updatePhotoList(photoList: MutableList<Photo>) {
+    private fun <T>updatePhotoList(photoList: MutableList<T>) {
         viewPagerVisibility(photoList)
-        this.viewPagerAdapter?.updatePhotoList(photoList)
+        if (viewModel?.isReadOnly?.value!!) {
+            this.viewPagerStringAdapter.updatePhotoList(photoList as MutableList<String>)
+        }else {
+            this.viewPagerAdapter.updatePhotoList(photoList as MutableList<Photo>)
+        }
+
     }
 
     // set visibility of viewpager depending to recipe photo list size
-    private fun viewPagerVisibility(photoList: MutableList<Photo>) {
+    private fun <T>viewPagerVisibility(photoList: MutableList<T>) {
         val isListEmpty = photoList.size == 0
         viewPager_recipe_details.visibility = if (isListEmpty) View.INVISIBLE else View.VISIBLE
         empty_photo.visibility = if (isListEmpty) View.VISIBLE else View.INVISIBLE
