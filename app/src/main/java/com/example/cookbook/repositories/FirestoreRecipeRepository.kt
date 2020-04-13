@@ -1,6 +1,7 @@
 package com.example.cookbook.repositories
 
 import android.net.Uri
+import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.Recipe
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -29,15 +30,16 @@ class FirestoreRecipeRepository {
         return list.documents.map { x -> x.data!! }.toMutableList()
     }
 
-    fun sharedRecipe(recipe: Recipe, description: String, photoUrls: List<String>): Task<Void> {
+    fun sharedRecipe(recipe: Recipe, description: String, photoUrls: List<String>,ingredientList: List<Ingredient>): Task<Void> {
         val sharedRecipeInformation = hashMapOf(
                 "user_Id" to firebaseUser?.uid,
                 "username" to firebaseUser?.displayName,
-                "user_profile_photo" to firebaseUser?.photoUrl,
+                "user_profile_photo" to firebaseUser?.photoUrl.toString(),
                 "recipe" to recipe,
                 "shared_date" to getCurrentDateTime().dateToString("dd/MM/yyyy"),
                 "description" to description,
-                "photosUrl" to photoUrls
+                "photosUrl" to photoUrls,
+                "ingredient_list" to convertIngredientIntoString(ingredientList.toMutableList())
         )
         var documentReference =
                 firestoreDB
@@ -66,6 +68,18 @@ class FirestoreRecipeRepository {
 
     private fun getCurrentDateTime(): Date {
         return Calendar.getInstance().time
+    }
+
+    private fun convertIngredientIntoString(ingredientList:MutableList<Ingredient>) : List<String>{
+        val convertedIngredientList = mutableListOf<String>()
+        for (ingredient in ingredientList) {
+            convertedIngredientList.add(
+                    "${ingredient.ingredientData.quantity} " +
+                            ingredient.ingredientData.unit + " " +
+                            ingredient.ingredientDatabase.name
+            )
+        }
+        return convertedIngredientList
     }
 
     //-------------------- EXTENSIONS ------------------------

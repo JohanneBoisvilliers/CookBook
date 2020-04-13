@@ -43,6 +43,7 @@ class SocialFragment : Fragment() {
         this.initViewModel()
         this.fetchSharedRecipeMap()
         this.initRecyclerView()
+        viewmodel.observerOnSharedRecipe()
     }
 
 

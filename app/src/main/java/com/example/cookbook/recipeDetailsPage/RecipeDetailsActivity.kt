@@ -39,7 +39,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private var recipeId: Long? = 0
     private var recipe: Recipe? = Recipe()
     private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
-    private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false, this)
+    private var ingredientAdapter = IngredientsListAdapter<Ingredient>(mutableListOf(), false, this)
     private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false, this)
     private lateinit var menu: Menu
 
@@ -395,6 +395,11 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                 addDate = baseDataRecipeAsMap["addDate"].toString()
         )
     }
+
+//    private fun ingredientListFromMap(recipeAsMap: Map<String,Any>):List<Ingredient>{
+//        val ingredientListAsMap = recipeAsMap["ingredientList"] as List<Map<String,Any>>
+//
+//    }
 
     // ---------------- EXTENSIONS -------------------
 
