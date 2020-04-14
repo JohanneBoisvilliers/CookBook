@@ -22,12 +22,13 @@
     <dimen name="card_margin">2dp</dimen>
     <dimen name="bottom_gradient_container_height">45dp</dimen>
     <dimen name="text_bottom_gradient_size">14sp</dimen>
-    <dimen name="margin_text_bottom">10sp</dimen>
+    <dimen name="text_bottom_overline">10sp</dimen>
+    <dimen name="margin_text_bottom">10dp</dimen>
     <!--ALL RECIPES FRAGMENT-->
     <dimen name="padding_bottom_recyclerview">100dp</dimen>
     <dimen name="margin_title">-10dp</dimen>
     <dimen name="title_size">30sp</dimen>
-    <dimen name="base_height_card">250dp</dimen>
+    <dimen name="base_height_card">350dp</dimen>
     <!--SOCIAL FRAGMENT-->
     <dimen name="category_text_size">14sp</dimen>
     <dimen name="photo_profile_size">55dp</dimen>

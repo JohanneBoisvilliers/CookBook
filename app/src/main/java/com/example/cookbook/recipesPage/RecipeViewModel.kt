@@ -25,7 +25,6 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val isUpdateIconPressed = MutableLiveData(false)
     val actualRecipe = MutableLiveData<Recipe>()
     val ingredientList = MutableLiveData<MutableList<Ingredient>>()
-    val ingredientStringList = MutableLiveData<MutableList<String>>()
     val photoList = MutableLiveData<MutableList<Photo>>()
     val stepList = MutableLiveData<MutableList<Step>>()
     val quantity = MutableLiveData<Int>()
@@ -41,6 +40,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
             return actualRecipe.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()
         }
     val isReadOnly = MutableLiveData(false)
+    val isUploaded = MutableLiveData<Boolean>()
     val sharedRecipesList = MutableLiveData<MutableList<Map<String, Any>>>()
 
 
@@ -220,6 +220,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
                         photoUrls = uriList
                 )
             }
+            isUploaded.postValue(true)
         }
     }
 

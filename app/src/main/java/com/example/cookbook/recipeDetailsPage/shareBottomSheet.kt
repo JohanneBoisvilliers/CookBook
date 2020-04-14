@@ -14,6 +14,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.example.cookbook.R
@@ -55,6 +56,7 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
         this.listenerOnShareButton()
         this.listenerOnCancelShareButton()
         this.listenerOnDescriptionField()
+        this.observerOnIsUploaded()
     }
 
     //------------------ INIT ------------------
@@ -110,6 +112,15 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
         shared_description.onTextChanged {
             viewModel.shareDescription.value = it
         }
+    }
+
+    //------------------ LISTENER ------------------
+
+    private fun observerOnIsUploaded(){
+        viewModel.isUploaded.observe(viewLifecycleOwner, Observer {
+            viewModel.isUploaded.postValue(false)
+            if(it) dismiss()
+        })
     }
 
     //------------------ EXTENSION ------------------

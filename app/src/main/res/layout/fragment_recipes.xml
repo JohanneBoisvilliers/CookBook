@@ -8,21 +8,28 @@
     tools:context=".recipesPage.RecipesFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.cardview.widget.CardView
         android:id="@+id/all_recipes_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/all_recipes_title"
-        android:fontFamily="@font/playfair_display_bold"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title_size"
-        android:background="@color/colorPrimary"
-        android:paddingTop="@dimen/margin_to_border"
-        android:paddingStart="@dimen/margin_to_border"
-        android:paddingBottom="@dimen/margin_to_border"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/all_recipes_recyclerview"/>
+        app:layout_constraintBottom_toTopOf="@+id/all_recipes_recyclerview"
+        app:cardElevation="3dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/all_recipes_title"
+            android:fontFamily="@font/playfair_display_bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title_size"
+            android:background="@color/colorPrimary"
+            android:paddingTop="@dimen/margin_to_border"
+            android:paddingStart="@dimen/margin_to_border"
+            android:paddingBottom="@dimen/margin_to_border" />
+    </androidx.cardview.widget.CardView>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/all_recipes_recyclerview"
@@ -30,10 +37,9 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/all_recipes_title"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="12dp"
-        android:layout_marginEnd="12dp"
         android:clipToPadding="false"
         android:layout_marginBottom="@dimen/bottom_bar_height"
+        android:paddingTop="@dimen/half_margin_to_border"
         android:paddingBottom="@dimen/padding_bottom_recyclerview"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
