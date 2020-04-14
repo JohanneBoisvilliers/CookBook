@@ -1,12 +1,15 @@
 package com.example.cookbook.repositories
 
 import android.net.Uri
+import com.example.cookbook.models.HeadLineArticle
 import com.example.cookbook.models.Ingredient
 import com.example.cookbook.models.Recipe
 import com.example.cookbook.models.Step
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
@@ -64,6 +67,16 @@ class FirestoreRecipeRepository {
                 }.addOnCompleteListener {
                     it.result!!
                 }.await()
+    }
+
+    suspend fun getHeadLineArticle():HeadLineArticle{
+        val headline = firestoreDB.collection("head_line_article")
+                .orderBy("sharedDate", Query.Direction.DESCENDING)
+                .limit(1)
+                .get().await()
+
+         return headline.documents[0]!!
+                 .toObject<HeadLineArticle>()!!
     }
 
     //-------------------- UTILS ------------------------

@@ -14,7 +14,7 @@ class SharedRecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
         val recipeMap = recipe["recipe"] as Map<String, Any>
         val baseDataRecipeMap = recipeMap["baseDataRecipe"] as Map<String, Any>
         val photosList = recipe["photosUrl"] as List<String>
-        itemView.category_container.text = baseDataRecipeMap["category"].toString()
+//        itemView.category_container.text = baseDataRecipeMap["category"].toString()
         itemView.social_description.text = recipe["description"].toString()
         itemView.posted_by.text = itemView.context.getString(R.string.posted_by, recipe["username"].toString())
         this.recipePhotoSettings(photosList[0])

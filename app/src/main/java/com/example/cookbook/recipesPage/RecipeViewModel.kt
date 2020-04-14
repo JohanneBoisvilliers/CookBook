@@ -224,6 +224,14 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
+    //----------------- ARTICLE -----------------
+
+    val article: LiveData<HeadLineArticle> = liveData {
+        val article = withContext(Dispatchers.IO){mFirestoreRecipeRepository.getHeadLineArticle()}
+        emit(article)
+    }
+
+
     //----------------- PRIVATE METHODS -----------------
 
     private suspend fun fetchIngredientList(ingredientData: IngredientData, tempIngredientList: MutableList<Ingredient>) {

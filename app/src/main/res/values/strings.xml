@@ -8,6 +8,7 @@
     <string name="app_name"></string>
     <!--HOME FRAGMENT-->
     <string name="category_latest">Latest Recipes</string>
+    <string name="home_title">Home</string>
     <!--ALL RECIPES FRAGMENT-->
     <string name="all_recipes_title">All Recipes</string>
     <!--PROFILE FRAGMENT-->
