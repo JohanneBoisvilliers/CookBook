@@ -92,6 +92,13 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         emit(recipe)
     }
 
+    val randomRecipes:LiveData<List<Recipe>> = liveData {
+        withContext(Dispatchers.IO){
+            val recipes = mRecipesDataRepository.getRandomRecipe()
+            emit(recipes)
+        }
+    }
+
     fun updateRecipeName(recipeId: Long, name: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -230,7 +237,6 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         val article = withContext(Dispatchers.IO){mFirestoreRecipeRepository.getHeadLineArticle()}
         emit(article)
     }
-
 
     //----------------- PRIVATE METHODS -----------------
 

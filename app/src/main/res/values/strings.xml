@@ -7,7 +7,7 @@
     <!--MAIN-->
     <string name="app_name"></string>
     <!--HOME FRAGMENT-->
-    <string name="category_latest">Latest Recipes</string>
+    <string name="headline">Headline</string>
     <string name="home_title">Home</string>
     <!--ALL RECIPES FRAGMENT-->
     <string name="all_recipes_title">All Recipes</string>
@@ -69,7 +69,7 @@
     <string name="share_bottom_sheet_title">Add a description to present your recipe :</string>
 
     <string-array name="titles_main_recycler_view">
-        <item>Latest recipes</item>
+        <item>Random recipes</item>
         <item>Favorite recipes</item>
         <item>Todo list</item>
     </string-array>
