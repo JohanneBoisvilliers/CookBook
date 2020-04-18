@@ -127,10 +127,10 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
-    fun likeRecipe(counterDocRef: DocumentReference,recipeDocRef: DocumentReference, numShards: Int){
+    fun likeRecipe(counterDocRef: DocumentReference,recipeDocRef: DocumentReference, numShards: Int,isChecked:Boolean){
         viewModelScope.launch {
             withContext(Dispatchers.IO){
-                mFirestoreRecipeRepository.incrementCounter(counterDocRef,recipeDocRef,numShards)
+                mFirestoreRecipeRepository.likeRecipe(counterDocRef,recipeDocRef,numShards,isChecked)
                         .addOnSuccessListener { println("increment succeess") }
                         .addOnFailureListener{ println("increment failed")}
             }

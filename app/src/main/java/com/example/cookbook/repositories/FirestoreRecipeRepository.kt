@@ -13,6 +13,7 @@ import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.floor
 
 class FirestoreRecipeRepository {
     var firestoreDB = FirebaseFirestore.getInstance()
@@ -105,13 +106,21 @@ class FirestoreRecipeRepository {
                 }
     }
 
-     fun incrementCounter(counterDocRef: DocumentReference,recipeDocRef: DocumentReference, numShards: Int): Task<Void> {
-        val shardId = Math.floor(Math.random() * numShards).toInt()
+     fun likeRecipe(counterDocRef: DocumentReference,
+                    recipeDocRef: DocumentReference,
+                    numShards: Int,
+                    isChecked:Boolean): Task<Void> {
+        val shardId = floor(Math.random() * numShards).toInt()
         val shardRef = counterDocRef.collection("shards").document(shardId.toString())
+         val action =
+                 if (isChecked)
+                     FieldValue.arrayUnion(currentUser?.uid)
+                 else
+                     FieldValue.arrayRemove(currentUser?.uid)
 
          return firestoreDB.runBatch {
-             recipeDocRef.update("users_liked", FieldValue.arrayUnion(currentUser?.uid))
-             shardRef.update("count", FieldValue.increment(1))
+             recipeDocRef.update("users_liked", action)
+             shardRef.update("count", FieldValue.increment(if(isChecked) 1L else -1L))
          }
 
     }

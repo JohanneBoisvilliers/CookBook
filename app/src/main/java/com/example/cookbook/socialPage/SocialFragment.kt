@@ -76,7 +76,7 @@ class SocialFragment : Fragment() {
                                 .collection("counter")
                                 .document("${recipe["document_id"]}_counter")
                 !like_button.isChecked
-                viewmodel.likeRecipe(counterDocRef,recipeDocRef,5)
+                viewmodel.likeRecipe(counterDocRef,recipeDocRef,5,like_button.isChecked)
             }
         })
     }
