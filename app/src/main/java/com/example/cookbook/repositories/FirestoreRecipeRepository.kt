@@ -1,14 +1,11 @@
 package com.example.cookbook.repositories
 
 import android.net.Uri
-import com.example.cookbook.models.HeadLineArticle
-import com.example.cookbook.models.Ingredient
-import com.example.cookbook.models.Recipe
-import com.example.cookbook.models.Step
+import com.example.cookbook.models.*
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.*
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -19,7 +16,7 @@ import java.util.*
 
 class FirestoreRecipeRepository {
     var firestoreDB = FirebaseFirestore.getInstance()
-    var firebaseUser = FirebaseAuth.getInstance().currentUser
+    var currentUser = FirebaseAuth.getInstance().currentUser
     var storage = Firebase.storage
     var storageRef = storage.reference
 
@@ -34,34 +31,40 @@ class FirestoreRecipeRepository {
         return list.documents.map { x -> x.data!! }.toMutableList()
     }
 
-    fun sharedRecipe(recipe: Recipe, description: String, photoUrls: List<String>,ingredientList: List<Ingredient>): Task<Void> {
+    suspend fun sharedRecipe(recipe: Recipe, description: String, photoUrls: List<String>,ingredientList: List<Ingredient>): Task<Void> {
         val sharedRecipeInformation = hashMapOf(
-                "user_Id" to firebaseUser?.uid,
-                "username" to firebaseUser?.displayName,
-                "user_profile_photo" to firebaseUser?.photoUrl.toString(),
+                "user_id" to currentUser?.uid,
+                "username" to currentUser?.displayName,
+                "user_profile_photo" to currentUser?.photoUrl.toString(),
                 "recipe" to recipe,
                 "shared_date" to getCurrentDateTime().dateToString("dd/MM/yyyy"),
                 "description" to description,
                 "photosUrl" to photoUrls,
                 "ingredient_list" to convertIngredientIntoString(ingredientList.toMutableList()),
-                "step_list" to convertStepIntoString(recipe.stepList)
+                "step_list" to convertStepIntoString(recipe.stepList),
+                "users_liked" to listOf<String>()
         )
         var documentReference =
                 firestoreDB
                         .collection("sharedRecipes")
                         .document()
-        return documentReference.set(sharedRecipeInformation)
+        documentReference.set(sharedRecipeInformation).continueWithTask{
+            val data = hashMapOf("document_id" to documentReference.id)
+            documentReference.set(data, SetOptions.merge())
+        }.await()
+        var counterRef= documentReference.collection("counter").document("${documentReference.id}_counter")
+        return createCounter(counterRef,5)
     }
 
     suspend fun uploadPhoto(recipe: Recipe, file: File): Uri {
         val newFile = Uri.fromFile(file)
         val photoRef = storageRef.child(
-                "${firebaseUser?.uid}/${recipe.baseDataRecipe?.name}/${newFile.lastPathSegment}")
+                "${currentUser?.uid}/${recipe.baseDataRecipe?.name}/${newFile.lastPathSegment}")
         val uploadTask = photoRef.putFile(newFile)
 
         return uploadTask
-                .addOnSuccessListener { println("Success") }
-                .addOnFailureListener { println("Failed") }
+                .addOnSuccessListener { println("Photo upload success") }
+                .addOnFailureListener { println("Photo upload failed") }
                 .continueWithTask {
                     photoRef.downloadUrl
                 }.addOnCompleteListener {
@@ -77,6 +80,40 @@ class FirestoreRecipeRepository {
 
          return headline.documents[0]!!
                  .toObject<HeadLineArticle>()!!
+    }
+
+    private fun createCounter(ref: DocumentReference, numShards: Int): Task<Void> {
+        // Initialize the counter document, then initialize each shard.
+        return ref.set(Counter(numShards))
+                .continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        throw task.exception!!
+                    }
+
+                    val tasks = arrayListOf<Task<Void>>()
+
+                    // Initialize each shard with count=0
+                    for (i in 0 until numShards) {
+                        val makeShard = ref.collection("shards")
+                                .document(i.toString())
+                                .set(Shard(0))
+
+                        tasks.add(makeShard)
+                    }
+
+                    Tasks.whenAll(tasks)
+                }
+    }
+
+     fun incrementCounter(counterDocRef: DocumentReference,recipeDocRef: DocumentReference, numShards: Int): Task<Void> {
+        val shardId = Math.floor(Math.random() * numShards).toInt()
+        val shardRef = counterDocRef.collection("shards").document(shardId.toString())
+
+         return firestoreDB.runBatch {
+             recipeDocRef.update("users_liked", FieldValue.arrayUnion(currentUser?.uid))
+             shardRef.update("count", FieldValue.increment(1))
+         }
+
     }
 
     //-------------------- UTILS ------------------------

@@ -34,6 +34,5 @@ class IngredientsListViewHolder<T>(itemView:View):RecyclerView.ViewHolder(itemVi
             itemView.update_icon.visibility = if(isEditModeOn) View.VISIBLE else View.GONE
             itemView.remove_icon.visibility = if(isEditModeOn) View.VISIBLE else View.GONE
         }
-
  }
 }

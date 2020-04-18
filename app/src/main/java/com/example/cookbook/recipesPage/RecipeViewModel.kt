@@ -1,12 +1,10 @@
 package com.example.cookbook.recipesPage
 
-import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.*
 import com.example.cookbook.addRecipePage.plusAssign
 import com.example.cookbook.models.*
 import com.example.cookbook.repositories.*
-import com.facebook.internal.Mutable
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -116,13 +114,27 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     }
 
     fun sharedRecipe(recipe: Recipe, description: String, photoUrls: List<String>) {
-        mFirestoreRecipeRepository.sharedRecipe(recipe, description, photoUrls, ingredientList.value!!)
-                .addOnSuccessListener {
-                    println("Shared recipe success")
-                }
-                .addOnFailureListener {
-                    println("Error in : recipeViewModel => shareRecipe()")
-                }
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mFirestoreRecipeRepository.sharedRecipe(recipe, description, photoUrls, ingredientList.value!!)
+                        .addOnSuccessListener {
+                            println("Shared recipe success")
+                        }
+                        .addOnFailureListener {
+                            println("Error in : recipeViewModel => shareRecipe()")
+                        }
+            }
+        }
+    }
+
+    fun likeRecipe(counterDocRef: DocumentReference,recipeDocRef: DocumentReference, numShards: Int){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mFirestoreRecipeRepository.incrementCounter(counterDocRef,recipeDocRef,numShards)
+                        .addOnSuccessListener { println("increment succeess") }
+                        .addOnFailureListener{ println("increment failed")}
+            }
+        }
     }
 
     //----------------- INGREDIENTS -----------------

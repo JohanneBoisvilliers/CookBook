@@ -7,13 +7,23 @@ import android.widget.FrameLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cookbook.R
 import com.example.cookbook.models.Recipe
+import com.example.cookbook.recipeDetailsPage.IngredientsListAdapter
 import kotlinx.android.synthetic.main.recyclerview_all_recipes_item.view.*
 import java.util.*
 
 class SharedRecipeAdapter constructor(list : MutableList<Map<String,Any>>) : RecyclerView.Adapter<SharedRecipeViewHolder>() {
     private var mContext: Context? = null
     private var mRecipeList:MutableList<Map<String,Any>> = list
+    private var callback:Listener?=null
 
+    interface Listener{
+        fun onItemClick(position: Int)
+        fun onClickLikeButton(recipe:Map<String,Any>)
+    }
+
+    fun setOnItemClickListener(listener: Listener){
+        this.callback = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SharedRecipeViewHolder {
         mContext = parent.context
@@ -24,7 +34,7 @@ class SharedRecipeAdapter constructor(list : MutableList<Map<String,Any>>) : Rec
     }
 
     override fun onBindViewHolder(holder: SharedRecipeViewHolder, position: Int) {
-        holder.updateRecipeCardUi(mRecipeList[position])
+        holder.updateRecipeCardUi(mRecipeList[position],callback!!)
     }
 
     override fun getItemCount(): Int {

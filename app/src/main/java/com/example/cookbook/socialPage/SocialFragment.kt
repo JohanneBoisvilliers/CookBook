@@ -9,14 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.cookbook.R
-import com.example.cookbook.injections.Injections
-import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipeDetailsPage.RecipeDetailsActivity
 import com.example.cookbook.recipesPage.RecipeViewModel
-import com.example.cookbook.utils.RecyclerItemClickListenr
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_social.*
+import kotlinx.android.synthetic.main.recyclerview_social_item.*
 
 /**
  * A simple [Fragment] subclass.
@@ -26,6 +24,7 @@ class SocialFragment : Fragment() {
     lateinit var viewmodel:RecipeViewModel
     var sharedRecipeAsMap:MutableList<Map<String,Any>> = mutableListOf()
     private var mListAdapter: SharedRecipeAdapter = SharedRecipeAdapter(sharedRecipeAsMap)
+    var firestoreDB = FirebaseFirestore.getInstance()
 
     companion object {
         fun newInstance(): SocialFragment {
@@ -58,19 +57,28 @@ class SocialFragment : Fragment() {
             layoutManager = LinearLayoutManager(activity)
             adapter = mListAdapter
         }
-        shared_recipes_recyclerview.addOnItemTouchListener(RecyclerItemClickListenr(requireContext(), shared_recipes_recyclerview, object : RecyclerItemClickListenr.OnItemClickListener {
 
-            override fun onItemClick(view: View, position: Int) {
+        mListAdapter.setOnItemClickListener(object: SharedRecipeAdapter.Listener{
+            override fun onItemClick(position: Int) {
                 val intent = Intent(context, RecipeDetailsActivity::class.java)
                 val map =  HashMap<String,Any>(sharedRecipeAsMap[position])
                 intent.putExtra("sharedRecipe",map)
 
                 startActivity(intent)
             }
-            override fun onItemLongClick(view: View?, position: Int) {
-                print(position)
+
+            override fun onClickLikeButton(recipe: Map<String, Any>) {
+                val recipeDocRef =
+                        firestoreDB.collection("sharedRecipes")
+                                .document("${recipe["document_id"]}")
+                val counterDocRef =
+                        recipeDocRef
+                                .collection("counter")
+                                .document("${recipe["document_id"]}_counter")
+                !like_button.isChecked
+                viewmodel.likeRecipe(counterDocRef,recipeDocRef,5)
             }
-        }))
+        })
     }
 
     //------------------- ASYNC -------------------
@@ -88,6 +96,8 @@ class SocialFragment : Fragment() {
         sharedRecipeAsMap.addAll(recipesList)
         mListAdapter.updateList(recipesList)
     }
+
+
 
 
 }
