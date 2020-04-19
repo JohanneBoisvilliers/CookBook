@@ -80,22 +80,29 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
 
     //take recipe saved in viewmodel and take input in share_description field then call shared function in viewmodel
     private fun listenerOnShareButton() {
-        val compressedList:MutableList<File> = mutableListOf()
+        val compressedList: MutableList<File> = mutableListOf()
         share_button.setOnClickListener {
-            val actualRecipe = viewModel.actualRecipe.value
+            val isFieldEmpty = viewModel.shareDescription.value?.length!! < 5
 
-            lifecycleScope.launch {
-                withContext(Dispatchers.Default) {
-                    actualRecipe?.photoList?.forEach {
-                        launch {
-                            val compressedFile = Compressor.compress(activity!!, File(it.photoUrl)) {
-                                size(50_000)
+            when (isFieldEmpty) {
+                true -> shared_description.error = getString(R.string.description_error)
+                false -> {
+                    val actualRecipe = viewModel.actualRecipe.value
+
+                    lifecycleScope.launch {
+                        withContext(Dispatchers.Default) {
+                            actualRecipe?.photoList?.forEach {
+                                launch {
+                                    val compressedFile = Compressor.compress(activity!!, File(it.photoUrl)) {
+                                        size(50_000)
+                                    }
+                                    compressedList.add(compressedFile)
+                                }
                             }
-                            compressedList.add(compressedFile)
                         }
+                        viewModel.uploadPhoto(actualRecipe!!, compressedList)
                     }
                 }
-                viewModel.uploadPhoto(actualRecipe!!,compressedList)
             }
         }
     }
@@ -116,10 +123,10 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
 
     //------------------ LISTENER ------------------
 
-    private fun observerOnIsUploaded(){
+    private fun observerOnIsUploaded() {
         viewModel.isUploaded.observe(viewLifecycleOwner, Observer {
             viewModel.isUploaded.postValue(false)
-            if(it) dismiss()
+            if (it) dismiss()
         })
     }
 

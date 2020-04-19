@@ -122,7 +122,6 @@ class FirestoreRecipeRepository {
              recipeDocRef.update("users_liked", action)
              shardRef.update("count", FieldValue.increment(if(isChecked) 1L else -1L))
          }
-
     }
 
     //-------------------- UTILS ------------------------

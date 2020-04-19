@@ -55,6 +55,10 @@
     <string name="share_button_text">Share</string>
     <string name="update_button_text">Update</string>
     <string name="cancel_ingredient_text">Cancel</string>
+    <string name="error_shared">Please add at least : \n</string>
+    <string name="error_photo">one photo</string>
+    <string name="error_step">one step</string>
+    <string name="error_ingredient">one ingredient</string>
     <string name="name_ingredient_text">Name :</string>
     <string name="unit_ingredient_text">Unit :</string>
     <string name="quantity_ingredient_text">Qt. :</string>
@@ -66,6 +70,7 @@
     <string name="step_bottom_sheet_qt_error">Insert a description for this step</string>
     <string name="ingredient_bottom_sheet_qt_error">Insert a quantity</string>
     <string name="ingredient_bottom_sheet_name_error">Insert a name</string>
+    <string name="description_error">Add a description(at least 5 characters)</string>
     <string name="share_bottom_sheet_title">Add a description to present your recipe :</string>
 
     <string-array name="titles_main_recycler_view">

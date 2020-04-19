@@ -14,6 +14,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +31,7 @@ import com.example.cookbook.models.*
 import com.example.cookbook.onlineREcipe.RecipeOnlineActivity
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
 
@@ -45,6 +47,9 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private var stepAdapter = StepListAdapter<Step>(mutableListOf(), false, this)
     private var stepStringAdapter = StepListAdapter<String>(mutableListOf(), false, this)
     private lateinit var menu: Menu
+    private lateinit var snackbar: Snackbar
+    private lateinit var shareMessageError:String
+
 
     override fun onResume() {
         super.onResume()
@@ -105,7 +110,11 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             true
         }
         R.id.action_share -> {
-            showModalBottomSheet(ShareBottomSheet(), ShareBottomSheet.TAG)
+            if(isSharedFieldFilled())
+                showModalBottomSheet(ShareBottomSheet(), ShareBottomSheet.TAG)
+            else
+                initSnackBar(shareMessageError,Snackbar.LENGTH_LONG)
+
             true
         }
 
@@ -431,6 +440,38 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
                 baseRecipeId = baseDataRecipeAsMap["baseRecipeId"].toString().toLong(),
                 addDate = baseDataRecipeAsMap["addDate"].toString()
         )
+    }
+    //concatenate errors messages to show all needed fields to share a recipe
+    private fun isSharedFieldFilled():Boolean{
+        // init message error with base sentence "please add at least :"
+        shareMessageError = getString(R.string.error_shared)
+        // check if there is a empty field
+        val isPhotoEmpty = viewModel?.photoList?.value?.isEmpty()
+        val isIngredientEmpty = viewModel?.ingredientList?.value?.isEmpty()
+        val isStepEmpty = viewModel?.stepList?.value?.isEmpty()
+        // set each error message for photo, ingredient list and step list
+        val errorPhoto = if(isPhotoEmpty==true) getString(R.string.error_photo) else ""
+        val errorIngredient = if(isIngredientEmpty==true) getString(R.string.error_ingredient)else ""
+        val errorStep = if(isStepEmpty==true)getString(R.string.error_step) else ""
+        // put this error message into shareMessageError if a field is empty
+        when(isPhotoEmpty){
+            true-> shareMessageError += "\n      - $errorPhoto"
+        }
+        when(isIngredientEmpty){
+            true-> shareMessageError += "\n      - $errorIngredient"
+        }
+        when(isStepEmpty){
+            true-> shareMessageError += "\n      - $errorStep"
+        }
+        // return a boolean to know if all needed fields are filled
+        return isPhotoEmpty==false && isIngredientEmpty==false && isStepEmpty==false
+    }
+
+    fun initSnackBar(message: String, duration: Int) {
+        snackbar = Snackbar.make(recipe_detail_root, message, duration).apply {
+            (view.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView).isSingleLine = false
+            show()
+        }
     }
 
 
