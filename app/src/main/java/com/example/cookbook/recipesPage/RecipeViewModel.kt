@@ -40,13 +40,20 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val isReadOnly = MutableLiveData(false)
     val isUploaded = MutableLiveData<Boolean>()
     val sharedRecipesList = MutableLiveData<MutableList<Map<String, Any>>>()
+    val favoritesRecipesList = MutableLiveData<MutableList<Map<String, Any>>>()
 
 
     //----------------- RECIPES -----------------
 
     fun getSharedRecipes() {
         viewModelScope.launch(Dispatchers.IO) {
-            sharedRecipesList.postValue(mFirestoreRecipeRepository.getSharedRecipe())
+            sharedRecipesList.postValue(mFirestoreRecipeRepository.getRecipes("sharedRecipes"))
+        }
+    }
+
+    fun getFavoritesRecipes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoritesRecipesList.postValue(mFirestoreRecipeRepository.getRecipes("favorites"))
         }
     }
 

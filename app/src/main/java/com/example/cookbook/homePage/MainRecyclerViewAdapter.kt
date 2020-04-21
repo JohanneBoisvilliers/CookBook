@@ -21,6 +21,8 @@ class MainRecyclerViewAdapter(private val mMainEmbeddedRecipeList: LinkedHashMap
     private var mViewPool: RecycledViewPool? = null
     private val mHorizontalRecyclerViewAdapter: HorizontalRecyclerViewAdapter? = null
     private lateinit var mCategoryTitles: Array<String>
+    private var mRecipeList:MutableList<Map<String,Any>>? = mutableListOf()
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainRecyclerViewViewHolder {
         mContext = parent.context
@@ -41,7 +43,11 @@ class MainRecyclerViewAdapter(private val mMainEmbeddedRecipeList: LinkedHashMap
         return mMainEmbeddedRecipeList.size
     }
 
-    fun notifyItemChanged(embeddedList: LinkedHashMap<String,List<Recipe>>?) {
+    fun notifyItemChanged(embeddedList: LinkedHashMap<String,List<Recipe>>?,recipeAsMap:MutableList<Map<String,Any>>?) {
+        recipeAsMap?.let {
+            mRecipeList?.clear()
+            mRecipeList?.addAll(recipeAsMap)
+        }
         mMainEmbeddedRecipeList.clear()
         mMainEmbeddedRecipeList.putAll(embeddedList!!)
         notifyDataSetChanged()
@@ -62,8 +68,14 @@ class MainRecyclerViewAdapter(private val mMainEmbeddedRecipeList: LinkedHashMap
                     object : RecyclerItemClickListenr.OnItemClickListener {
 
                         override fun onItemClick(view: View, position: Int) {
+                            val isRecipeObject = list[position].baseDataRecipe?.baseRecipeId == 0L
                             val intent = Intent(mContext, RecipeDetailsActivity::class.java)
-                            intent.putExtra("recipe",list[position].baseDataRecipe?.baseRecipeId)
+                            if(!isRecipeObject){
+                                intent.putExtra("recipe",list[position].baseDataRecipe?.baseRecipeId)
+                            }else {
+                                val map =  HashMap<String,Any>(mRecipeList?.get(position)!!)
+                                intent.putExtra("sharedRecipe",map)
+                            }
 
                             startActivity(mContext!!,intent,null)
                         }

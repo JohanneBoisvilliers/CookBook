@@ -12,7 +12,7 @@ class SocialViewModel(val mFirestoreRecipeRepository: FirestoreRecipeRepository)
 
     fun getSharedRecipes(){
         viewModelScope.launch (Dispatchers.IO){
-            sharedRecipesList = mFirestoreRecipeRepository.getSharedRecipe()
+            sharedRecipesList = mFirestoreRecipeRepository.getRecipes("sharedRecipes")
         }
     }
 }

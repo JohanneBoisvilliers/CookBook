@@ -21,8 +21,8 @@ class FirestoreRecipeRepository {
     var storage = Firebase.storage
     var storageRef = storage.reference
 
-    suspend fun getSharedRecipe():MutableList<Map<String,Any>>{
-        val list = firestoreDB.collection("sharedRecipes")
+    suspend fun getRecipes(collection:String):MutableList<Map<String,Any>>{
+        val list = firestoreDB.collection(collection)
                 .get()
                 .addOnSuccessListener {
                     println("success")

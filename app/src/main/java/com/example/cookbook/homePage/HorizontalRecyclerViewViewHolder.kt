@@ -21,10 +21,21 @@ class HorizontalRecyclerViewViewHolder(itemView: View) : RecyclerView.ViewHolder
     //get the actual recipe and check if there are some photos to
     //set the recipe thumbnail
     private fun photoSettings(recipe:Recipe){
-        if(recipe.photoList.size > 0){
+        val isFromFirebase =
+                if(recipe.photoList.size > 0){
+                    recipe.photoList[0].photoUrl.contains("firebasestorage")
+                }else{
+                    false
+                }
+        if(recipe.photoList.size > 0 && !isFromFirebase){
             Glide.with(itemView.context)
                     .load(Uri.fromFile(File(recipe.photoList[0].photoUrl)))
                     .error(R.drawable.no_photo_low)
+                    .centerCrop()
+                    .into(itemView.photo_container)
+        }else if(recipe.photoList.size > 0 && isFromFirebase){
+            Glide.with(itemView.context)
+                    .load(recipe.photoList[0].photoUrl)
                     .centerCrop()
                     .into(itemView.photo_container)
         }else{

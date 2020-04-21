@@ -18,6 +18,8 @@ import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipesPage.RecipeViewModel
 
 import com.bumptech.glide.Glide
+import com.example.cookbook.models.BaseDataRecipe
+import com.example.cookbook.models.Photo
 import com.example.cookbook.onlineREcipe.RecipeOnlineActivity
 import com.facebook.internal.Mutable
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -49,8 +51,10 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.initMainRecyclerView()
+        viewModel?.getFavoritesRecipes()
         this.observerOnArticle()
         this.observerOnRandomRecipes()
+        this.observerOnFavoriteRecipes()
     }
 
     // ----------------------------------- INIT -----------------------------------
@@ -68,8 +72,8 @@ class HomeFragment : Fragment() {
     // ----------------------------------- UI -----------------------------------
 
 
-    private fun updateItemList(embeddedList: LinkedHashMap<String,List<Recipe>>) {
-        this.mMainAdapter.notifyItemChanged(embeddedList)
+    private fun updateItemList(embeddedList: LinkedHashMap<String,List<Recipe>>,recipeListMap:MutableList<Map<String,Any>>?) {
+        this.mMainAdapter.notifyItemChanged(embeddedList,recipeListMap)
     }
 
     // ----------------------------------- OBSERVERS -----------------------------------
@@ -97,10 +101,15 @@ class HomeFragment : Fragment() {
 
     private fun observerOnRandomRecipes(){
         viewModel?.randomRecipes?.observe(viewLifecycleOwner, Observer {
-            this.mRandomRecipes.clear()
-            this.mRandomRecipes.addAll(it)
-            mFinalEmbeddedList["Random Recipes"] = mRandomRecipes
-            this.updateItemList(mFinalEmbeddedList)
+            mFinalEmbeddedList[getString(R.string.random_recipe)] = it
+            this.updateItemList(mFinalEmbeddedList,null)
+        })
+    }
+
+    private fun observerOnFavoriteRecipes(){
+        viewModel?.favoritesRecipesList?.observe(viewLifecycleOwner, Observer {
+            mFinalEmbeddedList[getString(R.string.favorites_recipe)] = mapIntoListConversion(it)
+            this.updateItemList(mFinalEmbeddedList,it)
         })
     }
 
@@ -113,6 +122,31 @@ class HomeFragment : Fragment() {
             intent.putExtra("url", url)
             startActivity(intent)
         }
+    }
+
+    // ------------------------------------ UTILS ----------------------------------
+
+    private fun mapIntoListConversion(recipe: MutableList<Map<String,Any>>):List<Recipe>{
+        val list = mutableListOf<Recipe>()
+        recipe.forEach {
+            val recipeMap = it["recipe"] as Map<String, Any>
+            val baseDataRecipeMap = recipeMap["baseDataRecipe"] as Map<String, Any>
+            val photosList = it["photosUrl"] as MutableList<String>
+            val baseDataRecipe = BaseDataRecipe(
+                    category = baseDataRecipeMap["category"].toString(),
+                    recipeUrl = baseDataRecipeMap["recipeUrl"].toString(),
+                    name = baseDataRecipeMap["name"].toString(),
+                    numberOfLike = baseDataRecipeMap["numberOfLike"].toString().toInt(),
+                    isAlreadyDone = baseDataRecipeMap["isAlreadyDone"].toString().toBoolean(),
+                    baseRecipeId = 0L,
+                    addDate = baseDataRecipeMap["addDate"].toString()
+            )
+            val photo = Photo(photoUrl = photosList[0],recipeId = baseDataRecipe.baseRecipeId)
+            val finalPhotoList = mutableListOf<Photo>()
+            finalPhotoList.add(photo)
+            list.add(Recipe(baseDataRecipe,photoList = finalPhotoList,ingredientList = mutableListOf(),stepList = mutableListOf()))
+        }
+        return list
     }
 
 }
