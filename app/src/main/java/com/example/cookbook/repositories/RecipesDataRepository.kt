@@ -13,6 +13,10 @@ class RecipesDataRepository(private val mRecipeDao: RecipeDao) {
         return mRecipeDao.getSpecificRecipe(recipeId)
     }
 
+    fun getRandomRecipe(): List<Recipe> {
+        return mRecipeDao.getRandomRecipes()
+    }
+
     suspend fun insertRecipe(recipe: BaseDataRecipe): Long {
         return mRecipeDao.insertRecipe(recipe)
     }

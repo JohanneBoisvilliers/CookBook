@@ -37,6 +37,6 @@ public class HorizontalRecyclerViewAdapter extends RecyclerView.Adapter<Horizont
 
     @Override
     public int getItemCount() {
-        return 5;
+        return mRecipeList.size();
     }
 }

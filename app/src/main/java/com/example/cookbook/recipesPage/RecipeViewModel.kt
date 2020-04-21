@@ -3,19 +3,20 @@ package com.example.cookbook.recipesPage
 import androidx.lifecycle.*
 import com.example.cookbook.addRecipePage.plusAssign
 import com.example.cookbook.models.*
-import com.example.cookbook.repositories.IngredientDataRepository
-import com.example.cookbook.repositories.PhotoDataRepository
-import com.example.cookbook.repositories.RecipesDataRepository
-import com.example.cookbook.repositories.StepDataRepository
+import com.example.cookbook.repositories.*
+import com.google.firebase.firestore.DocumentReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
                       private val mIngredientDataRepository: IngredientDataRepository,
                       private val mStepDataRepository: StepDataRepository,
-                      private val mPhotoDataRepository: PhotoDataRepository) : ViewModel() {
+                      private val mPhotoDataRepository: PhotoDataRepository,
+                      private val mFirestoreRecipeRepository: FirestoreRecipeRepository) : ViewModel() {
 
     val recipes: LiveData<List<Recipe>> = mRecipesDataRepository.recipes
     val isUpdateModeOn = MutableLiveData(false)
@@ -26,14 +27,48 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val stepList = MutableLiveData<MutableList<Step>>()
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()
+    val shareDescription = MutableLiveData("")
     val newStepText = MutableLiveData<String>()
     val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
     val photoSelected = MutableLiveData(0)
-    val isNotOnline:Boolean
-        get() {return actualRecipe.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()}
+    private val uriList: MutableList<String> = mutableListOf()
+    val isNotOnline: Boolean
+        get() {
+            return actualRecipe.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()
+        }
+    val isReadOnly = MutableLiveData(false)
+    val isUploaded = MutableLiveData<Boolean>()
+    val sharedRecipesList = MutableLiveData<MutableList<Map<String, Any>>>()
+    val favoritesRecipesList = MutableLiveData<MutableList<Map<String, Any>>>()
+
 
     //----------------- RECIPES -----------------
+
+    fun getSharedRecipes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            sharedRecipesList.postValue(mFirestoreRecipeRepository.getRecipes("sharedRecipes"))
+        }
+    }
+
+    fun getFavoritesRecipes() {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoritesRecipesList.postValue(mFirestoreRecipeRepository.getRecipes("favorites"))
+        }
+    }
+
+    fun observerOnSharedRecipe() {
+        FirebaseFirestore.getInstance().collection("sharedRecipes").addSnapshotListener { snapshot, e ->
+            if (e != null) {
+                return@addSnapshotListener
+            }
+
+            if (snapshot != null) {
+                getSharedRecipes()
+            } else {
+            }
+        }
+    }
 
     // fetch a recipe depending on an id (when user click on a recipe in recipe list)
     private suspend fun getSpecificRecipe(recipeId: Long): Recipe {
@@ -62,6 +97,13 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         emit(recipe)
     }
 
+    val randomRecipes:LiveData<List<Recipe>> = liveData {
+        withContext(Dispatchers.IO){
+            val recipes = mRecipesDataRepository.getRandomRecipe()
+            emit(recipes)
+        }
+    }
+
     fun updateRecipeName(recipeId: Long, name: String) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
@@ -74,6 +116,30 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
                 mRecipesDataRepository.updateRecipeUrl(recipeId, recipeUrl)
+            }
+        }
+    }
+
+    fun sharedRecipe(recipe: Recipe, description: String, photoUrls: List<String>) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mFirestoreRecipeRepository.sharedRecipe(recipe, description, photoUrls, ingredientList.value!!)
+                        .addOnSuccessListener {
+                            println("Shared recipe success")
+                        }
+                        .addOnFailureListener {
+                            println("Error in : recipeViewModel => shareRecipe()")
+                        }
+            }
+        }
+    }
+
+    fun likeRecipe(counterDocRef: DocumentReference,recipeDocRef: DocumentReference, numShards: Int,isChecked:Boolean){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                mFirestoreRecipeRepository.likeRecipe(counterDocRef,recipeDocRef,numShards,isChecked)
+                        .addOnSuccessListener { println("increment succeess") }
+                        .addOnFailureListener{ println("increment failed")}
             }
         }
     }
@@ -146,22 +212,49 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
 
     //----------------- PHOTOS -----------------
 
-    fun insertPhoto(vararg photo:Photo){
+    fun insertPhoto(vararg photo: Photo) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 mPhotoDataRepository.insertPhoto(*photo)
             }
         }
     }
 
-    fun deletePhoto(photo: Photo){
+    fun deletePhoto(photo: Photo) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 mPhotoDataRepository.deletePhoto(photo)
             }
             photoList.value!!.removeAt(photoSelected.value!!)
             photoList.postValue(photoList.value)
         }
+    }
+
+    fun uploadPhoto(recipe: Recipe, files: MutableList<File>) {
+        viewModelScope.launch(Dispatchers.IO) {
+            withContext(Dispatchers.IO) {
+                files.forEach {
+                    launch {
+                        uriList.add(mFirestoreRecipeRepository.uploadPhoto(recipe, it).toString())
+                    }
+                }
+            }
+            withContext(Dispatchers.IO) {
+                sharedRecipe(
+                        recipe = recipe,
+                        description = shareDescription.value!!,
+                        photoUrls = uriList
+                )
+            }
+            isUploaded.postValue(true)
+        }
+    }
+
+    //----------------- ARTICLE -----------------
+
+    val article: LiveData<HeadLineArticle> = liveData {
+        val article = withContext(Dispatchers.IO){mFirestoreRecipeRepository.getHeadLineArticle()}
+        emit(article)
     }
 
     //----------------- PRIVATE METHODS -----------------

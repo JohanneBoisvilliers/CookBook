@@ -64,7 +64,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     // ---------------- INIT -------------------
 
     //get recipe view model for requests
-    private fun initViewModel() {
+    private fun initViewModel(){
         viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
     }
 

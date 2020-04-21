@@ -7,7 +7,10 @@
     <!--MAIN-->
     <string name="app_name"></string>
     <!--HOME FRAGMENT-->
-    <string name="category_latest">Latest Recipes</string>
+    <string name="headline">Headline</string>
+    <string name="home_title">Home</string>
+    <string name="random_recipe">Random Recipes</string>
+    <string name="favorites_recipe">Most popular</string>
     <!--ALL RECIPES FRAGMENT-->
     <string name="all_recipes_title">All Recipes</string>
     <!--PROFILE FRAGMENT-->
@@ -41,15 +44,23 @@
     <string name="title_login_page">Welcome, please Login</string>
     <!--PROFILE FRAGMENT-->
     <string name="register_date">Registered since: %s</string>
-
     <string name="facebook_app_id">190699912159028</string>
     <string name="fb_login_protocol_scheme">fb190699912159028</string>
+    <!--SOCIAL FRAGMENT-->
+    <string name="social_fragment_title">Social</string>
+    <string name="posted_by">Posted by %s</string>
+    <string name="timestamp">%d minute(s) ago</string>
     <!--RECIPES DETAILS ACTIVITY-->
     <string name="ingredient_title">INGREDIENTS</string>
     <string name="recipe_step_title">RECIPE</string>
     <string name="add_button_text">Add</string>
+    <string name="share_button_text">Share</string>
     <string name="update_button_text">Update</string>
     <string name="cancel_ingredient_text">Cancel</string>
+    <string name="error_shared">Please add at least : \n</string>
+    <string name="error_photo">one photo</string>
+    <string name="error_step">one step</string>
+    <string name="error_ingredient">one ingredient</string>
     <string name="name_ingredient_text">Name :</string>
     <string name="unit_ingredient_text">Unit :</string>
     <string name="quantity_ingredient_text">Qt. :</string>
@@ -61,9 +72,11 @@
     <string name="step_bottom_sheet_qt_error">Insert a description for this step</string>
     <string name="ingredient_bottom_sheet_qt_error">Insert a quantity</string>
     <string name="ingredient_bottom_sheet_name_error">Insert a name</string>
+    <string name="description_error">Add a description(at least 5 characters)</string>
+    <string name="share_bottom_sheet_title">Add a description to present your recipe :</string>
 
     <string-array name="titles_main_recycler_view">
-        <item>Latest recipes</item>
+        <item>Random recipes</item>
         <item>Favorite recipes</item>
         <item>Todo list</item>
     </string-array>

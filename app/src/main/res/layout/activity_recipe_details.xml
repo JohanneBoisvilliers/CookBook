@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    android:id="@+id/recipe_detail_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -18,8 +20,7 @@
                     android:scaleType="centerCrop"
                     android:id="@+id/empty_photo"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/viewpager_height"
-                    android:src="@drawable/no_photo_low"/>
+                    android:layout_height="@dimen/viewpager_height"/>
 
                 <androidx.viewpager2.widget.ViewPager2
                     android:id="@+id/viewPager_recipe_details"
@@ -45,7 +46,7 @@
                     android:layout_alignBottom="@id/viewPager_recipe_details"
                     android:layout_marginEnd="@dimen/icon_margin_to_border"
                     android:src="@drawable/baseline_add_circle_outline_24"
-                    android:tint="@color/colorPrimary"
+                    android:tint="@color/colorAccent"
                     android:onClick="onClicked"
                     android:background="@android:color/transparent"/>
 
@@ -58,7 +59,7 @@
                     android:layout_marginBottom="@dimen/margin_to_border"
                     android:layout_marginEnd="@dimen/margin_to_border"
                     android:src="@drawable/baseline_remove_circle_outline_24"
-                    android:tint="@color/colorPrimary"
+                    android:tint="@color/colorAccent"
                     android:background="@android:color/transparent"
                     android:onClick="onClicked"/>
                 <EditText

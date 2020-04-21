@@ -13,6 +13,10 @@ interface RecipeDao {
     @Transaction
     fun getRecipes(): LiveData<List<Recipe>>
 
+    @Query("SELECT * FROM BaseDataRecipe ORDER BY RANDOM() LIMIT 10")
+    @Transaction
+    fun getRandomRecipes(): List<Recipe>
+
     @Query("SELECT * FROM BaseDataRecipe WHERE baseRecipeId= :recipeId")
     @Transaction
     suspend fun getSpecificRecipe(recipeId : Long): Recipe

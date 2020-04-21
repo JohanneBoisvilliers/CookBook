@@ -57,7 +57,7 @@ class MainActivity : AppCompatActivity() {
         if (!hasPermissions(this, *PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }
-
+        mRecipeViewModel?.getSharedRecipes()
     }
 
     // ----------------------------------- UTILS -----------------------------------

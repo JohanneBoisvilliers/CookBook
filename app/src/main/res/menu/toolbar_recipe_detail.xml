@@ -16,4 +16,10 @@
         app:showAsAction="ifRoom"
         android:visible="true"/>
 
+    <item android:id="@+id/action_share"
+        android:icon="@drawable/baseline_share_24"
+        android:title="Url"
+        app:showAsAction="ifRoom"
+        android:visible="true"/>
+
 </menu>

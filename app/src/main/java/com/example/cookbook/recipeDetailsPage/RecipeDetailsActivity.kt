@@ -14,6 +14,7 @@ import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.lifecycle.MutableLiveData
@@ -30,6 +31,7 @@ import com.example.cookbook.models.*
 import com.example.cookbook.onlineREcipe.RecipeOnlineActivity
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayoutMediator
 import kotlinx.android.synthetic.main.activity_recipe_details.*
 
@@ -38,10 +40,16 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private var viewModel: RecipeViewModel? = null
     private var recipeId: Long? = 0
     private var recipe: Recipe? = Recipe()
-    private var viewPagerAdapter: PhotoViewPagerAdapter? = PhotoViewPagerAdapter(mutableListOf())
-    private var ingredientAdapter: IngredientsListAdapter? = IngredientsListAdapter(mutableListOf(), false, this)
-    private var stepAdapter: StepListAdapter? = StepListAdapter(mutableListOf(), false, this)
+    private var viewPagerAdapter= PhotoViewPagerAdapter<Photo>(mutableListOf())
+    private var viewPagerStringAdapter= PhotoViewPagerAdapter<String>(mutableListOf())
+    private var ingredientAdapter = IngredientsListAdapter<Ingredient>(mutableListOf(), false, this)
+    private var ingredientStringAdapter = IngredientsListAdapter<String>(mutableListOf(), false, this)
+    private var stepAdapter = StepListAdapter<Step>(mutableListOf(), false, this)
+    private var stepStringAdapter = StepListAdapter<String>(mutableListOf(), false, this)
     private lateinit var menu: Menu
+    private lateinit var snackbar: Snackbar
+    private lateinit var shareMessageError:String
+
 
     override fun onResume() {
         super.onResume()
@@ -64,20 +72,20 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         invalidateOptionsMenu()
         menu.findItem(R.id.action_open_url).isEnabled = !viewModel?.isNotOnline!!
         menu.findItem(R.id.action_open_url).isVisible = !viewModel?.isNotOnline!!
+        menu.findItem(R.id.action_modify).isEnabled = !viewModel?.isReadOnly?.value!!
+        menu.findItem(R.id.action_modify).isVisible = !viewModel?.isReadOnly?.value!!
+        menu.findItem(R.id.action_share).isEnabled = !viewModel?.isReadOnly?.value!!
+        menu.findItem(R.id.action_share).isVisible = !viewModel?.isReadOnly?.value!!
         return true
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_recipe_details)
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        this.initToolbar()
         this.initRecipeViewModel()
 
         this.fetchRecipe()
-        this.initViewPager()
-        this.initIngredientRecyclerview()
-        this.initStepRecyclerview()
         this.observerOnEditMode()
         this.observerOnIngredientList()
         this.observerOnStepList()
@@ -95,12 +103,18 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             viewModel?.isUpdateModeOn?.value = !viewModel?.isUpdateModeOn?.value!!
             true
         }
-
-        R.id.action_open_url ->
-        {
+        R.id.action_open_url -> {
             val intent = Intent(this, RecipeOnlineActivity::class.java)
             intent.putExtra("url", viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
             startActivity(intent)
+            true
+        }
+        R.id.action_share -> {
+            if(isSharedFieldFilled())
+                showModalBottomSheet(ShareBottomSheet(), ShareBottomSheet.TAG)
+            else
+                initSnackBar(shareMessageError,Snackbar.LENGTH_LONG)
+
             true
         }
 
@@ -111,15 +125,24 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
 
     // ---------------- INIT -------------------
 
+    private fun initToolbar() {
+        //set toolbar
+        setSupportActionBar(toolbar)
+        //show the back button on toolbar
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        //hide app name in toolbar
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+    }
+
     private fun initRecipeViewModel() {
         val viewModelFactory = Injections.provideViewModelFactory(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel::class.java)
     }
 
     // settings of viewpager
-    private fun initViewPager() {
+    private fun <T>initViewPager(customAdapter: PhotoViewPagerAdapter<T>) {
         viewPager_recipe_details.orientation = ViewPager2.ORIENTATION_HORIZONTAL
-        viewPager_recipe_details.adapter = viewPagerAdapter
+        viewPager_recipe_details.adapter = customAdapter
         viewPager_recipe_details.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
@@ -130,17 +153,17 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         TabLayoutMediator(rd_tab_layout, viewPager_recipe_details) { _, _ -> Unit }.attach()
     }
 
-    private fun initIngredientRecyclerview() {
+    private fun <T>initIngredientRecyclerview(customAdapter:IngredientsListAdapter<T>) {
         ingredient_recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = ingredientAdapter
+            adapter = customAdapter
         }
     }
 
-    private fun initStepRecyclerview() {
+    private fun <T>initStepRecyclerview(customAdapter: StepListAdapter<T>) {
         recipe_step_recycler_view.apply {
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-            adapter = stepAdapter
+            adapter = customAdapter
         }
     }
 
@@ -161,7 +184,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     private fun initUrlField(isUpdateModeOn: Boolean) {
         url_icon.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
         url_field.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
-        if (url_field.visibility == View.VISIBLE){
+        if (url_field.visibility == View.VISIBLE) {
             url_field.setText(viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
         }
         btn_update_url.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
@@ -180,7 +203,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
             btn_add_step.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
             initRecipeNameField(isUpdateModeOn)
             initUrlField(isUpdateModeOn)
-            if (viewModel?.actualRecipe?.value != null) {
+            if (viewModel?.actualRecipe?.value != null && viewModel?.isReadOnly?.value==false) {
                 updateUi(viewModel?.actualRecipe?.value!!, isUpdateModeOn)
             }
         })
@@ -270,7 +293,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
     }
 
-    private fun listenerOnUrlField(){
+    private fun listenerOnUrlField() {
         url_field.onTextChanged {
             val recipe = viewModel?.actualRecipe?.value?.baseDataRecipe
             val recipeCopy = recipe?.copy(recipeUrl = it)
@@ -281,12 +304,51 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     // ---------------- ASYNC -------------------
 
     private fun fetchRecipe() {
+        // get the recipe id send when user click on a recipe card in recipe list
         recipeId = intent.getLongExtra("recipe", 0)
-        viewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
-            viewModel?.actualRecipe?.value = recipeFetch
-            recipe_name.setText(recipeFetch.baseDataRecipe?.name)
+        // if recipe list == 0, we are in read only mode(in social tab when user click on a recipe)
+        if (recipeId != 0L) {
+            // call request with recipeId to get the recipe
+            viewModel?.getRecipeWithIngredient(recipeId!!)?.observe(this, Observer { recipeFetch ->
+                viewModel?.actualRecipe?.value = recipeFetch
+                // set the recipe title
+                recipe_name.setText(recipeFetch.baseDataRecipe?.name)
+            })
+            // init listview with adapter containing objects (photos, Ingredient, step)
+            this.initViewPager(viewPagerAdapter)
+            this.initIngredientRecyclerview(ingredientAdapter)
+            this.initStepRecyclerview(stepAdapter)
+        } else {
+            // get the map of entire shard recipe saved on firebase(recipe + infos) and sent by user's click on
+            // recipe card in social tab
+            val sharedRecipe = intent.getSerializableExtra("sharedRecipe") as HashMap<String, Any>
+            // get the map of recipe(baseDatarecipe + photolist + ingredientList...)
+            val recipeAsMap =  sharedRecipe["recipe"] as HashMap<String, Any>
+            // get the map of recipe details(baseDataRecipe)
+            val baseDataRecipeAsMap = recipeAsMap["baseDataRecipe"] as HashMap<String, Any>
+            // build a new recipe object with maps information
+            val recipe = Recipe(
+                    baseDataRecipe = baseDataRecipeFromMap(baseDataRecipeAsMap),
+                    ingredientList = mutableListOf(),
+                    photoList = mutableListOf(),
+                    stepList = mutableListOf()
+            )
+            viewModel?.actualRecipe?.value = recipe
+            // when user come from social tab, the recipe detail page is in read only mode: user can't update anything
+            viewModel?.isReadOnly?.value = true
+            // init lists view with adapters containing list of string : when a user share a recipe, in his database, ingredients
+            // can have a different Ids than in an another user's database. So to avoid misleading content, we send all recipes fields as
+            // string. And we have to get them as list<Sting> to show them in read only mode
+            this.initIngredientRecyclerview(ingredientStringAdapter)
+            this.initStepRecyclerview(stepStringAdapter)
+            this.initViewPager(viewPagerStringAdapter)
+            // trigger adapter notifydatasetchanged function
+            this.updateIngredientList(sharedRecipe["ingredient_list"] as MutableList<String>,false)
+            this.updateStepList(sharedRecipe["step_list"] as MutableList<String>,false)
+            this.updatePhotoList(sharedRecipe["photosUrl"] as MutableList<String>)
+            recipe_name.setText(recipe.baseDataRecipe?.name)
         }
-        )
+
     }
 
     // ---------------- UTILS -------------------
@@ -316,23 +378,36 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
     }
 
     // update only the ingredient list
-    private fun updateIngredientList(ingredientList: MutableList<Ingredient>, isEditMode: Boolean) {
-        this.ingredientAdapter?.updateIngredientList(ingredientList, isEditMode)
+    private fun <T>updateIngredientList(ingredientList: MutableList<T>, isEditMode: Boolean) {
+        if(viewModel?.isReadOnly?.value!!){
+            this.ingredientStringAdapter.updateIngredientList(ingredientList as List<String>, isEditMode)
+        }else{
+            this.ingredientAdapter.updateIngredientList(ingredientList as List<Ingredient>, isEditMode)
+        }
     }
 
     //update only the step list
-    private fun updateStepList(stepList: MutableList<Step>, isEditMode: Boolean) {
-        this.stepAdapter?.updateStepList(stepList, isEditMode)
+    private fun <T>updateStepList(stepList: MutableList<T>, isEditMode: Boolean) {
+        if(viewModel?.isReadOnly?.value!!){
+            this.stepStringAdapter?.updateStepList(stepList as List<String>, isEditMode)
+        }else{
+            this.stepAdapter?.updateStepList(stepList as List<Step>, isEditMode)
+        }
     }
 
     // update only the photo list
-    private fun updatePhotoList(photoList: MutableList<Photo>) {
+    private fun <T>updatePhotoList(photoList: MutableList<T>) {
         viewPagerVisibility(photoList)
-        this.viewPagerAdapter?.updatePhotoList(photoList)
+        if (viewModel?.isReadOnly?.value!!) {
+            this.viewPagerStringAdapter.updatePhotoList(photoList as MutableList<String>)
+        }else {
+            this.viewPagerAdapter.updatePhotoList(photoList as MutableList<Photo>)
+        }
+
     }
 
     // set visibility of viewpager depending to recipe photo list size
-    private fun viewPagerVisibility(photoList: MutableList<Photo>) {
+    private fun <T>viewPagerVisibility(photoList: MutableList<T>) {
         val isListEmpty = photoList.size == 0
         viewPager_recipe_details.visibility = if (isListEmpty) View.INVISIBLE else View.VISIBLE
         empty_photo.visibility = if (isListEmpty) View.VISIBLE else View.INVISIBLE
@@ -354,6 +429,51 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         }
         win.attributes = winParams
     }
+
+    private fun baseDataRecipeFromMap(baseDataRecipeAsMap: Map<String, Any>): BaseDataRecipe {
+        return BaseDataRecipe(
+                category = baseDataRecipeAsMap["category"].toString(),
+                recipeUrl = baseDataRecipeAsMap["recipeUrl"].toString(),
+                name = baseDataRecipeAsMap["name"].toString(),
+                numberOfLike = baseDataRecipeAsMap["numberOfLike"].toString().toInt(),
+                isAlreadyDone = baseDataRecipeAsMap["isAlreadyDone"].toString().toBoolean(),
+                baseRecipeId = baseDataRecipeAsMap["baseRecipeId"].toString().toLong(),
+                addDate = baseDataRecipeAsMap["addDate"].toString()
+        )
+    }
+    //concatenate errors messages to show all needed fields to share a recipe
+    private fun isSharedFieldFilled():Boolean{
+        // init message error with base sentence "please add at least :"
+        shareMessageError = getString(R.string.error_shared)
+        // check if there is a empty field
+        val isPhotoEmpty = viewModel?.photoList?.value?.isEmpty()
+        val isIngredientEmpty = viewModel?.ingredientList?.value?.isEmpty()
+        val isStepEmpty = viewModel?.stepList?.value?.isEmpty()
+        // set each error message for photo, ingredient list and step list
+        val errorPhoto = if(isPhotoEmpty==true) getString(R.string.error_photo) else ""
+        val errorIngredient = if(isIngredientEmpty==true) getString(R.string.error_ingredient)else ""
+        val errorStep = if(isStepEmpty==true)getString(R.string.error_step) else ""
+        // put this error message into shareMessageError if a field is empty
+        when(isPhotoEmpty){
+            true-> shareMessageError += "\n      - $errorPhoto"
+        }
+        when(isIngredientEmpty){
+            true-> shareMessageError += "\n      - $errorIngredient"
+        }
+        when(isStepEmpty){
+            true-> shareMessageError += "\n      - $errorStep"
+        }
+        // return a boolean to know if all needed fields are filled
+        return isPhotoEmpty==false && isIngredientEmpty==false && isStepEmpty==false
+    }
+
+    fun initSnackBar(message: String, duration: Int) {
+        snackbar = Snackbar.make(recipe_detail_root, message, duration).apply {
+            (view.findViewById<View>(com.google.android.material.R.id.snackbar_text) as TextView).isSingleLine = false
+            show()
+        }
+    }
+
 
     // ---------------- EXTENSIONS -------------------
 

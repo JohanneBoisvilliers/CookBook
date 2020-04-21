@@ -23,6 +23,7 @@ class RecipesListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) 
     //set the recipe's item in recycler view
     fun updateRecipeCardUi(recipe:Recipe){
         itemView.recipe_title.text= recipe.baseDataRecipe?.name
+        itemView.recipe_category.text = recipe.baseDataRecipe?.category
         this.PhotoSettings(recipe)
     }
     //get the actual recipe and check if there are some photos to
