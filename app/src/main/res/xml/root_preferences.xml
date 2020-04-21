@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="@string/messages_header">
+
+        <EditTextPreference
+            app:key="username"
+            app:title="@string/username_title_pref"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            app:key="profile_url"
+            app:title="@string/profile_url_title_pref"
+            app:useSimpleSummaryProvider="true" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

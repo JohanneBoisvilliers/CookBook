@@ -16,8 +16,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".onlineREcipe.RecipeOnlineActivity"
-            android:parentActivityName=".recipeDetailsPage.RecipeDetailsActivity"/>
+        <activity
+            android:name=".settingsPage.SettingsActivity"
+            android:label="@string/title_activity_settings"></activity>
+        <activity
+            android:name=".onlineREcipe.RecipeOnlineActivity"
+            android:parentActivityName=".recipeDetailsPage.RecipeDetailsActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -33,12 +37,16 @@
         <activity
             android:name=".recipeDetailsPage.RecipeDetailsActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".MainActivity"></activity>
-        <meta-data android:name="com.facebook.sdk.ApplicationId"
-            android:value="@string/facebook_app_id"/>
+        <activity android:name=".MainActivity" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
         <activity android:name=".loginPage.LandingPageActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

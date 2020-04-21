@@ -33,6 +33,17 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginStart="@dimen/margin_to_border"
             android:layout_marginTop="@dimen/margin_to_border" />
+        <ImageButton
+            android:id="@+id/menu_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_more_vert_black_24dp"
+            app:tint="@color/colorPrimary"
+            android:background="@android:color/transparent"
+            app:layout_constraintTop_toTopOf="@id/user_informations"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="@dimen/margin_to_border"
+            android:layout_marginTop="@dimen/margin_to_border" />
 
         <TextView
             android:id="@+id/profile_register_date"
@@ -199,15 +210,15 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        tools:viewBindingIgnore="true"
-        android:id="@+id/fab_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_anchor="@id/user_informations"
-        app:layout_anchorGravity="top|right|end"
-        android:src="@drawable/logout_sign"
-        android:tint="@color/colorPrimary"
-        android:layout_margin="@dimen/margin_fab" />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        tools:viewBindingIgnore="true"-->
+<!--        android:id="@+id/fab_logout"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_anchor="@id/user_informations"-->
+<!--        app:layout_anchorGravity="top|right|end"-->
+<!--        android:src="@drawable/logout_sign"-->
+<!--        android:tint="@color/colorPrimary"-->
+<!--        android:layout_margin="@dimen/margin_fab" />-->
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
