@@ -65,7 +65,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     //get recipe view model for requests
     private fun initViewModel(){
-        viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
 
     // configure the unit spinner for ingredient unit

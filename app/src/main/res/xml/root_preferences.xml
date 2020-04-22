@@ -5,12 +5,12 @@
         <EditTextPreference
             app:key="username"
             app:title="@string/username_title_pref"
-            app:useSimpleSummaryProvider="true" />
+            app:summary="@string/default_summary"/>
 
         <EditTextPreference
             app:key="profile_url"
             app:title="@string/profile_url_title_pref"
-            app:useSimpleSummaryProvider="true" />
+            app:summary="@string/default_summary"/>
 
     </PreferenceCategory>
 

@@ -76,6 +76,11 @@
     <string name="ingredient_bottom_sheet_name_error">Insert a name</string>
     <string name="description_error">Add a description(at least 5 characters)</string>
     <string name="share_bottom_sheet_title">Add a description to present your recipe :</string>
+    <!--SETTINGS ACTIVITY-->
+    <string name="messages_header">User</string>
+    <string name="username_title_pref">Your username</string>
+    <string name="profile_url_title_pref">Your profile\'s photo</string>
+    <string name="default_summary">Not set</string>
 
     <string-array name="titles_main_recycler_view">
         <item>Random recipes</item>
@@ -105,17 +110,4 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">Settings</string>
 
-    <!-- Preference Titles -->
-    <string name="messages_header">User</string>
-
-    <!-- Messages Preferences -->
-    <string name="username_title_pref">Your username</string>
-    <string name="profile_url_title_pref">Your profile\'s photo</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
 </resources>
