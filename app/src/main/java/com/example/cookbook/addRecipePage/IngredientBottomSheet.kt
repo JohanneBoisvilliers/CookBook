@@ -89,7 +89,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     private fun initIngredientNameField(ingredientList: List<IngredientDatabase>) {
         // Initialize a new array adapter object
         val adapter = ArrayAdapter<String>(
-                activity!!, // Context
+                requireContext(), // Context
                 android.R.layout.simple_dropdown_item_1line, // Layout
                 ingredientList.map { it.name }.toList() // Array
         )
