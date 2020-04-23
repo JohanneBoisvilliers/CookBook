@@ -65,14 +65,14 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     //get recipe view model for requests
     private fun initViewModel(){
-        viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
 
     // configure the unit spinner for ingredient unit
     private fun initSpinner() {
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
-                activity!!,
+                requireContext(),
                 R.array.unit_list,
                 android.R.layout.simple_spinner_item
         ).also { adapter ->

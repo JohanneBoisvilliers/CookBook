@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.viewpager.widget.ViewPager.OnPageChangeListener
 import com.example.cookbook.database.CookBookLocalDatabase
 import com.example.cookbook.injections.Injections
+import com.example.cookbook.profilePage.ProfileViewModel
 import com.example.cookbook.recipesPage.RecipeViewModel
 //import com.facebook.flipper.android.AndroidFlipperClient
 //import com.facebook.flipper.android.utils.FlipperUtils
@@ -25,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
 
     private var mRecipeViewModel: RecipeViewModel? = null
+
     var PERMISSION_ALL = 1
     var PERMISSIONS = arrayOf(
             Manifest.permission.READ_CONTACTS,
@@ -92,6 +94,7 @@ class MainActivity : AppCompatActivity() {
     private fun configureRecipeViewModel() {
         val viewModelFactory = Injections.provideViewModelFactory(this)
         mRecipeViewModel = ViewModelProviders.of(this, viewModelFactory).get(RecipeViewModel::class.java)
+
     }
 
     fun hasPermissions(context: Context, vararg permissions: String): Boolean = permissions.all {

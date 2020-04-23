@@ -4,10 +4,12 @@ import android.content.Context;
 
 import com.example.cookbook.database.CookBookLocalDatabase;
 import com.example.cookbook.repositories.FirestoreRecipeRepository;
+import com.example.cookbook.repositories.FirestoreUserRepository;
 import com.example.cookbook.repositories.IngredientDataRepository;
 import com.example.cookbook.repositories.PhotoDataRepository;
 import com.example.cookbook.repositories.RecipesDataRepository;
 import com.example.cookbook.repositories.StepDataRepository;
+import com.google.firebase.ktx.Firebase;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -33,10 +35,14 @@ public class Injections {
         CookBookLocalDatabase database = CookBookLocalDatabase.getInstance(context);
         return new PhotoDataRepository(database.photoDao());
     }
-    //instantiate photo repository
-    public static FirestoreRecipeRepository provideFireStoreRecipeDataRepository(Context context) {
-        CookBookLocalDatabase database = CookBookLocalDatabase.getInstance(context);
+    //instantiate firestore recipe repository
+    public static FirestoreRecipeRepository provideFireStoreRecipeDataRepository() {
         return new FirestoreRecipeRepository();
+    }
+
+    //instantiate firestore user repository
+    public static FirestoreUserRepository provideFireStoreUserDataRepository() {
+        return new FirestoreUserRepository();
     }
     //instantiate viewmodel factory
     public static ViewModelFactory provideViewModelFactory(Context context) {
@@ -44,13 +50,15 @@ public class Injections {
         IngredientDataRepository ingredientDataRepository = provideIngredientDataSource(context);
         StepDataRepository stepDataRepository = provideStepDataRepository(context);
         PhotoDataRepository photoDataRepository = providePhotoDataRepository(context);
-        FirestoreRecipeRepository firestoreRecipeRepository = provideFireStoreRecipeDataRepository(context);
+        FirestoreRecipeRepository firestoreRecipeRepository = provideFireStoreRecipeDataRepository();
+        FirestoreUserRepository firestoreUserRepository = provideFireStoreUserDataRepository();
         return new ViewModelFactory(
                 recipesDataRepository,
                 ingredientDataRepository,
                 stepDataRepository,
                 photoDataRepository,
-                firestoreRecipeRepository
+                firestoreRecipeRepository,
+                firestoreUserRepository
         );
     }
 }
