@@ -47,7 +47,7 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
         initViewModel()
     }
 
@@ -63,7 +63,7 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
 
     //get recipe view model for requests
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
 
     fun byteSizeOf(bitmap: Bitmap): Int {

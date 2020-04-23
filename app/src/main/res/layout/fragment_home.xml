@@ -16,20 +16,20 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/app_bar_height"
+            android:gravity="center_vertical"
             android:text="@string/home_title"
             android:fontFamily="@font/playfair_display_bold"
             android:textColor="@color/colorAccent"
             android:textSize="@dimen/title_size"
             android:background="@color/colorPrimary"
-            android:paddingTop="@dimen/margin_to_border"
-            android:paddingStart="@dimen/margin_to_border"
-            android:paddingBottom="@dimen/margin_to_border" />
+            android:paddingStart="@dimen/margin_to_border"/>
     </androidx.cardview.widget.CardView>
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -43,7 +43,7 @@
                 android:fontFamily="@font/playfair_display"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:layout_marginTop="85dp"
+                android:layout_marginTop="72dp"
                 android:text="@string/headline"
                 android:textColor="@color/colorAccent"
                 android:textSize="@dimen/category_title_size" />
@@ -55,7 +55,6 @@
                 app:layout_constraintTop_toBottomOf="@id/head_line_category"
                 app:cardElevation="3dp"
                 android:layout_marginTop="@dimen/margin_to_border"
-                android:layout_marginBottom="@dimen/margin_to_border"
                 android:clickable="true"
                 android:focusable="true">
 
@@ -86,7 +85,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintTop_toBottomOf="@id/article_card"
-                android:layout_below="@id/article_card"/>
+                android:layout_marginTop="@dimen/margin_to_border"
+                android:layout_below="@id/article_card"
+                android:scrollbars="none"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
 

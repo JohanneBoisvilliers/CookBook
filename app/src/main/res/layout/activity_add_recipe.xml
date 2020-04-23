@@ -3,12 +3,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <ScrollView
+    android:layout_height="match_parent"
+    android:background="@color/colorGeneralBackground">
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/margin_to_border">
+        android:layout_height="match_parent"
+        android:src="@drawable/background_accueil"
+        android:alpha="0.4"
+        android:scaleType="centerCrop"/>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -17,94 +19,142 @@
             android:paddingBottom="@dimen/margin_to_border"
             tools:context=".addRecipePage.AddRecipeActvity">
 
-            <TextView
-                android:id="@+id/new_recipe_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_to_border"
-                android:layout_marginTop="@dimen/margin_title"
-                android:fontFamily="@font/segoepr"
-                android:paddingTop="@dimen/margin_title_toolbar"
-                android:paddingBottom="@dimen/margin_title_toolbar"
-                android:text="@string/add_recipe_title"
-                android:textColor="@color/colorAccent"
-                android:textSize="@dimen/title_size"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/recipe_name_container"
+            <androidx.cardview.widget.CardView
+                android:id="@+id/new_recipes_title_page"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:hint="@string/recipe_title"
-                app:layout_constraintTop_toBottomOf="@+id/new_recipe_title">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:cardElevation="3dp">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/recipe_name_textfield"
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_recipe_title"
+                    android:fontFamily="@font/playfair_display_bold"
+                    android:textColor="@color/colorAccent"
+                    android:textSize="@dimen/title_size"
+                    android:background="@color/colorPrimary"
+                    android:paddingTop="@dimen/margin_to_border"
+                    android:paddingStart="@dimen/margin_to_border"
+                    android:paddingBottom="@dimen/margin_to_border" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/name_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/playfair_display"
+                android:text="@string/name_separator"
+                android:textSize="@dimen/section_text_size"
+                android:layout_marginTop="@dimen/twice_margin_to_border"
+                app:layout_constraintBottom_toTopOf="@+id/recipe_name_textfield"
+                app:layout_constraintRight_toLeftOf="@id/recipe_category"
+                app:layout_constraintStart_toStartOf="@+id/recipe_name_textfield"
+                app:layout_constraintTop_toBottomOf="@id/new_recipes_title_page" />
+            <EditText
+                android:id="@+id/recipe_name_textfield"
+                android:layout_width="@dimen/textfield_width"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textfield_background"
+                android:hint="@string/recipe_title"
+                android:maxLines="1"
+                android:padding="@dimen/half_margin_to_border"
+                android:layout_marginTop="@dimen/margin_to_border"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/name_text" />
+            <!-- "Recipe Details" SEPARATOR CONTAINER -->
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:id="@+id/separator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:orientation="horizontal"
+                android:paddingTop="@dimen/separator_padding"
+                android:paddingBottom="@dimen/separator_padding"
+                android:layout_marginTop="@dimen/margin_to_border"
+                app:layout_constraintTop_toBottomOf="@+id/recipe_name_textfield">
+
+            <View
+                android:layout_width="@dimen/separator_width"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/colorPrimaryDark" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/margin_to_border"
+                android:paddingEnd="@dimen/margin_to_border"
+                android:text="@string/details_separator"
+                android:textColor="@color/colorAccent" />
+
+            <View
+                android:layout_width="@dimen/separator_width"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/colorPrimaryDark" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
             <!-- CATEGORY -->
             <TextView
                 android:id="@+id/category_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_to_border"
+                android:fontFamily="@font/playfair_display"
                 android:text="@string/category_title"
+                android:textSize="@dimen/section_text_size"
                 app:layout_constraintBottom_toBottomOf="@+id/recipe_category"
-                app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toLeftOf="@id/recipe_category"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/recipe_name_textfield"
                 app:layout_constraintTop_toTopOf="@+id/recipe_category" />
 
             <Spinner
                 android:id="@+id/recipe_category"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/category_spinner_width"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/margin_to_border"
+                app:layout_constraintEnd_toEndOf="@+id/recipe_name_textfield"
                 app:layout_constraintLeft_toRightOf="@id/category_text"
-                app:layout_constraintRight_toLeftOf="@id/online_recipe_text"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_name_container" />
+                app:layout_constraintTop_toBottomOf="@+id/separator" />
             <!-- ONLINE RECIPE -->
             <TextView
                 android:id="@+id/online_recipe_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/twice_margin_to_border"
+                android:fontFamily="@font/playfair_display"
                 android:text="@string/online_title"
-                app:layout_constraintBottom_toBottomOf="@+id/recipe_category"
-                app:layout_constraintLeft_toRightOf="@id/recipe_category"
-                app:layout_constraintRight_toLeftOf="@id/online_checkbox"
-                app:layout_constraintTop_toTopOf="@+id/recipe_category" />
+                android:textSize="@dimen/section_text_size"
+                app:layout_constraintStart_toStartOf="@+id/category_text"
+                app:layout_constraintTop_toBottomOf="@+id/category_text" />
 
             <com.google.android.material.checkbox.MaterialCheckBox
                 android:id="@+id/online_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/margin_to_border"
+                android:layout_marginStart="@dimen/half_margin_to_border"
                 android:onClick="onClicked"
                 app:layout_constraintBottom_toBottomOf="@+id/online_recipe_text"
                 app:layout_constraintLeft_toRightOf="@id/online_recipe_text"
-                app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/online_recipe_text" />
             <!-- RECIPE URL -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/recipe_url_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/margin_to_border"
-                android:hint="@string/hint_add_recipe_url"
+            <EditText
                 android:visibility="gone"
-                app:layout_constraintTop_toBottomOf="@+id/recipe_category">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/recipe_url_field"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-            </com.google.android.material.textfield.TextInputLayout>
+                android:id="@+id/recipe_url_field"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/textfield_background"
+                android:hint="@string/hint_add_recipe_url"
+                android:maxLines="1"
+                android:padding="@dimen/half_margin_to_border"
+                android:layout_marginTop="@dimen/margin_to_border"
+                app:layout_constraintEnd_toEndOf="@+id/recipe_name_textfield"
+                app:layout_constraintStart_toStartOf="@id/online_recipe_text"
+                app:layout_constraintTop_toBottomOf="@id/online_recipe_text" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_go_details"

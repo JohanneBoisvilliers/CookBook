@@ -4,14 +4,15 @@
     android:orientation="horizontal"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/margin_to_border"
-    android:layout_marginEnd="@dimen/margin_to_border">
+    android:layout_marginStart="@dimen/twice_margin_to_border"
+    android:layout_marginEnd="@dimen/twice_margin_to_border">
 
     <TextView
         android:id="@+id/ingredient_quantity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="10"
+        android:textColor="@color/colorPrimaryDark"
         android:padding="@dimen/ingredient_word_padding"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -20,6 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="@dimen/ingredient_word_padding"
+        android:textColor="@android:color/darker_gray"
         android:text="gr"
         app:layout_constraintLeft_toRightOf="@id/ingredient_quantity"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -29,6 +31,7 @@
         android:layout_height="wrap_content"
         android:text="avocat"
         android:paddingTop="@dimen/ingredient_word_padding"
+        android:textColor="@android:color/darker_gray"
         app:layout_constraintLeft_toRightOf="@id/ingredient_unit"
         app:layout_constraintTop_toTopOf="parent"/>
     <ImageButton

@@ -66,7 +66,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
 
     // ----------------------------------- UI -----------------------------------
@@ -84,11 +84,11 @@ class HomeFragment : Fragment() {
             // set article name
             headline_title.text = it.description
             // create a circular progress bar for article photo loading
-            val circularProgressDrawable = CircularProgressDrawable(context!!)
+            val circularProgressDrawable = CircularProgressDrawable(requireContext())
             circularProgressDrawable.strokeWidth = 5f
             circularProgressDrawable.centerRadius = 30f
             circularProgressDrawable.start()
-            Glide.with(context!!)
+            Glide.with(requireActivity())
                     .load(it.photoUrl)
                     .placeholder(circularProgressDrawable)
                     .centerCrop()
@@ -117,7 +117,7 @@ class HomeFragment : Fragment() {
 
     private fun listenerOnHeadLineCard(url:String){
         article_card.setOnClickListener {
-            val intent = Intent(context!!, RecipeOnlineActivity::class.java)
+            val intent = Intent(requireContext(), RecipeOnlineActivity::class.java)
             // set intent extra with the url from HeadLineArticle object from firebase
             intent.putExtra("url", url)
             startActivity(intent)
