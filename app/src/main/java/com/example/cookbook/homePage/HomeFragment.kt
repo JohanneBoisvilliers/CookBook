@@ -30,9 +30,6 @@ class HomeFragment : Fragment() {
     private var viewModel: RecipeViewModel? = null
 
     private val mFinalEmbeddedList: LinkedHashMap<String,List<Recipe>> = linkedMapOf()
-    private val mRandomRecipes: MutableList<Recipe> = mutableListOf()
-    private val mFavoriteRecipes: List<Recipe>? = null
-    private val mNotDoneRecipes: List<Recipe>? = null
 
     companion object {
         fun newInstance(): HomeFragment {
@@ -72,8 +69,8 @@ class HomeFragment : Fragment() {
     // ----------------------------------- UI -----------------------------------
 
 
-    private fun updateItemList(embeddedList: LinkedHashMap<String,List<Recipe>>,recipeListMap:MutableList<Map<String,Any>>?) {
-        this.mMainAdapter.notifyItemChanged(embeddedList,recipeListMap)
+    private fun updateItemList(embeddedList: LinkedHashMap<String,List<Recipe>>,recipeListMap:MutableList<Map<String,Any>>?,position:Int) {
+        this.mMainAdapter.notifyItemChanged(embeddedList,recipeListMap,position)
     }
 
     // ----------------------------------- OBSERVERS -----------------------------------
@@ -102,14 +99,14 @@ class HomeFragment : Fragment() {
     private fun observerOnRandomRecipes(){
         viewModel?.randomRecipes?.observe(viewLifecycleOwner, Observer {
             mFinalEmbeddedList[getString(R.string.random_recipe)] = it
-            this.updateItemList(mFinalEmbeddedList,null)
+            this.updateItemList(mFinalEmbeddedList,null,0)
         })
     }
 
     private fun observerOnFavoriteRecipes(){
         viewModel?.favoritesRecipesList?.observe(viewLifecycleOwner, Observer {
             mFinalEmbeddedList[getString(R.string.favorites_recipe)] = mapIntoListConversion(it)
-            this.updateItemList(mFinalEmbeddedList,it)
+            this.updateItemList(mFinalEmbeddedList,it,1)
         })
     }
 

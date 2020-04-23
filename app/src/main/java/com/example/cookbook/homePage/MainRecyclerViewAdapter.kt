@@ -16,12 +16,12 @@ import com.example.cookbook.utils.RecyclerItemClickListenr
 import kotlinx.android.synthetic.main.fragment_recipes.*
 import kotlinx.android.synthetic.main.recyclerview_main_item.view.*
 
-class MainRecyclerViewAdapter(private val mMainEmbeddedRecipeList: LinkedHashMap<String,List<Recipe>>) : RecyclerView.Adapter<MainRecyclerViewViewHolder>() {
+class MainRecyclerViewAdapter(private val mMainEmbeddedRecipeList: LinkedHashMap<String, List<Recipe>>) : RecyclerView.Adapter<MainRecyclerViewViewHolder>() {
     private var mContext: Context? = null
     private var mViewPool: RecycledViewPool? = null
     private val mHorizontalRecyclerViewAdapter: HorizontalRecyclerViewAdapter? = null
     private lateinit var mCategoryTitles: Array<String>
-    private var mRecipeList:MutableList<Map<String,Any>>? = mutableListOf()
+    private var mRecipeList: MutableList<Map<String, Any>>? = mutableListOf()
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainRecyclerViewViewHolder {
@@ -36,27 +36,27 @@ class MainRecyclerViewAdapter(private val mMainEmbeddedRecipeList: LinkedHashMap
     override fun onBindViewHolder(holder: MainRecyclerViewViewHolder, position: Int) {
         val actualRecipeList = mMainEmbeddedRecipeList.values.elementAt(position)
         holder.itemView.category_title.text = mMainEmbeddedRecipeList.keys.elementAt(position)
-        this.initRecyclerViewAtPosition(holder,actualRecipeList)
+        this.initRecyclerViewAtPosition(holder, actualRecipeList)
     }
 
     override fun getItemCount(): Int {
         return mMainEmbeddedRecipeList.size
     }
 
-    fun notifyItemChanged(embeddedList: LinkedHashMap<String,List<Recipe>>?,recipeAsMap:MutableList<Map<String,Any>>?) {
+    fun notifyItemChanged(embeddedList: LinkedHashMap<String, List<Recipe>>?, recipeAsMap: MutableList<Map<String, Any>>?, position: Int) {
         recipeAsMap?.let {
             mRecipeList?.clear()
             mRecipeList?.addAll(recipeAsMap)
         }
         mMainEmbeddedRecipeList.clear()
         mMainEmbeddedRecipeList.putAll(embeddedList!!)
-        notifyDataSetChanged()
+        notifyItemChanged(position)
     }
 
     //------------------- INIT ---------------
 
-    private fun initRecyclerViewAtPosition(holder: MainRecyclerViewViewHolder,list: List<Recipe>){
-        if(mMainEmbeddedRecipeList.isNotEmpty()){
+    private fun initRecyclerViewAtPosition(holder: MainRecyclerViewViewHolder, list: List<Recipe>) {
+        if (mMainEmbeddedRecipeList.isNotEmpty()) {
             holder.itemView.horizontal_recycler_view.setRecycledViewPool(mViewPool)
             holder.itemView.horizontal_recycler_view.apply {
                 adapter = HorizontalRecyclerViewAdapter(list)
@@ -70,20 +70,21 @@ class MainRecyclerViewAdapter(private val mMainEmbeddedRecipeList: LinkedHashMap
                         override fun onItemClick(view: View, position: Int) {
                             val isRecipeObject = list[position].baseDataRecipe?.baseRecipeId == 0L
                             val intent = Intent(mContext, RecipeDetailsActivity::class.java)
-                            if(!isRecipeObject){
-                                intent.putExtra("recipe",list[position].baseDataRecipe?.baseRecipeId)
-                            }else {
-                                val map =  HashMap<String,Any>(mRecipeList?.get(position)!!)
-                                intent.putExtra("sharedRecipe",map)
+                            if (!isRecipeObject) {
+                                intent.putExtra("recipe", list[position].baseDataRecipe?.baseRecipeId)
+                            } else {
+                                val map = HashMap<String, Any>(mRecipeList?.get(position)!!)
+                                intent.putExtra("sharedRecipe", map)
                             }
 
-                            startActivity(mContext!!,intent,null)
+                            startActivity(mContext!!, intent, null)
                         }
+
                         override fun onItemLongClick(view: View?, position: Int) {
                             print(position)
                         }
                     }))
         }
     }
-
 }
+
