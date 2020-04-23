@@ -49,7 +49,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new AddRecipeViewModel(mIngredientDataRepository, mRecipesDataRepository);
         }
         if (modelClass.isAssignableFrom(ProfileViewModel.class)) {
-            return (T) new ProfileViewModel();
+            return (T) new ProfileViewModel(mRecipesDataRepository);
         }
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
             return (T) new LoginViewModel();

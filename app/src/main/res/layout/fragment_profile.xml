@@ -57,6 +57,7 @@
             android:layout_marginStart="@dimen/margin_to_border" />
 
         <ImageView
+            android:visibility="gone"
             tools:viewBindingIgnore="true"
             android:id="@+id/logo_like"
             android:layout_width="@dimen/logo_size"
@@ -69,6 +70,7 @@
             android:layout_marginTop="@dimen/margin_logo" />
 
         <TextView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="10 Likes"
@@ -81,6 +83,7 @@
             android:layout_marginStart="@dimen/margin_to_border" />
 
         <ImageView
+            android:visibility="gone"
             tools:viewBindingIgnore="true"
             android:id="@+id/logo_love"
             android:layout_width="@dimen/logo_size"
@@ -93,6 +96,7 @@
             android:layout_marginTop="@dimen/margin_logo" />
 
         <TextView
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="10 Favorites"
@@ -114,7 +118,7 @@
             app:layout_constraintTop_toBottomOf="@id/logo_love"
             app:layout_constraintLeft_toLeftOf="parent"
             android:layout_marginStart="@dimen/margin_to_border"
-            android:layout_marginTop="@dimen/margin_logo" />
+            android:layout_marginTop="@dimen/margin_to_border" />
 
         <TextView
             tools:viewBindingIgnore="true"

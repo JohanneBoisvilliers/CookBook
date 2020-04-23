@@ -72,7 +72,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     private fun initSpinner() {
         // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
-                activity!!,
+                requireContext(),
                 R.array.unit_list,
                 android.R.layout.simple_spinner_item
         ).also { adapter ->
