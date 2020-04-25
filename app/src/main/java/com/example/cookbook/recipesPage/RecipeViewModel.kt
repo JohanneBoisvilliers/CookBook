@@ -9,7 +9,6 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.*
 import java.io.File
-import java.util.concurrent.CancellationException
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
@@ -33,6 +32,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
     val photoSelected = MutableLiveData(0)
+    val requestState = MutableLiveData<RequestResult<*>>(RequestResult.Initial("test"))
     private val uriList: MutableList<String> = mutableListOf()
     val isNotOnline: Boolean
         get() {
@@ -230,13 +230,40 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
+    fun uploadPhoto() {
+        requestState.value = RequestResult.Loading("chargement")
+        try {
+            viewModelScope.launch(Dispatchers.IO) {
+//                delay(1500L)
+                withContext(Dispatchers.IO) {
+                    compressedPhotoList.value!!.forEach {
+                        launch {
+                            uriList.add(mFirestoreRecipeRepository.uploadPhoto(actualRecipe.value!!, it).toString())
+                        }
+                    }
+                }
+                withContext(Dispatchers.IO) {
+                    sharedRecipe(
+                            recipe = actualRecipe.value!!,
+                            description = shareDescription.value!!,
+                            photoUrls = uriList
+                    )
+                }
+                requestState.postValue(RequestResult.Success(true))
+            }
+        }catch (e: Exception){
+            requestState.value = RequestResult.Failure(e)
+        }
+
+    }
+
     val uploadPhoto = liveData<RequestResult<Any>> {
         emit(RequestResult.Loading("chargement"))
 
         try {
 
 
-            viewModelScope.launch(Dispatchers.IO) {
+            viewModelScope.launch {
 
                 delay(500L)
 //                withContext(Dispatchers.IO) {
@@ -253,8 +280,8 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
 //                            photoUrls = uriList
 //                    )
 //                }
+
             }
-            emit(RequestResult.Success(true))
         } catch (e: Exception) {
             println(e)
         }

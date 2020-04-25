@@ -1,20 +1,18 @@
 package com.example.cookbook.recipeDetailsPage
 
-import android.R.attr
+import MyAlertDialogFragment
+import android.app.AlertDialog
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
@@ -24,15 +22,11 @@ import com.example.cookbook.utils.RequestResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
 import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.quality
 import id.zelory.compressor.constraint.size
-import kotlinx.android.synthetic.main.activity_landing_page.*
-import kotlinx.android.synthetic.main.activity_recipe_details.*
 import kotlinx.android.synthetic.main.fragment_share_bottom_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 
@@ -62,6 +56,8 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
         this.listenerOnShareButton()
         this.listenerOnCancelShareButton()
         this.listenerOnDescriptionField()
+        observerOnIsUploaded()
+
     }
 
     //------------------ INIT ------------------
@@ -111,9 +107,7 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
                             }
                         }
                         viewModel.compressedPhotoList.value = compressedList
-                        observerOnIsUploaded()
-                        dismiss()
-
+                        viewModel.uploadPhoto()
                     }
                 }
             }
@@ -137,18 +131,35 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
     //------------------ LISTENER ------------------
 
     private fun observerOnIsUploaded() {
-        viewModel.uploadPhoto.observe(viewLifecycleOwner, Observer {
+
+        viewModel.requestState.observe(viewLifecycleOwner, Observer {
+            val fragmentTransaction = requireFragmentManager().beginTransaction()
+            val prev = requireFragmentManager().findFragmentByTag("dialog")
+            if (prev != null) {
+                fragmentTransaction.remove(prev)
+            }
+            fragmentTransaction.addToBackStack(null)
+            val dialogFragment = MyAlertDialogFragment() //here MyDialog is my custom dialog
             when(it){
                 is RequestResult.Loading -> {
-                    Snackbar.make(recipe_detail_root, it.data, Snackbar.LENGTH_LONG).show()
+                    dialogFragment.show(fragmentTransaction, "dialog")
                 }
                 is RequestResult.Success  -> {
-                    Toast.makeText(requireContext(),"fini",Toast.LENGTH_LONG).show()
+                    requireFragmentManager().findFragmentByTag("dialog")?.let {
+                        (it as DialogFragment).dismiss()
+                    }
+                    dismiss()
                 }
-                is RequestResult.Failure  -> {println(it.throwable)}
+                is RequestResult.Failure  -> {
+                    println(it.throwable)
+                }
             }
         })
     }
+
+    private fun showAlertDialog() {
+    }
+
 
     //------------------ EXTENSION ------------------
 
