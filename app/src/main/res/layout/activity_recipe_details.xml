@@ -5,13 +5,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary">
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:scrollbars="none">
 
             <RelativeLayout
-                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:context=".recipeDetailsPage.RecipeDetailsActivity">
@@ -32,7 +33,8 @@
                     android:id="@+id/rd_tab_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/viewPager_recipe_details"
+                    android:layout_above="@id/main_container_card"
+                    android:layout_marginBottom="@dimen/tablayout_override"
                     app:tabBackground="@drawable/tab_selector"
                     app:tabGravity="center"
                     app:tabIndicatorHeight="0dp" />
@@ -43,7 +45,7 @@
                     android:layout_height="@dimen/viewpager_update_icon_size"
                     android:layout_marginBottom="@dimen/margin_to_border"
                     android:layout_alignEnd="@id/vp_del_photo"
-                    android:layout_alignBottom="@id/viewPager_recipe_details"
+                    android:layout_alignBottom="@id/rd_tab_layout"
                     android:layout_marginEnd="@dimen/icon_margin_to_border"
                     android:src="@drawable/baseline_add_circle_outline_24"
                     android:tint="@color/colorAccent"
@@ -54,7 +56,7 @@
                     android:id="@+id/vp_del_photo"
                     android:layout_width="@dimen/viewpager_update_icon_size"
                     android:layout_height="@dimen/viewpager_update_icon_size"
-                    android:layout_alignBottom="@id/viewPager_recipe_details"
+                    android:layout_alignBottom="@id/rd_tab_layout"
                     android:layout_alignParentEnd="true"
                     android:layout_marginBottom="@dimen/margin_to_border"
                     android:layout_marginEnd="@dimen/margin_to_border"
@@ -62,127 +64,151 @@
                     android:tint="@color/colorAccent"
                     android:background="@android:color/transparent"
                     android:onClick="onClicked"/>
-                <EditText
-                    android:id="@+id/recipe_name"
-                    android:layout_below="@id/viewPager_recipe_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/recipe_title_size"
-                    android:layout_marginTop="@dimen/margin_to_border"
-                    android:layout_marginEnd="@dimen/margin_to_border"
-                    android:layout_marginStart="@dimen/margin_to_border"
-                    android:text="Nom de la recette ici"
-                    android:inputType="textNoSuggestions"
-                    android:longClickable="false"
-                    android:focusable="false"
-                    android:background="@android:color/transparent"/>
-                <ImageButton
-                    android:background="@android:color/transparent"
-                    android:id="@+id/btn_update_recipe_name"
-                    android:layout_width="@dimen/viewpager_update_icon_size"
-                    android:layout_height="@dimen/viewpager_update_icon_size"
-                    android:layout_toEndOf="@id/recipe_name"
-                    android:layout_alignTop="@id/recipe_name"
-                    android:layout_alignBottom="@id/recipe_name"
-                    android:src="@drawable/baseline_create_24"
-                    android:scaleType="fitCenter"
-                    android:tint="@color/colorAccent"
-                    android:onClick="onClicked"/>
-
-                <ImageView
-                    android:visibility="gone"
-                    android:id="@+id/url_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_language_24"
-                    android:layout_below="@id/recipe_name"
-                    android:layout_margin="@dimen/margin_to_border"/>
-                <EditText
-                    android:visibility="gone"
-                    android:id="@+id/url_field"
-                    android:layout_below="@id/viewPager_recipe_details"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/url_icon"
-                    android:layout_alignTop="@id/url_icon"
-                    android:textSize="@dimen/recipe_title_size"
-                    android:text="url ici"
-                    android:inputType="textNoSuggestions"
-                    android:maxWidth="@dimen/url_width"
-                    android:layout_marginEnd="@dimen/margin_to_border"
-                    android:longClickable="false"
-                    android:focusable="false"
-                    android:background="@android:color/transparent"
-                    tools:ignore="TextFields" />
-                <ImageButton
-                    android:visibility="gone"
-                    android:background="@android:color/transparent"
-                    android:id="@+id/btn_update_url"
-                    android:layout_width="@dimen/viewpager_update_icon_size"
-                    android:layout_height="@dimen/viewpager_update_icon_size"
-                    android:layout_toEndOf="@id/url_field"
-                    android:layout_alignTop="@id/url_field"
-                    android:layout_alignBottom="@id/url_field"
-                    android:src="@drawable/baseline_create_24"
-                    android:scaleType="fitCenter"
-                    android:tint="@color/colorAccent"
-                    android:onClick="onClicked"/>
-
-                <TextView
-                    android:id="@+id/ingredient_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/url_icon"
-                    android:layout_margin="@dimen/margin_to_border"
-                    android:text="@string/ingredient_title"
-                    android:textSize="@dimen/ingredients_title_size"
-                    android:textStyle="bold" />
-
-                <ImageButton
-                    android:background="@android:color/transparent"
-                    android:id="@+id/btn_add_ingredient"
-                    android:layout_width="@dimen/viewpager_update_icon_size"
-                    android:layout_height="@dimen/viewpager_update_icon_size"
-                    android:layout_toEndOf="@id/ingredient_title"
-                    android:layout_alignTop="@id/ingredient_title"
-                    android:layout_alignBottom="@id/ingredient_title"
-                    android:src="@drawable/baseline_add_circle_outline_24"
-                    android:tint="@color/colorAccent"
-                    android:onClick="onClicked"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/ingredient_recycler_view"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/main_container_card"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/ingredient_title" />
+                    android:layout_below="@id/viewPager_recipe_details"
+                    app:cardCornerRadius="30dp"
+                    android:layout_marginTop="@dimen/image_override"
+                    android:layout_marginBottom="-20dp">
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <EditText
+                            android:id="@+id/recipe_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="@dimen/recipe_title_size"
+                            android:layout_marginTop="@dimen/twice_margin_to_border"
+                            android:layout_marginEnd="@dimen/margin_to_border"
+                            android:layout_marginStart="@dimen/twice_margin_to_border"
+                            android:text="Nom de la recette ici"
+                            android:inputType="textNoSuggestions"
+                            android:longClickable="false"
+                            android:focusable="false"
+                            android:background="@android:color/transparent"
+                            android:textStyle="bold"
+                            android:textColor="@color/colorAccent"/>
+                        <ImageButton
+                            android:background="@android:color/transparent"
+                            android:id="@+id/btn_update_recipe_name"
+                            android:layout_width="@dimen/viewpager_update_icon_size"
+                            android:layout_height="@dimen/viewpager_update_icon_size"
+                            android:layout_toEndOf="@id/recipe_name"
+                            android:layout_alignTop="@id/recipe_name"
+                            android:layout_alignBottom="@id/recipe_name"
+                            android:src="@drawable/baseline_create_24"
+                            android:scaleType="fitCenter"
+                            android:tint="@color/colorAccent"
+                            android:onClick="onClicked"/>
 
-                <TextView
-                    android:id="@+id/recipe_step_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/ingredient_recycler_view"
-                    android:layout_margin="@dimen/margin_to_border"
-                    android:text="@string/recipe_step_title"
-                    android:textSize="@dimen/ingredients_title_size"
-                    android:textStyle="bold" />
-                <ImageButton
-                    android:id="@+id/btn_add_step"
-                    android:layout_width="@dimen/viewpager_update_icon_size"
-                    android:layout_height="@dimen/viewpager_update_icon_size"
-                    android:layout_toEndOf="@id/recipe_step_title"
-                    android:layout_alignTop="@id/recipe_step_title"
-                    android:layout_alignBottom="@id/recipe_step_title"
-                    android:src="@drawable/baseline_add_circle_outline_24"
-                    android:tint="@color/colorAccent"
-                    android:onClick="onClicked"
-                    android:background="@android:color/transparent"/>
+                        <ImageView
+                            android:visibility="gone"
+                            android:id="@+id/url_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/baseline_language_24"
+                            android:layout_below="@id/recipe_name"
+                            android:layout_marginTop="@dimen/margin_to_border"
+                            android:layout_marginBottom="@dimen/margin_to_border"
+                            android:layout_marginEnd="@dimen/margin_to_border"
+                            android:layout_marginStart="@dimen/twice_margin_to_border"/>
+                        <EditText
+                            android:visibility="gone"
+                            android:id="@+id/url_field"
+                            android:layout_below="@id/recipe_name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@id/url_icon"
+                            android:layout_alignTop="@id/url_icon"
+                            android:text="url ici"
+                            android:inputType="textNoSuggestions"
+                            android:maxWidth="@dimen/url_width"
+                            android:layout_marginEnd="@dimen/margin_to_border"
+                            android:longClickable="false"
+                            android:focusable="false"
+                            android:background="@android:color/transparent"
+                            tools:ignore="TextFields" />
+                        <ImageButton
+                            android:visibility="gone"
+                            android:background="@android:color/transparent"
+                            android:id="@+id/btn_update_url"
+                            android:layout_width="@dimen/viewpager_update_icon_size"
+                            android:layout_height="@dimen/viewpager_update_icon_size"
+                            android:layout_toEndOf="@id/url_field"
+                            android:layout_alignTop="@id/url_field"
+                            android:layout_alignBottom="@id/url_field"
+                            android:src="@drawable/baseline_create_24"
+                            android:scaleType="fitCenter"
+                            android:tint="@color/colorAccent"
+                            android:onClick="onClicked"/>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recipe_step_recycler_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/recipe_step_title"
-                    android:layout_marginBottom="@dimen/bottom_padding"/>
+                        <TextView
+                            android:id="@+id/ingredient_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/url_field"
+                            android:layout_marginStart="@dimen/twice_margin_to_border"
+                            android:layout_marginTop="@dimen/twice_margin_to_border"
+                            android:layout_marginEnd="@dimen/margin_to_border"
+                            android:layout_marginBottom="@dimen/margin_to_border"
+                            android:text="@string/ingredient_title"
+                            android:textSize="@dimen/ingredients_title_size"
+                            android:textStyle="bold" />
+
+                        <ImageButton
+                            android:background="@android:color/transparent"
+                            android:id="@+id/btn_add_ingredient"
+                            android:layout_width="@dimen/viewpager_update_icon_size"
+                            android:layout_height="@dimen/viewpager_update_icon_size"
+                            android:layout_toEndOf="@id/ingredient_title"
+                            android:layout_alignTop="@id/ingredient_title"
+                            android:layout_alignBottom="@id/ingredient_title"
+                            android:src="@drawable/baseline_add_circle_outline_24"
+                            android:tint="@color/colorAccent"
+                            android:onClick="onClicked"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/ingredient_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/ingredient_title" />
+
+                        <TextView
+                            android:id="@+id/recipe_step_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/ingredient_recycler_view"
+                            android:layout_marginTop="@dimen/margin_to_border"
+                            android:layout_marginStart="@dimen/twice_margin_to_border"
+                            android:layout_marginBottom="@dimen/margin_to_border"
+                            android:text="@string/recipe_step_title"
+                            android:textSize="@dimen/ingredients_title_size"
+                            android:textStyle="bold" />
+                        <ImageButton
+                            android:id="@+id/btn_add_step"
+                            android:layout_width="@dimen/viewpager_update_icon_size"
+                            android:layout_height="@dimen/viewpager_update_icon_size"
+                            android:layout_toEndOf="@id/recipe_step_title"
+                            android:layout_alignTop="@id/recipe_step_title"
+                            android:layout_alignBottom="@id/recipe_step_title"
+                            android:src="@drawable/baseline_add_circle_outline_24"
+                            android:tint="@color/colorAccent"
+                            android:onClick="onClicked"
+                            android:background="@android:color/transparent"
+                            android:layout_marginStart="@dimen/margin_to_border"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recipe_step_recycler_view"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/recipe_step_title"
+                            android:layout_marginBottom="@dimen/bottom_padding"/>
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
 
             </RelativeLayout>
 

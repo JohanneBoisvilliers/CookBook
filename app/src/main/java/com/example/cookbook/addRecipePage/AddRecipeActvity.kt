@@ -61,9 +61,9 @@ class AddRecipeActvity : AppCompatActivity() {
         if (view is CheckBox) {
             val checked: Boolean = view.isChecked
             if (checked) {
-                recipe_url_container.visibility = View.VISIBLE
+                recipe_url_field.visibility = View.VISIBLE
             } else {
-                recipe_url_container.visibility = View.GONE
+                recipe_url_field.visibility = View.GONE
             }
         }
     }

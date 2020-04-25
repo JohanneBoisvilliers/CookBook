@@ -26,7 +26,6 @@ class SharedRecipeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
                 if(recipe["users_liked"] != null)
                     recipe["users_liked"] as List<String>
                 else listOf()
-//        itemView.category_container.text = baseDataRecipeMap["category"].toString()
         itemView.social_description.text = recipe["description"].toString()
         itemView.posted_by.text = itemView.context.getString(R.string.posted_by, recipe["username"].toString())
         this.recipePhotoSettings(photosList[0])

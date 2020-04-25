@@ -1,5 +1,6 @@
 package com.example.cookbook.socialPage
 
+import android.R.string
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -15,6 +16,11 @@ import com.example.cookbook.recipesPage.RecipeViewModel
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.fragment_social.*
 import kotlinx.android.synthetic.main.recyclerview_social_item.*
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.HashMap
+
 
 /**
  * A simple [Fragment] subclass.
@@ -49,7 +55,7 @@ class SocialFragment : Fragment() {
     //------------------- INIT -------------------
 
     private fun initViewModel(){
-        viewmodel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        viewmodel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
     //configure recycler view : set layout manager and adapter
     private fun initRecyclerView() {
@@ -96,8 +102,4 @@ class SocialFragment : Fragment() {
         sharedRecipeAsMap.addAll(recipesList)
         mListAdapter.updateList(recipesList)
     }
-
-
-
-
 }

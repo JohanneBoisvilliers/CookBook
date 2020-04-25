@@ -19,8 +19,10 @@
     <string name="add_recipe_title">New Recipes</string>
     <string name="hint_add_recipe_url">Recipe URL</string>
     <string name="add_step_button">ADD STEP</string>
+    <string name="details_separator">Recipe details</string>
+    <string name="name_separator">Name :</string>
     <string name="category_title">Category :</string>
-    <string name="recipe_title">Recipe</string>
+    <string name="recipe_title">Recipe name</string>
     <string name="online_title">Online recipe ?</string>
     <string name="ingredients_title">Ingredients :</string>
     <string name="photos_title">Photos :</string>

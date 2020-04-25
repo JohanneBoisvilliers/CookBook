@@ -7,21 +7,27 @@
     tools:context=".socialPage.SocialFragment"
     android:background="@color/colorGeneralBackground">
 
-    <TextView
+    <androidx.cardview.widget.CardView
         android:id="@+id/all_recipes_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/social_fragment_title"
-        android:fontFamily="@font/playfair_display_bold"
-        android:textColor="@color/colorAccent"
-        android:textSize="@dimen/title_size"
-        android:background="@color/colorPrimary"
-        android:paddingTop="@dimen/margin_to_border"
-        android:paddingStart="@dimen/margin_to_border"
-        android:paddingBottom="@dimen/margin_to_border"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/shared_recipes_recyclerview"/>
+        app:layout_constraintBottom_toTopOf="@+id/all_recipes_recyclerview"
+        app:cardElevation="3dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/social_fragment_title"
+            android:fontFamily="@font/playfair_display_bold"
+            android:textColor="@color/colorAccent"
+            android:textSize="@dimen/title_size"
+            android:background="@color/colorPrimary"
+            android:paddingTop="@dimen/margin_to_border"
+            android:paddingStart="@dimen/margin_to_border"
+            android:paddingBottom="@dimen/margin_to_border" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/shared_recipes_recyclerview"

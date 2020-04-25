@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_marginStart="@dimen/twice_margin_to_border"
+    android:layout_marginEnd="@dimen/twice_margin_to_border">
 
 <LinearLayout
     android:layout_width="match_parent"
@@ -13,9 +15,9 @@
         android:id="@+id/step_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="@dimen/recipe_title_size"
-        android:text="1"
-        android:layout_marginStart="@dimen/margin_to_border"/>
+        style="@style/TextAppearance.MaterialComponents.Overline"
+        android:textColor="@android:color/darker_gray"
+        android:text="1"/>
     <ImageButton
         android:id="@+id/update_step"
         android:layout_width="@dimen/step_modify_icon"
@@ -47,7 +49,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="@dimen/recipe_text_size"
-        android:layout_marginStart="@dimen/margin_to_border"
+        android:textColor="@color/colorPrimaryDark"
         android:layout_marginEnd="@dimen/margin_to_border"
         android:layout_marginBottom="@dimen/margin_to_border"/>
 

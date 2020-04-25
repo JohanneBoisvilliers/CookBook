@@ -10,7 +10,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/margin_to_border"
         android:layout_marginBottom="@dimen/margin_to_border"
-        android:layout_marginTop="@dimen/margin_to_border"
         android:fontFamily="@font/playfair_display"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/category_title_size" />

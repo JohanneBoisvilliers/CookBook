@@ -43,7 +43,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
         this.initViewModel()
         observerOnIngredientList()
     }
@@ -89,7 +89,7 @@ class IngredientBottomSheet : BottomSheetDialogFragment() {
     private fun initIngredientNameField(ingredientList: List<IngredientDatabase>) {
         // Initialize a new array adapter object
         val adapter = ArrayAdapter<String>(
-                activity!!, // Context
+                requireContext(), // Context
                 android.R.layout.simple_dropdown_item_1line, // Layout
                 ingredientList.map { it.name }.toList() // Array
         )

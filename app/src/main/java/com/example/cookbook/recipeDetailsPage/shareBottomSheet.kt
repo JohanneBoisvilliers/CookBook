@@ -1,12 +1,10 @@
 package com.example.cookbook.recipeDetailsPage
 
-import android.R.attr
+import MyAlertDialogFragment
+import android.app.AlertDialog
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.LayoutInflater
@@ -14,26 +12,28 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.example.cookbook.R
 import com.example.cookbook.recipesPage.RecipeViewModel
+import com.example.cookbook.utils.RequestResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import id.zelory.compressor.Compressor
-import id.zelory.compressor.constraint.quality
 import id.zelory.compressor.constraint.size
 import kotlinx.android.synthetic.main.fragment_share_bottom_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.ByteArrayOutputStream
 import java.io.File
 
 
 class ShareBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: RecipeViewModel
+    private lateinit var snackbar: Snackbar
 
     companion object {
         const val TAG = "ModalShareBottomSheet"
@@ -47,7 +47,7 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(DialogFragment.STYLE_NORMAL, R.style.DialogStyle)
+        setStyle(DialogFragment.STYLE_NORMAL, R.style.CustomBottomSheetDialogTheme)
         initViewModel()
     }
 
@@ -56,14 +56,15 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
         this.listenerOnShareButton()
         this.listenerOnCancelShareButton()
         this.listenerOnDescriptionField()
-        this.observerOnIsUploaded()
+        observerOnIsUploaded()
+
     }
 
     //------------------ INIT ------------------
 
     //get recipe view model for requests
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
 
     fun byteSizeOf(bitmap: Bitmap): Int {
@@ -74,6 +75,11 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
         } else {
             bitmap.rowBytes * bitmap.height
         }
+    }
+
+    fun initSnackBar(message: String, duration: Int) {
+        snackbar = Snackbar.make(root_share_bottom_sheet, message, duration)
+        snackbar.show()
     }
 
     //------------------ LISTENER ------------------
@@ -93,14 +99,15 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
                         withContext(Dispatchers.Default) {
                             actualRecipe?.photoList?.forEach {
                                 launch {
-                                    val compressedFile = Compressor.compress(activity!!, File(it.photoUrl)) {
+                                    val compressedFile = Compressor.compress(requireContext(), File(it.photoUrl)) {
                                         size(50_000)
                                     }
                                     compressedList.add(compressedFile)
                                 }
                             }
                         }
-                        viewModel.uploadPhoto(actualRecipe!!, compressedList)
+                        viewModel.compressedPhotoList.value = compressedList
+                        viewModel.uploadPhoto()
                     }
                 }
             }
@@ -124,11 +131,35 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
     //------------------ LISTENER ------------------
 
     private fun observerOnIsUploaded() {
-        viewModel.isUploaded.observe(viewLifecycleOwner, Observer {
-            viewModel.isUploaded.postValue(false)
-            if (it) dismiss()
+
+        viewModel.requestState.observe(viewLifecycleOwner, Observer {
+            val fragmentTransaction = requireFragmentManager().beginTransaction()
+            val prev = requireFragmentManager().findFragmentByTag("dialog")
+            if (prev != null) {
+                fragmentTransaction.remove(prev)
+            }
+            fragmentTransaction.addToBackStack(null)
+            val dialogFragment = MyAlertDialogFragment() //here MyDialog is my custom dialog
+            when(it){
+                is RequestResult.Loading -> {
+                    dialogFragment.show(fragmentTransaction, "dialog")
+                }
+                is RequestResult.Success  -> {
+                    requireFragmentManager().findFragmentByTag("dialog")?.let {
+                        (it as DialogFragment).dismiss()
+                    }
+                    dismiss()
+                }
+                is RequestResult.Failure  -> {
+                    println(it.throwable)
+                }
+            }
         })
     }
+
+    private fun showAlertDialog() {
+    }
+
 
     //------------------ EXTENSION ------------------
 
