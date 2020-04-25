@@ -13,16 +13,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.lifecycle.lifecycleScope
 import com.example.cookbook.R
 import com.example.cookbook.recipesPage.RecipeViewModel
+import com.example.cookbook.utils.RequestResult
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.snackbar.Snackbar
 import id.zelory.compressor.Compressor
 import id.zelory.compressor.constraint.quality
 import id.zelory.compressor.constraint.size
+import kotlinx.android.synthetic.main.activity_landing_page.*
+import kotlinx.android.synthetic.main.activity_recipe_details.*
 import kotlinx.android.synthetic.main.fragment_share_bottom_sheet.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -34,6 +39,7 @@ import java.io.File
 class ShareBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var viewModel: RecipeViewModel
+    private lateinit var snackbar: Snackbar
 
     companion object {
         const val TAG = "ModalShareBottomSheet"
@@ -56,7 +62,6 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
         this.listenerOnShareButton()
         this.listenerOnCancelShareButton()
         this.listenerOnDescriptionField()
-        this.observerOnIsUploaded()
     }
 
     //------------------ INIT ------------------
@@ -76,6 +81,11 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
         }
     }
 
+    fun initSnackBar(message: String, duration: Int) {
+        snackbar = Snackbar.make(root_share_bottom_sheet, message, duration)
+        snackbar.show()
+    }
+
     //------------------ LISTENER ------------------
 
     //take recipe saved in viewmodel and take input in share_description field then call shared function in viewmodel
@@ -93,14 +103,17 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
                         withContext(Dispatchers.Default) {
                             actualRecipe?.photoList?.forEach {
                                 launch {
-                                    val compressedFile = Compressor.compress(activity!!, File(it.photoUrl)) {
+                                    val compressedFile = Compressor.compress(requireContext(), File(it.photoUrl)) {
                                         size(50_000)
                                     }
                                     compressedList.add(compressedFile)
                                 }
                             }
                         }
-                        viewModel.uploadPhoto(actualRecipe!!, compressedList)
+                        viewModel.compressedPhotoList.value = compressedList
+                        observerOnIsUploaded()
+                        dismiss()
+
                     }
                 }
             }
@@ -124,9 +137,16 @@ class ShareBottomSheet : BottomSheetDialogFragment() {
     //------------------ LISTENER ------------------
 
     private fun observerOnIsUploaded() {
-        viewModel.isUploaded.observe(viewLifecycleOwner, Observer {
-            viewModel.isUploaded.postValue(false)
-            if (it) dismiss()
+        viewModel.uploadPhoto.observe(viewLifecycleOwner, Observer {
+            when(it){
+                is RequestResult.Loading -> {
+                    Snackbar.make(recipe_detail_root, it.data, Snackbar.LENGTH_LONG).show()
+                }
+                is RequestResult.Success  -> {
+                    Toast.makeText(requireContext(),"fini",Toast.LENGTH_LONG).show()
+                }
+                is RequestResult.Failure  -> {println(it.throwable)}
+            }
         })
     }
 

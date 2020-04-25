@@ -22,7 +22,9 @@ class FirestoreRecipeRepository {
     var storageRef = storage.reference
 
     suspend fun getRecipes(collection:String):MutableList<Map<String,Any>>{
+        val order = if(collection == "favorites") "counter" else "shared_date"
         val list = firestoreDB.collection(collection)
+                .orderBy(order, Query.Direction.DESCENDING)
                 .get()
                 .addOnSuccessListener {
                     println("success")

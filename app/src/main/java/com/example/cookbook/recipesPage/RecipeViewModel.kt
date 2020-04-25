@@ -4,12 +4,12 @@ import androidx.lifecycle.*
 import com.example.cookbook.addRecipePage.plusAssign
 import com.example.cookbook.models.*
 import com.example.cookbook.repositories.*
+import com.example.cookbook.utils.RequestResult
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import java.io.File
+import java.util.concurrent.CancellationException
 import java.util.concurrent.ConcurrentLinkedQueue
 
 class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
@@ -25,6 +25,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val ingredientList = MutableLiveData<MutableList<Ingredient>>()
     val photoList = MutableLiveData<MutableList<Photo>>()
     val stepList = MutableLiveData<MutableList<Step>>()
+    val compressedPhotoList = MutableLiveData<MutableList<File>>()
     val quantity = MutableLiveData<Int>()
     val unit = MutableLiveData<String>()
     val shareDescription = MutableLiveData("")
@@ -38,7 +39,6 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
             return actualRecipe.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()
         }
     val isReadOnly = MutableLiveData(false)
-    val isUploaded = MutableLiveData<Boolean>()
     val sharedRecipesList = MutableLiveData<MutableList<Map<String, Any>>>()
     val favoritesRecipesList = MutableLiveData<MutableList<Map<String, Any>>>()
 
@@ -97,8 +97,8 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         emit(recipe)
     }
 
-    val randomRecipes:LiveData<List<Recipe>> = liveData {
-        withContext(Dispatchers.IO){
+    val randomRecipes: LiveData<List<Recipe>> = liveData {
+        withContext(Dispatchers.IO) {
             val recipes = mRecipesDataRepository.getRandomRecipe()
             emit(recipes)
         }
@@ -122,7 +122,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
 
     fun sharedRecipe(recipe: Recipe, description: String, photoUrls: List<String>) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
+            withContext(Dispatchers.IO) {
                 mFirestoreRecipeRepository.sharedRecipe(recipe, description, photoUrls, ingredientList.value!!)
                         .addOnSuccessListener {
                             println("Shared recipe success")
@@ -134,12 +134,12 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
-    fun likeRecipe(counterDocRef: DocumentReference,recipeDocRef: DocumentReference, numShards: Int,isChecked:Boolean){
+    fun likeRecipe(counterDocRef: DocumentReference, recipeDocRef: DocumentReference, numShards: Int, isChecked: Boolean) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO){
-                mFirestoreRecipeRepository.likeRecipe(counterDocRef,recipeDocRef,numShards,isChecked)
+            withContext(Dispatchers.IO) {
+                mFirestoreRecipeRepository.likeRecipe(counterDocRef, recipeDocRef, numShards, isChecked)
                         .addOnSuccessListener { println("increment succeess") }
-                        .addOnFailureListener{ println("increment failed")}
+                        .addOnFailureListener { println("increment failed") }
             }
         }
     }
@@ -230,30 +230,39 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }
     }
 
-    fun uploadPhoto(recipe: Recipe, files: MutableList<File>) {
-        viewModelScope.launch(Dispatchers.IO) {
-            withContext(Dispatchers.IO) {
-                files.forEach {
-                    launch {
-                        uriList.add(mFirestoreRecipeRepository.uploadPhoto(recipe, it).toString())
-                    }
-                }
+    val uploadPhoto = liveData<RequestResult<Any>> {
+        emit(RequestResult.Loading("chargement"))
+
+        try {
+
+
+            viewModelScope.launch(Dispatchers.IO) {
+
+                delay(500L)
+//                withContext(Dispatchers.IO) {
+//                    compressedPhotoList.value!!.forEach {
+//                        launch {
+//                            uriList.add(mFirestoreRecipeRepository.uploadPhoto(actualRecipe.value!!, it).toString())
+//                        }
+//                    }
+//                }
+//                withContext(Dispatchers.IO) {
+//                    sharedRecipe(
+//                            recipe = actualRecipe.value!!,
+//                            description = shareDescription.value!!,
+//                            photoUrls = uriList
+//                    )
+//                }
             }
-            withContext(Dispatchers.IO) {
-                sharedRecipe(
-                        recipe = recipe,
-                        description = shareDescription.value!!,
-                        photoUrls = uriList
-                )
-            }
-            isUploaded.postValue(true)
+            emit(RequestResult.Success(true))
+        } catch (e: Exception) {
+            println(e)
         }
     }
-
     //----------------- ARTICLE -----------------
 
     val article: LiveData<HeadLineArticle> = liveData {
-        val article = withContext(Dispatchers.IO){mFirestoreRecipeRepository.getHeadLineArticle()}
+        val article = withContext(Dispatchers.IO) { mFirestoreRecipeRepository.getHeadLineArticle() }
         emit(article)
     }
 
