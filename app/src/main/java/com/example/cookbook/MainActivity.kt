@@ -29,10 +29,7 @@ class MainActivity : AppCompatActivity() {
 
     var PERMISSION_ALL = 1
     var PERMISSIONS = arrayOf(
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.WRITE_CONTACTS,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.READ_SMS,
             Manifest.permission.CAMERA
     )
 
@@ -55,7 +52,6 @@ class MainActivity : AppCompatActivity() {
         configureRecipeViewModel()
         val cookBookLocalDatabase = CookBookLocalDatabase.getInstance(this)
 
-        // TODO créer vraie méthode pour gestion de permission
         if (!hasPermissions(this, *PERMISSIONS)) {
             ActivityCompat.requestPermissions(this, PERMISSIONS, PERMISSION_ALL);
         }

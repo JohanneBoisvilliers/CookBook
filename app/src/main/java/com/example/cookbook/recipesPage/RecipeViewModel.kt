@@ -32,7 +32,7 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
     val ingredientPicked = MutableLiveData<IngredientDatabase>()
     val ingredientDatabaseList = ConcurrentLinkedQueue<IngredientDatabase>()
     val photoSelected = MutableLiveData(0)
-    val requestState = MutableLiveData<RequestResult<*>>(RequestResult.Initial("test"))
+    val requestState = MutableLiveData<RequestResult<*>>(RequestResult.Initial("init state"))
     private val uriList: MutableList<String> = mutableListOf()
     val isNotOnline: Boolean
         get() {
@@ -254,38 +254,8 @@ class RecipeViewModel(private val mRecipesDataRepository: RecipesDataRepository,
         }catch (e: Exception){
             requestState.value = RequestResult.Failure(e)
         }
-
     }
 
-    val uploadPhoto = liveData<RequestResult<Any>> {
-        emit(RequestResult.Loading("chargement"))
-
-        try {
-
-
-            viewModelScope.launch {
-
-                delay(500L)
-//                withContext(Dispatchers.IO) {
-//                    compressedPhotoList.value!!.forEach {
-//                        launch {
-//                            uriList.add(mFirestoreRecipeRepository.uploadPhoto(actualRecipe.value!!, it).toString())
-//                        }
-//                    }
-//                }
-//                withContext(Dispatchers.IO) {
-//                    sharedRecipe(
-//                            recipe = actualRecipe.value!!,
-//                            description = shareDescription.value!!,
-//                            photoUrls = uriList
-//                    )
-//                }
-
-            }
-        } catch (e: Exception) {
-            println(e)
-        }
-    }
     //----------------- ARTICLE -----------------
 
     val article: LiveData<HeadLineArticle> = liveData {
