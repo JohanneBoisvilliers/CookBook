@@ -48,7 +48,6 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
     private static volatile CookBookLocalDatabase INSTANCE;
 
     // --- DAO ---
-    public abstract UserDao userDao();
     public abstract IngredientDao ingredientDao();
     public abstract RecipeDao recipeDao();
     public abstract StepDao stepDao();
@@ -132,41 +131,6 @@ public abstract class CookBookLocalDatabase extends RoomDatabase {
             Log.wtf("deb", "Error reading data file on line" + line, e);
             e.printStackTrace();
         }
-    }
-
-    private static void insertPhotoHelper(SupportSQLiteDatabase db){
-
-        ContentValues photo1 = new ContentValues();
-        photo1.put("id",1);
-        photo1.put("recipeId",1);
-        photo1.put("photoUrl","storage/emulated/0/DCIM/photo_1.jpg");
-        db.insert("Photo", OnConflictStrategy.REPLACE, photo1);
-        ContentValues photo2 = new ContentValues();
-        photo1.put("id",2);
-        photo1.put("recipeId",2);
-        photo1.put("photoUrl","storage/emulated/0/DCIM/photo_2.jpg");
-        db.insert("Photo", OnConflictStrategy.REPLACE, photo2);
-        ContentValues photo3 = new ContentValues();
-        photo1.put("id",3);
-        photo1.put("recipeId",3);
-        photo1.put("photoUrl","storage/emulated/0/DCIM/photo_3.jpg");
-        db.insert("Photo", OnConflictStrategy.REPLACE, photo3);
-        ContentValues photo4 = new ContentValues();
-        photo1.put("id",4);
-        photo1.put("recipeId",4);
-        photo1.put("photoUrl","storage/emulated/0/DCIM/photo_4.jpg");
-        db.insert("Photo", OnConflictStrategy.REPLACE, photo4);
-        ContentValues photo5 = new ContentValues();
-        photo1.put("id",5);
-        photo1.put("recipeId",5);
-        photo1.put("photoUrl","storage/emulated/0/DCIM/photo_5.jpg");
-        db.insert("Photo", OnConflictStrategy.REPLACE, photo5);
-        ContentValues photo6 = new ContentValues();
-        photo1.put("id",6);
-        photo1.put("recipeId",6);
-        photo1.put("photoUrl","storage/emulated/0/DCIM/photo_6.jpg");
-        db.insert("Photo", OnConflictStrategy.REPLACE, photo6);
-
     }
 
 }

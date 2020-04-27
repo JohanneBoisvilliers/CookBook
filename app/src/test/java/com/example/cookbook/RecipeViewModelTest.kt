@@ -2,13 +2,15 @@ package com.example.cookbook
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.cookbook.models.HeadLineArticle
+import com.example.cookbook.models.IngredientDatabase
+import com.example.cookbook.models.Recipe
 import com.example.cookbook.recipesPage.RecipeViewModel
 import com.example.cookbook.repositories.*
 import com.jraska.livedata.test
 import junit.framework.Assert.assertEquals
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
@@ -19,9 +21,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
-import org.mockito.ArgumentMatcher
-import org.mockito.ArgumentMatchers.anyMap
-import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mock
 import org.mockito.Mockito.*
 import org.mockito.MockitoAnnotations
@@ -44,7 +43,10 @@ class RecipeViewModelTest {
     lateinit var firestoreRecipeRepository: FirestoreRecipeRepository
     lateinit var viewmodel: RecipeViewModel
     private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    var recipesList = mutableListOf<Recipe>()
+    var ingredientDatabaseList = mutableListOf<IngredientDatabase>()
 
+    @ExperimentalCoroutinesApi
     @Before
     fun setUp() {
         MockitoAnnotations.initMocks(this)
@@ -56,8 +58,11 @@ class RecipeViewModelTest {
                 mPhotoDataRepository = photoRepository,
                 mStepDataRepository = stepRepository
         )
+        this.setRecipeList()
+        this.setIngredientDatabaseList()
     }
 
+    @ExperimentalCoroutinesApi
     @After
     fun tearDown() {
         Dispatchers.resetMain() // reset main dispatcher to the original Main dispatcher
@@ -111,7 +116,7 @@ class RecipeViewModelTest {
     }
     @Test
     fun testGetArticleFromFirebase(){
-        runBlocking (Dispatchers.IO){
+        runBlocking{
             `when`(firestoreRecipeRepository.getHeadLineArticle()).thenReturn(HeadLineArticle(
                     description = "description test",
                     photoUrl = "url",
@@ -127,6 +132,46 @@ class RecipeViewModelTest {
         }
     }
 
+    //------------------------- TEST INTERNAL DATA -------------------------
+
+    @Test
+    fun testGetRandomRecipes(){
+        runBlocking {
+            `when`(recipeRepository.getRandomRecipe()).thenReturn(
+                   recipesList
+            )
+        }
+        viewmodel.randomRecipes.test().awaitValue()
+        viewmodel.randomRecipes.observeOnce {
+            assertEquals(2,it.size)
+        }
+    }
+    @Test
+    fun testGetIngredientlistForPickList(){
+        runBlocking {
+            `when`(ingredientRepository.getIngredientList()).thenReturn(ingredientDatabaseList)
+        }
+        viewmodel.ingredientListPicked.test().awaitValue()
+        viewmodel.ingredientListPicked.observeOnce {
+            assertEquals(2,it.size)
+        }
+    }
+
+    //------------------------- PRIVATE METHODS -------------------------
+
+    private fun setRecipeList(){
+        val recipe1 = Recipe()
+        val recipe2 = Recipe()
+        recipesList.add(recipe1)
+        recipesList.add(recipe2)
+    }
+
+    private fun setIngredientDatabaseList(){
+        val ingredientDatabase1 = IngredientDatabase()
+        val ingredientDatabase2 = IngredientDatabase()
+        ingredientDatabaseList.add(ingredientDatabase1)
+        ingredientDatabaseList.add(ingredientDatabase2)
+    }
 }
 
 fun <T> LiveData<T>.observeOnce(onChangeHandler: (T) -> Unit) {

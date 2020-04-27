@@ -14,9 +14,6 @@ import com.example.cookbook.repositories.PhotoDataRepository;
 import com.example.cookbook.repositories.RecipesDataRepository;
 import com.example.cookbook.repositories.StepDataRepository;
 import com.example.cookbook.settingsPage.SettingsViewModel;
-import com.example.cookbook.socialPage.SocialViewModel;
-
-import java.util.concurrent.Executor;
 
 public class ViewModelFactory implements ViewModelProvider.Factory {
     private RecipesDataRepository mRecipesDataRepository;
@@ -53,9 +50,6 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         }
         if (modelClass.isAssignableFrom(LoginViewModel.class)) {
             return (T) new LoginViewModel();
-        }
-        if (modelClass.isAssignableFrom(SocialViewModel.class)) {
-            return (T) new SocialViewModel(mFireStoreRecipeRepository);
         }
         if (modelClass.isAssignableFrom(SettingsViewModel.class)) {
             return (T) new SettingsViewModel(mFireStoreUserRepository);
