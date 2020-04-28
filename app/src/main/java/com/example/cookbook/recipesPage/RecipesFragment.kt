@@ -51,23 +51,24 @@ class RecipesFragment : Fragment() {
         all_recipes_recyclerview.apply {
             layoutManager = StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL)
             adapter = mListAdapter
+            addOnItemTouchListener(RecyclerItemClickListenr(requireContext(), all_recipes_recyclerview, object : RecyclerItemClickListenr.OnItemClickListener {
+
+                override fun onItemClick(view: View, position: Int) {
+                    val intent = Intent(context, RecipeDetailsActivity::class.java)
+                    intent.putExtra("recipe",mRecipesList[position].baseDataRecipe?.baseRecipeId)
+
+                    startActivity(intent)
+                }
+                override fun onItemLongClick(view: View?, position: Int) {
+                    print(position)
+                }
+            }))
         }
-        all_recipes_recyclerview.addOnItemTouchListener(RecyclerItemClickListenr(requireContext(), all_recipes_recyclerview, object : RecyclerItemClickListenr.OnItemClickListener {
-
-            override fun onItemClick(view: View, position: Int) {
-                val intent = Intent(context, RecipeDetailsActivity::class.java)
-                intent.putExtra("recipe",mRecipesList[position].baseDataRecipe?.baseRecipeId)
-
-                startActivity(intent)
-            }
-            override fun onItemLongClick(view: View?, position: Int) {
-                print(position)
-            }
-        }))
+//        all_recipes_recyclerview.
     }
     //get recipe view model for requests
     private fun configureRecipeViewModel(){
-        mRecipeViewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        mRecipeViewModel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
     private fun updateItemsList(recipesList:List<Recipe>){
         mRecipesList.clear()

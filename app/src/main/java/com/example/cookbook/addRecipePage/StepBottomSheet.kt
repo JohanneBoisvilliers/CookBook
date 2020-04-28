@@ -53,7 +53,7 @@ class StepBottomSheet : BottomSheetDialogFragment() {
 
     //get recipe view model for requests
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
 
     // check if user clicked on add ingredient button or update ingredient icon

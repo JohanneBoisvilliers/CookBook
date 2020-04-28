@@ -94,7 +94,7 @@ class PhotoBottomSheet : BottomSheetDialogFragment() {
 
     //get recipe view model for requests
     private fun initViewModel() {
-        viewModel = ViewModelProviders.of(activity!!).get(RecipeViewModel::class.java)
+        viewModel = ViewModelProviders.of(requireActivity()).get(RecipeViewModel::class.java)
     }
 
     // ---------------- UTILS -------------------
@@ -179,7 +179,7 @@ class PhotoBottomSheet : BottomSheetDialogFragment() {
                     // Continue only if the File was successfully created
                     photoFile?.also {
                         val photoURI: Uri = FileProvider.getUriForFile(
-                                activity!!,
+                                requireActivity(),
                                 "com.example.cookbook.fileprovider",
                                 it
                         )
