@@ -50,6 +50,7 @@
                     android:src="@drawable/baseline_add_circle_outline_24"
                     android:tint="@color/colorAccent"
                     android:onClick="onClicked"
+                    android:scaleType="fitCenter"
                     android:background="@android:color/transparent"/>
 
                 <ImageButton
@@ -62,6 +63,7 @@
                     android:layout_marginEnd="@dimen/margin_to_border"
                     android:src="@drawable/baseline_remove_circle_outline_24"
                     android:tint="@color/colorAccent"
+                    android:scaleType="fitCenter"
                     android:background="@android:color/transparent"
                     android:onClick="onClicked"/>
                 <androidx.cardview.widget.CardView
@@ -167,6 +169,7 @@
                             android:layout_alignBottom="@id/ingredient_title"
                             android:src="@drawable/baseline_add_circle_outline_24"
                             android:tint="@color/colorAccent"
+                            android:scaleType="fitCenter"
                             android:onClick="onClicked"/>
 
                         <androidx.recyclerview.widget.RecyclerView
@@ -196,6 +199,7 @@
                             android:src="@drawable/baseline_add_circle_outline_24"
                             android:tint="@color/colorAccent"
                             android:onClick="onClicked"
+                            android:scaleType="fitCenter"
                             android:background="@android:color/transparent"
                             android:layout_marginStart="@dimen/margin_to_border"/>
 

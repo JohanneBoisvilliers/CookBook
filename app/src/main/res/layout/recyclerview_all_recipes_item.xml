@@ -18,7 +18,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="@dimen/title_recipe_card"
             android:layout_below="@+id/photo_container"
             android:gravity="center_vertical"
             android:background="@color/colorPrimary"

@@ -1,7 +1,7 @@
 <resources>
     <!-- GENERAL -->
-    <string name="username_hint">Email</string>
     <string name="password_hint">Password</string>
+    <string name="email_login_hint">Email</string>
     <string name="or_separator">OR</string>
     <string name="continue_separator">Continue with</string>
     <!--MAIN-->
@@ -28,10 +28,8 @@
     <string name="photos_title">Photos :</string>
     <string name="steps_title">Steps :</string>
     <string name="error_recipe_name">You have to choose a recipe name</string>
-    <string name="add_recipe_button_url">ADD RECIPE BY URL</string>
-    <string name="add_recipe_button_manually">ADD RECIPE MANUALLY</string>
     <!-- LANDING PAGE -->
-    <string name="landing_title">Cookbook</string>
+    <string name="landing_title" translatable="false">Cookbook</string>
     <string name="login_button">Login</string>
     <string name="register_sentence">Don\'t have an account yet ? please</string>
     <string name="register_word">register</string>
@@ -48,8 +46,8 @@
     <string name="register_date">Registered since: %s</string>
     <string name="action_menu_settings">Settings</string>
     <string name="action_menu_logout">Logout</string>
-    <string name="facebook_app_id">190699912159028</string>
-    <string name="fb_login_protocol_scheme">fb190699912159028</string>
+    <string name="facebook_app_id" translatable="false">190699912159028</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb190699912159028</string>
     <!--SOCIAL FRAGMENT-->
     <string name="social_fragment_title">Social</string>
     <string name="posted_by">Posted by %s</string>
@@ -64,6 +62,7 @@
     <string name="error_shared">Please add at least : \n</string>
     <string name="error_photo">one photo</string>
     <string name="error_step">one step</string>
+    <string name="url_field_text">Enter URL</string>
     <string name="error_ingredient">one ingredient</string>
     <string name="name_ingredient_text">Name :</string>
     <string name="unit_ingredient_text">Unit :</string>
@@ -108,8 +107,6 @@
         <item>Drink</item>
     </string-array>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_settings">Settings</string>
 
 </resources>
