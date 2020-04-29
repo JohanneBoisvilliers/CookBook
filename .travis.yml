@@ -24,6 +24,8 @@ before_install:
   - yes | sdkmanager "platforms;android-28"
   - yes | sdkmanager "build-tools;28.0.3"
 
+install: pip install codecov
+
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
   - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
@@ -42,4 +44,4 @@ script:
   - ./gradlew test
 
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
