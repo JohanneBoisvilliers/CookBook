@@ -40,10 +40,11 @@ class SettingsActivity : AppCompatActivity() {
         var usernamePreference: EditTextPreference? = null
         var photoPreference: EditTextPreference? = null
         lateinit var viewModel:SettingsViewModel
+        lateinit var sharedPreferences:SharedPreferences
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey)
-            val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
+            sharedPreferences  = PreferenceManager.getDefaultSharedPreferences(activity)
             initViewModel()
             initPreferencesValues(sharedPreferences)
             listenerOnPhotoUrlPreference()
@@ -60,10 +61,13 @@ class SettingsActivity : AppCompatActivity() {
         private fun initPreferencesValues(sharedpref:SharedPreferences) {
             usernamePreference = findPreference("username")
             photoPreference = findPreference("profile_url")
+            //the first time user open the settings activity, sharedpreferences are null
+            //so init the sharedpref username and profile_url
+            initSharedPrefIfNUll(sharedpref)
             // set username summary with current user display name
             usernamePreference?.summaryProvider = Preference.SummaryProvider<EditTextPreference> {
                 // get username in shared preferences
-                val savedUsername = sharedpref.getString("username","")
+                val savedUsername = sharedpref.getString("username",user?.displayName)
                 // if there is no username saved in shared preferences (user put an empty name or the first time user open settings page),
                 // get the user display name, else get the username from shared preferences
                 if (savedUsername?.isEmpty()!!) {
@@ -75,7 +79,7 @@ class SettingsActivity : AppCompatActivity() {
             // set photo url summary with current user photo url
             photoPreference?.summaryProvider = Preference.SummaryProvider<EditTextPreference> {
                 // get username in shared preferences
-                val savedPhotoUrl = sharedpref.getString("profile_url","")
+                val savedPhotoUrl = sharedpref.getString("profile_url",user?.photoUrl.toString())
                 // if there is no username saved in shared preferences (user put an empty name or the first time user open settings page),
                 // get the user display name, else get the username from shared preferences
                 if (savedPhotoUrl?.isEmpty()!!) {
@@ -109,5 +113,23 @@ class SettingsActivity : AppCompatActivity() {
                 false
             }
         }
+
+        // ---------------------------- INIT ----------------------------
+
+        private fun initSharedPrefIfNUll(sharedpref:SharedPreferences){
+            if(usernamePreference?.text == null){
+                with (sharedpref.edit()) {
+                    putString("username", user?.displayName)
+                    commit()
+                }
+            }
+            if(photoPreference?.text == null){
+                with (sharedpref.edit()) {
+                    putString("profile_url", user?.photoUrl.toString())
+                    commit()
+                }
+            }
+        }
+
     }
 }
