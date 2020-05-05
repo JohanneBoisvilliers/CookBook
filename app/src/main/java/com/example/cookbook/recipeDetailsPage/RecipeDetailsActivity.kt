@@ -187,7 +187,7 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         if (url_field.visibility == View.VISIBLE) {
             val isUrlEmpty= viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()
             when(isUrlEmpty){
-                true -> url_field.setText(getString(R.string.url_field_text))
+                true -> url_field.hint = getString(R.string.url_field_text)
                 false ->  url_field.setText(viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
             }
         }

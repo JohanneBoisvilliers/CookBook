@@ -124,7 +124,6 @@
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@id/url_icon"
                             android:layout_alignTop="@id/url_icon"
-                            android:text="url ici"
                             android:inputType="textNoSuggestions"
                             android:maxWidth="@dimen/url_width"
                             android:layout_marginEnd="@dimen/margin_to_border"
