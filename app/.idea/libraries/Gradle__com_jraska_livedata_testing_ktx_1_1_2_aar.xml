@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="Gradle: com.jraska.livedata:testing-ktx:1.1.2@aar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d9d2eab3163fc4b160a3bacb1ee6a23f/jetified-testing-ktx-1.1.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-2/files-2.1/d9d2eab3163fc4b160a3bacb1ee6a23f/jetified-testing-ktx-1.1.2/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.jraska.livedata/testing-ktx/1.1.2/d60328aedb036110bd5b53e01adc4a8dd135939d/testing-ktx-1.1.2-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/CookBook.iml" filepath="$PROJECT_DIR$/CookBook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CookBook.iml" filepath="$PROJECT_DIR$/CookBook.iml" group="CookBook" />
       <module fileurl="file://$PROJECT_DIR$/app/CookBook-app.iml" filepath="$PROJECT_DIR$/app/CookBook-app.iml" group="CookBook/app" />
       <module fileurl="file://$PROJECT_DIR$/Documents-CookBook.iml" filepath="$PROJECT_DIR$/Documents-CookBook.iml" group="CookBook" />
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="CookBook/app" />
     </modules>
   </component>
 </project>
