@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--GENERAL-->
+    <dimen name="margin_to_border">16dp</dimen>
+    <dimen name="twice_margin_to_border">32dp</dimen>
+    <dimen name="half_margin_to_border">8dp</dimen>
+    <dimen name="margin_in_button">50dp</dimen>
+    <dimen name="margin_title_toolbar">10sp</dimen>
+    <dimen name="round_button_height">40dp</dimen>
+    <dimen name="round_button_width">200dp</dimen>
+    <dimen name="social_logo_size">60dp</dimen>
+    <dimen name="app_bar_height">56dp</dimen>
+    <dimen name="app_bar_margin_start">32dp</dimen>
+    <!--MAIN ACTIVITY-->
+    <dimen name="bottom_bar_height">60dp</dimen>
+    <dimen name="icon_bottom_bar">30dp</dimen>
+    <!--HOME FRAGMENT-->
+    <!--main recycler view-->
+    <dimen name="category_title_size">16sp</dimen>
+    <dimen name="headline_height">160dp</dimen>
+    <dimen name="headline_card">200dp</dimen>
+    <dimen name="headline_title">40dp</dimen>
+    <!--horizontal recycler view-->
+    <dimen name="radius_card_horizontal">5dp</dimen>
+    <dimen name="elevation_card_horizontal">3dp</dimen>
+    <dimen name="card_width">100dp</dimen>
+    <dimen name="photo_height">80dp</dimen>
+    <dimen name="description_height">40dp</dimen>
+    <dimen name="card_height">120dp</dimen>
+    <dimen name="headline_margin_height">72dp</dimen><!--appbar(56) + margintop(16) -->
+    <dimen name="card_margin">5dp</dimen>
+    <dimen name="bottom_gradient_container_height">45dp</dimen>
+    <dimen name="text_bottom_gradient_size">12sp</dimen>
+    <dimen name="text_bottom_overline">8sp</dimen>
+    <dimen name="margin_text_bottom">10dp</dimen>
+    <!--ALL RECIPES FRAGMENT-->
+    <dimen name="padding_bottom_recyclerview">72dp</dimen><!--bottombar(56) + marginbottom for space between last item and bottombar(16) -->
+    <dimen name="margin_title">-10dp</dimen>
+    <dimen name="title_size">16sp</dimen>
+    <dimen name="base_height_card">150dp</dimen>
+    <dimen name="title_recipe_card">40dp</dimen>
+    <!--SOCIAL FRAGMENT-->
+    <dimen name="category_text_size">14sp</dimen>
+    <dimen name="photo_profile_size">55dp</dimen>
+    <dimen name="photo_recipe_card">240dp</dimen>
+    <!--USER PROFILE-->
+    <dimen name="bottom_container">200dp</dimen>
+    <dimen name="username_size">20sp</dimen>
+    <dimen name="logo_size">20dp</dimen>
+    <dimen name="number_recipe_logos_size">30dp</dimen>
+    <dimen name="text_size">18sp</dimen>
+    <dimen name="margin_logo">5dp</dimen>
+    <dimen name="margin_fab">40dp</dimen>
+    <!--RECIPE DETAIL ACTIVITY-->
+    <dimen name="viewpager_height">250dp</dimen>
+    <dimen name="viewpager_dot_size">6dp</dimen>
+    <dimen name="viewpager_default_dot_size">3dp</dimen>
+    <dimen name="ingredients_title_size">14sp</dimen>
+    <dimen name="image_override">-20sp</dimen>
+    <dimen name="tablayout_override">20sp</dimen>
+    <dimen name="recipe_text_size">14sp</dimen>
+    <dimen name="recipe_title_size">16sp</dimen>
+    <dimen name="ingredient_word_padding">5dp</dimen>
+    <dimen name="margin_share_bottom_sheet">30dp</dimen>
+    <!-- LANDING PAGE -->
+    <dimen name="separator_width">50dp</dimen>
+    <dimen name="textfield_width">220dp</dimen>
+    <dimen name="separator_padding">15dp</dimen>
+    <dimen name="logos_bottom_padding">30dp</dimen>
+    <dimen name="textfield_padding">8dp</dimen>
+    <dimen name="title_register_size">25sp</dimen>
+    <dimen name="bottom_sheet_height">500dp</dimen>
+    <!-- REGISTER PAGE -->
+    <dimen name="margin_register_word">5dp</dimen>
+    <dimen name="title_text_size">30sp</dimen>
+    <dimen name="bottom_padding">80dp</dimen>
+    <dimen name="url_width">200dp</dimen>
+    <!-- ADD RECIPE ACTIVITY-->
+    <dimen name="bottom_sheet_icon_size">24dp</dimen>
+    <dimen name="viewpager_update_icon_size">16dp</dimen>
+    <dimen name="step_modify_icon">16dp</dimen>
+    <dimen name="ingredient_modify_icon">16dp</dimen>
+    <dimen name="update_icon_margin">80dp</dimen>
+    <dimen name="icon_margin_to_border">30dp</dimen>
+    <dimen name="status_bar_height">25dp</dimen>
+    <dimen name="category_spinner_width">120dp</dimen>
+    <dimen name="text_input_margin">12dp</dimen>
+    <dimen name="section_text_size">14sp</dimen>
+
+</resources>

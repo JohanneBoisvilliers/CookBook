@@ -15,7 +15,7 @@
             <ImageView
                 android:id="@+id/recipe_photo"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
+                android:layout_height="@dimen/photo_recipe_card"
                 android:layout_centerHorizontal="true"
                 android:layout_below="@id/user_photo"
                 android:layout_marginTop="@dimen/margin_to_border"

@@ -185,7 +185,11 @@ class RecipeDetailsActivity : AppCompatActivity(), IngredientsListAdapter.Listen
         url_icon.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
         url_field.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
         if (url_field.visibility == View.VISIBLE) {
-            url_field.setText(viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
+            val isUrlEmpty= viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl.isNullOrEmpty()
+            when(isUrlEmpty){
+                true -> url_field.hint = getString(R.string.url_field_text)
+                false ->  url_field.setText(viewModel?.actualRecipe?.value?.baseDataRecipe?.recipeUrl)
+            }
         }
         btn_update_url.visibility = if (isUpdateModeOn) View.VISIBLE else View.GONE
         url_field.isFocusableInTouchMode = isUpdateModeOn

@@ -25,8 +25,8 @@ class RecipesListAdapter constructor(list:MutableList<Recipe>) : RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: RecipesListViewHolder, position: Int) {
-        mRandom = Random()
-        holder.itemView.photo_container.layoutParams.height = getRandomHeight(550, 800)
+//        mRandom = Random()
+//        holder.itemView.photo_container.layoutParams.height = getRandomHeight(550, 800)
         holder.updateRecipeCardUi(mRecipeList[position])
     }
 
